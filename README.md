@@ -12,6 +12,7 @@ In a world where an ancient evil stirs and the sky grows dark, only one man
 can unite the free lands and fulfil the prophesy... 
 > Renewed shall be blade that was broken,
 > The crownless again shall be king.
+
 You're not playing as him, so relax. You play as ranger who was sent to
 patrol the area near the south-east of Mirkwood. You know, getting kittens out
 of trees and chasing down escaped swans, etc. But there was more trouble than
