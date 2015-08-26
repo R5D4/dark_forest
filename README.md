@@ -64,6 +64,7 @@ you expected and you were "volunteered" for a more dangerous task.
   * 'down' - to come down from a tree once you're up
   * 'n', 'e', 's', 'w', etc. - to move out to another area in that direction
   * 'attack' - to attack the enemy once you see it
+
 ### Combat Commands
   * The player currently has three attacks. Type them once you're in combat.
   * 'shoot' - shoot an arrow from your longbow
