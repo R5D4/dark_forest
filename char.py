@@ -56,7 +56,8 @@ class Player(Character):
         self.desc = {
             'name': 'Hallas',
             'job': 'ranger',
-            'desc': 'Hallas Tall-Leaf, an exiled ranger from the North.'
+            'desc': '"Tall-Leaf" in the common speech. An exiled ranger from \
+the North.'
         } 
         for stat in self.attributes.keys():
             self.attributes[stat] += bonus + randint(1, 6) + randint(1, 6)

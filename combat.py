@@ -110,10 +110,14 @@ class Attack(object):
         }
 
 
-    # attack from <from_char> to <to_char>
-    # Hit formula: hit if (<from_char>.<hit_attr> + <hit_roll>)
-    #                     > (<to_char>.<hit_againt>)
-    # Dmg formula: <dmg>
+    # attack from from_char to to_char
+    # Hit formula:
+    #   attacker's hit_attr attribute + hit_roll VS
+    #   defender's hit_against attribute
+    # Dmg formula:
+    #   Critical roll and hit = max damage for the attack type
+    #   Critical roll and miss = roll for normal damage
+    #   Normal damage = attack's dmg_base + dmg_roll
     def attack(self, from_char, to_char):
         print self.details['prep_msg'] % (from_char.desc['job'], 
                                       to_char.desc['job'])
@@ -149,6 +153,8 @@ class Attack(object):
         else:
             print self.details['hit_fail_msg']
 
+
+########## PLAYER ATTACKS ##########
 
 class Slash(Attack):
     
@@ -197,6 +203,8 @@ class Stab(Attack):
             'dmg_base': 1
         }
 
+
+########## BOSS ATTACKS ##########
 
 class Charge(Attack):
     
