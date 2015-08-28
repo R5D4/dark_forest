@@ -1,3 +1,6 @@
+# A game engine that uses information from a game map to allow the player to
+# progress through a game
+
 class Engine(object):
 
     def __init__(self, scene_map):

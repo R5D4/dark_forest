@@ -1,6 +1,13 @@
-from engine import *
-from map_ import *
+"""
+This is entry point of the game.
 
-a_map = Map('story')
-a_game = Engine(a_map)
+Usage:
+$ python game.py
+"""
+
+import engine
+import map_
+
+a_map = map_.Map('story')
+a_game = engine.Engine(a_map)
 a_game.play()

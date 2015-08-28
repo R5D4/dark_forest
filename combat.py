@@ -66,7 +66,9 @@ def begin_combat(characters):
 
 
 # Parses the dice roll formatting string
+
 def parse_roll(formatting):
+
     extracted = formatting.split('d')
     times = int(extracted[0])
     die_max = int(extracted[1])
@@ -78,7 +80,9 @@ def parse_roll(formatting):
 # e.g. '1d20' will simulate rolling a 20-sided die (1-20) once
 # '2d6' will simulate rolling a 6-sided die (1-6) twice
 # output = True will output dice roll details, False will be silent
+
 def roll(formatting, output):
+
     if output:
         print "Rolling %s..." % formatting,
     times, die_max = parse_roll(formatting)
@@ -93,6 +97,7 @@ def roll(formatting, output):
 
 
 # holds information about an attack
+
 class Attack(object):
 
     def __init__(self):
@@ -110,7 +115,8 @@ class Attack(object):
         }
 
 
-    # attack from from_char to to_char
+    # Attack from from_char to to_char
+    # Determine hit or not hit, damage, and apply damage if any
     # Hit formula:
     #   attacker's hit_attr attribute + hit_roll VS
     #   defender's hit_against attribute
@@ -118,7 +124,9 @@ class Attack(object):
     #   Critical roll and hit = max damage for the attack type
     #   Critical roll and miss = roll for normal damage
     #   Normal damage = attack's dmg_base + dmg_roll
+
     def attack(self, from_char, to_char):
+
         print self.details['prep_msg'] % (from_char.desc['job'], 
                                       to_char.desc['job'])
         # calculate hit

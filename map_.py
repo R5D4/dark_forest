@@ -1,32 +1,129 @@
+"""
+This module provides the map and the scenes of the map.
+
+The Map class is needed to initialize the game.
+"""
+
 from sys import exit
 from random import randint
 import char
 import combat
 
+
+class Map(object):
+    """
+    Defines the map. 
+
+    Instance variables:
+        self.characters
+        self.scenes
+        self.start_scene_name
+    Methods:
+        __init__(self, start_scene_name)
+        next_scene(self, scene_name)
+        opening_scene(self)
+        roll_characters(self)
+    """
+
+    def __init__(self, start_scene_name):
+        """ Create characters, create scenes and set a starting scene"""
+        self.roll_characters()
+        self.start_scene_name = start_scene_name
+        self.scenes = {
+            'story': Story(),
+            'death': Death(),
+            'win': Win(),
+            'quit': Quit(),
+            'start_area': StartArea(self.characters),
+            'dead_log_area': DeadLogArea(self.characters),
+            'ponds_area': PondsArea(self.characters),
+            'dead_end': DeadEnd(self.characters),
+            'brook_area': BrookArea(self.characters),
+            'tall_tree_area': TallTreeArea(self.characters),
+            'glade_area': GladeArea(self.characters),
+            'exit_sw': ExitSW(self.characters),
+            'exit_e': ExitE(self.characters)
+        }
+
+    def next_scene(self, scene_name):
+        """ Return the Scene object for the next scene."""
+        return self.scenes.get(scene_name)
+
+    def opening_scene(self):
+        """ Return the Scene object for the opening scene."""
+        return self.next_scene(self.start_scene_name)
+
+    def roll_characters(self):
+        """ Create characters. Allow user to re-roll."""
+        # The user verification loop is put in this method because I didn't 
+        # want to add a method to the Player and Boar classes just to loop.
+        response = 'y'
+        while response == 'y':
+            self.characters = {}
+            print "\nRolling player character:"
+            print "-" * 20
+            self.characters['player'] = char.Player(0)
+            response = raw_input("Reroll character? (y/n): ")
+
+        response = 'y'
+        while response == 'y':
+            print "\nRolling boss character:"
+            print "-" * 20
+            self.characters['boar'] = char.Boar(0)
+            response = raw_input("Reroll character? (y/n): ")
+            
+
 class Scene(object):
+    """ Defines a generic scene."""
 
     def process_action(self, action):
+        """
+        Process user action.
+
+        Currently needs to be overrode in a subclass. It is used to handle
+        user actions to do with environmental interaction.
+        """
         print "Please override this method."
 
-    def describe(): 
+    def describe(self): 
+        """
+        Print a description of the scene.
+
+        Needs to be overrode in a subclass. 
+        """
         print "Please override this method."
     
     def print_encounter_msg(self):
+        """ Print a message indicating if the boss is in the area."""
         if self.flags['encounter']:
             print "You see the boar! You don't think it notices you."
 
-    # determine encounter chance
-    # chance - encounter chance (0,1)
     def encounter(self, chance):
+        """
+        Calculate and return if the player has encountered the boss.
+
+        chance: encounter probability in (0, 1).
+        return True or False.
+        """
         return randint(1,10) <= (chance * 10)
 
-    # default enter method for interactive scenes
     def enter(self):
+        """
+        Execute actions upon entering a scene.
+
+        The set of actions is the same for all interactive scenes. For
+        special scenes like winning, dying, and quitting that are not
+        interactive, override this method.
+        """
+        # 1. Print scene description
         self.describe()
+
+        # 2. Calculate encounter chance and print encounter message
         chance = self.flags['encounter_chance']
         self.flags['encounter'] = self.encounter(chance)
         self.print_encounter_msg()
         
+        # 3. Enter user-input loop
         while True:
             action = raw_input("> ")
             # trying to leave
@@ -38,7 +135,11 @@ class Scene(object):
                 self.process_action(action)
 
 
+##########  SPECIAL SCENES  ##########
+
+
 class Death(Scene):
+    """ Special scene for dying. No interaction. Game over."""
 
     def enter(self):
         print "\n\n"
@@ -53,6 +154,7 @@ class Death(Scene):
 
 
 class Win(Scene):
+    """ Special scene for winning. No interaction. You're a winner."""
 
     def enter(self):
         print "\n\n"
@@ -68,6 +170,7 @@ class Win(Scene):
 
 
 class Quit(Scene):
+    """ Special scene for quitting. No interaction. Game over."""
 
     def enter(self):
         print "\n\n"
@@ -82,7 +185,9 @@ class Quit(Scene):
         print "Please support my kickstarter campaign for more content!"
         exit(1)
 
+
 class Story(Scene):
+    """ Special scene to print the story. Should be first scene in map."""
     
     def describe(self):
         print "\n\n"
@@ -102,13 +207,16 @@ class Story(Scene):
         print "You enter into the shadow of the trees..."
 
     def enter(self):
+        """ Print description and return first map area scene."""
         self.describe()
         return 'start_area'
 
 
-class StartArea(Scene):
+##########  MAP AREA SCENES ##########
 
-    """Area 1"""
+
+class StartArea(Scene):
+    """ Area 1. Key = 'start_area'."""
 
     def __init__(self, characters):
         self.characters = characters
@@ -438,7 +546,6 @@ class ExitSW(Scene):
 
 
 class ExitE(Scene):
-
     """Area 9"""
 
     def __init__(self, characters):
@@ -471,52 +578,3 @@ class ExitE(Scene):
         print "path for a bit, you see an exit!"
         print "The animal trail leads West (w) and East (e) out of the forest."
 
-
-class Map(object):
-
-    """ Defines the map, maps scene name to objects """
-
-    def __init__(self, start_scene_name):
-        self.roll_characters()
-        self.scenes = {
-            'story': Story(),
-            'death': Death(),
-            'win': Win(),
-            'quit': Quit(),
-            'start_area': StartArea(self.characters),
-            'dead_log_area': DeadLogArea(self.characters),
-            'ponds_area': PondsArea(self.characters),
-            'dead_end': DeadEnd(self.characters),
-            'brook_area': BrookArea(self.characters),
-            'tall_tree_area': TallTreeArea(self.characters),
-            'glade_area': GladeArea(self.characters),
-            'exit_sw': ExitSW(self.characters),
-            'exit_e': ExitE(self.characters)
-        }
-        self.start_scene_name = start_scene_name
-
-    # Returns a Scene object for the next scene.
-    def next_scene(self, scene_name):
-        return self.scenes.get(scene_name)
-
-    # Returns a Scene object for the opening scene.
-    def opening_scene(self):
-        return self.next_scene(self.start_scene_name)
-
-    # Roll characters
-    def roll_characters(self):
-        response = 'y'
-        while response == 'y':
-            self.characters = {}
-            print "\nRolling player character:"
-            print "-" * 20
-            self.characters['player'] = char.Player(0)
-            response = raw_input("Reroll character? (y/n): ")
-
-        response = 'y'
-        while response == 'y':
-            print "\nRolling boss character:"
-            print "-" * 20
-            self.characters['boar'] = char.Boar(0)
-            response = raw_input("Reroll character? (y/n): ")
-            
