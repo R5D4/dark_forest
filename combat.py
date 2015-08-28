@@ -40,7 +40,7 @@ def begin_combat(characters):
         print '-' * 20
         if turn == 'player':
             print "Player's turn:"
-            print "HP: %d" % player.attributes['HP']
+            print "HP: %d" % player.health['HP']
             action = raw_input("> ")
             if action in player.attacks.keys():
                 player_attack = player.attacks[action]
@@ -51,17 +51,17 @@ def begin_combat(characters):
             raw_input("Press any key to continue.")
         elif turn == 'boar':
             print "Boar's turn:"
-            #print "HP: %d" % boar.attributes['HP']
+            #print "HP: %d" % boar.health['HP']
             # output bloodied message if HP < 30%
-            if boar.attributes['HP']/float(boar.attributes['max_HP']) < 0.3:
+            if boar.health['HP']/float(boar.attributes['max_HP']) < 0.3:
                 print "The boar is bloodied!"
             boar_attack = boar.attacks[choice(boar.attacks.keys())]
             boar_attack.attack(boar, player)
             turn = 'player'
         
-        if player.attributes['HP'] <= 0:
+        if player.health['HP'] <= 0:
             return 'death' 
-        elif boar.attributes['HP'] <= 0:
+        elif boar.health['HP'] <= 0:
             return 'win' 
 
 

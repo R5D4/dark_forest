@@ -62,7 +62,7 @@ class Map(object):
         while response == 'y':
             print "\nRolling player character:"
             print "-" * 20
-            self.characters['player'] = char.Player(0)
+            self.characters['player'] = char.Player()
             response = raw_input("Reroll character? (y/n): ")
 
     def add_boar(self):
@@ -71,7 +71,7 @@ class Map(object):
         while response == 'y':
             print "\nRolling boss character:"
             print "-" * 20
-            self.characters['boar'] = char.Boar(0)
+            self.characters['boar'] = char.Boar()
             response = raw_input("Reroll character? (y/n): ")
 
 
