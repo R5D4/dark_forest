@@ -1,7 +1,8 @@
 """
 This module provides the map and the scenes of the map.
 
-The Map class is needed to initialize the game.
+Contains the Map class.
+Contains the generic Scene class and all map area scene subclasses.
 """
 
 from sys import exit
@@ -26,14 +27,16 @@ class Map(object):
     """
 
     def __init__(self, start_scene_name):
-        """ Create characters, create scenes and set a starting scene"""
-        self.roll_characters()
+        """ Set start scene name, create characters, create scene objects."""
         self.start_scene_name = start_scene_name
+        self.characters = {};
+        self.add_player()
+        self.add_boar()
         self.scenes = {
-            'story': Story(),
-            'death': Death(),
-            'win': Win(),
-            'quit': Quit(),
+            'story': Story(self.characters),
+            'death': Death(self.characters),
+            'win': Win(self.characters),
+            'quit': Quit(self.characters),
             'start_area': StartArea(self.characters),
             'dead_log_area': DeadLogArea(self.characters),
             'ponds_area': PondsArea(self.characters),
@@ -53,28 +56,42 @@ class Map(object):
         """ Return the Scene object for the opening scene."""
         return self.next_scene(self.start_scene_name)
 
-    def roll_characters(self):
-        """ Create characters. Allow user to re-roll."""
-        # The user verification loop is put in this method because I didn't 
-        # want to add a method to the Player and Boar classes just to loop.
+    def add_player(self):
+        """ Create player character. Allow user to re-roll."""
         response = 'y'
         while response == 'y':
-            self.characters = {}
             print "\nRolling player character:"
             print "-" * 20
             self.characters['player'] = char.Player(0)
             response = raw_input("Reroll character? (y/n): ")
 
+    def add_boar(self):
+        """ Create boss character. Allow user to re-roll."""
         response = 'y'
         while response == 'y':
             print "\nRolling boss character:"
             print "-" * 20
             self.characters['boar'] = char.Boar(0)
             response = raw_input("Reroll character? (y/n): ")
-            
+
 
 class Scene(object):
     """ Defines a generic scene."""
+
+    def __init__(self, characters):
+        """
+        Set default attributes.
+
+        Subclasse should _extend_ this method if the scene requires different
+        attributes or values than the default.
+        """
+        self.characters = characters
+        self.exits = {}
+        self.flags = {
+            'encounter_chance': 0,            
+            'encounter': False,
+            'can_leave': True 
+        }
 
     def process_action(self, action):
         """
@@ -219,18 +236,14 @@ class StartArea(Scene):
     """ Area 1. Key = 'start_area'."""
 
     def __init__(self, characters):
-        self.characters = characters
-        self.exits = {
-            'ne': 'dead_log_area',
-            'se': 'ponds_area'
-        }
-        self.flags = {
-            'can_leave': True,
-            'on_tree': False,
-            'can_dodge': True,
-            'encounter': False,
-            'encounter_chance': 0.1
-        }
+        super(StartArea, self).__init__(characters)
+        # add exits
+        self.exits['ne'] = 'dead_log_area'
+        self.exits['se'] = 'ponds_area'
+        # add flags
+        self.flags['encounter_chance'] = 0.1
+        self.flags['on_tree'] = False
+        self.flags['can_dodge'] = True
 
     # process all the actions other than leaving the scene
     def process_action(self, action):
