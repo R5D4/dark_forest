@@ -244,7 +244,6 @@ class StartArea(Scene):
         self.flags['encounter_chance'] = 0.1
         self.flags['on_tree'] = False
 
-    # process all the actions other than leaving the scene
     def process_action(self, action):
         """ Override Scene.process_action"""
         ENV_ACTIONS = {
@@ -303,7 +302,6 @@ class DeadLogArea(Scene):
         # add flags
         self.flags['encounter_chance'] = 0.2
 
-    # process all the actions other than leaving the scene
     def process_action(self, action):
         """ Override Scene.process_action"""
         ENV_ACTIONS = {
@@ -330,28 +328,28 @@ class DeadLogArea(Scene):
 
 
 class PondsArea(Scene):
-
-    """Area 3"""
+    """ Area 3. name = 'ponds_area'."""
 
     def __init__(self, characters):
-        self.characters = characters
-        self.exits = {
-            'nw': 'start_area',
-            'e': 'tall_tree_area',
-            'se': 'glade_area'
-        }
-        self.flags = {
-            'can_leave': True,
-            'encounter_chance': 0.3
-        }
+        super(PondsArea, self).__init__(characters)
+        # add exits
+        self.exits['nw'] = 'start_area'
+        self.exits['e'] = 'tall_tree_area'
+        self.exits['se'] = 'glade_area'
+        # add flags
+        self.flags['encounter_chance'] = 0.3
     
-    # process all the actions other than leaving the scene
     def process_action(self, action):
-
-        ENVIRON_ACTIONS = ['l']
+        """ Override Scene.process_action"""
+        ENV_ACTIONS = {
+            'look': ['l', 'look']
+        }
+        # make single list of supported actions to check against user action 
+        SUPPORTED_ACTIONS = \
+            [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
         
-        if action in ENVIRON_ACTIONS:
-            if action == 'l':
+        if action in SUPPORTED_ACTIONS:
+            if action in ENV_ACTIONS['look']:
                 self.describe()
                 self.print_encounter_msg()
         else:
@@ -365,27 +363,28 @@ class PondsArea(Scene):
         print "The animal trail leads North-West (nw), East (e), and"
         print "South-East (se)."
 
-class DeadEnd(Scene):
 
-    """Area 4"""
+class DeadEnd(Scene):
+    """Area 4. name = 'dead_end'."""
 
     def __init__(self, characters):
-        self.characters = characters
-        self.exits = {
-            'w': 'dead_log_area'
-        }
-        self.flags = {
-            'can_leave': True,
-            'encounter_chance': 0.3
-        }
+        super(DeadEnd, self).__init__(characters)
+        # add exits
+        self.exits['w'] = 'dead_log_area'
+        # add flags
+        self.flags['encounter_chance'] = 0.3
     
-    # process all the actions other than leaving the scene
     def process_action(self, action):
+        """ Override Scene.process_action"""
+        ENV_ACTIONS = {
+            'look': ['l', 'look']
+        }
+        # make a single list of supported action to check against user action
+        SUPPORTED_ACTIONS = \
+            [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
 
-        ENVIRON_ACTIONS = ['l']
-        
-        if action in ENVIRON_ACTIONS:
-            if action == 'l':
+        if action in SUPPORTED_ACTIONS:
+            if action in ENV_ACTIONS['look']:
                 self.describe()
                 self.print_encounter_msg()
         else:
