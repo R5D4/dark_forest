@@ -233,7 +233,7 @@ class Story(Scene):
 
 
 class StartArea(Scene):
-    """ Area 1. Key = 'start_area'."""
+    """ Area 1. name = 'start_area'."""
 
     def __init__(self, characters):
         super(StartArea, self).__init__(characters)
@@ -247,26 +247,34 @@ class StartArea(Scene):
 
     # process all the actions other than leaving the scene
     def process_action(self, action):
-
-        ENVIRON_ACTIONS = ['l', 'climb', 'climb oak', 'climb tree',
-                           'get down', 'down']
+        """ Override Scene.process_action"""
+        ENV_ACTIONS = {
+            'look': ['l', 'look'],
+            'up': ['up', 'climb up'],
+            'down': ['down', 'climb down']
+        }
+        # make single list of supported actions to check against user action
+        SUPPORTED_ACTIONS = \
+            [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
         
-        if action in ENVIRON_ACTIONS:
-            if action == 'l':
+        if action in SUPPORTED_ACTIONS:
+            if action in ENV_ACTIONS['look']:
                 self.describe()
                 self.print_encounter_msg()
-            elif 'climb' in action and not self.flags['on_tree']:
-                print "You climb the tall oak."
-                self.flags['on_tree'] = True
-                self.flags['can_leave'] = False
-            elif 'climb' in action and self.flags['on_tree']:
-                print "You're already at the top!"
-            elif 'down' in action and self.flags['on_tree']:
-                print "You climb down the tree."
-                self.flags['on_tree'] = False
-                self.flags['can_leave'] = True 
-            elif 'down' in action and not self.flags['on_tree']:
-                print "You're already on the ground."
+            elif action in ENV_ACTIONS['up']:
+                if not self.flags['on_tree']:
+                    print "You climb the tall oak."
+                    self.flags['on_tree'] = True
+                    self.flags['can_leave'] = False
+                else:
+                    print "You're already at the top!"
+            elif action in ENV_ACTIONS['down']:
+                if self.flags['on_tree']:
+                    print "You climb down the tree."
+                    self.flags['on_tree'] = False
+                    self.flags['can_leave'] = True 
+                else: 
+                    print "You're already on the ground."
         else:
             print "You can't do that."
 
