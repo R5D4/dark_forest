@@ -42,20 +42,14 @@ you expected and you were "volunteered" for a more dangerous task.
 
 ## Planned Features
 1. Map
-  * More environmental interaction
-  * Help messages
+  * In-game help messages
   * Tracking/hunting system (procedurally generated environmental clues)
-  * Procedurally-generated map?!
 2. Characters
-  * Items
-  * Equipment
-  * Procedural generation of items and equipment
+  * More accurate D&D character stats
 3. Combat
-  * Conditions
-  * Use of items
-  * Environmental interaction
-  * More nuanced battle system (allow reaction actions)
-  * Movement/distance?
+  * More accurate D&D combat system
+4. Interface
+  * More interactive game interface with curses
 
 ## How to Play
 ### Map Commands
