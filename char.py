@@ -17,28 +17,28 @@ class Character(object):
     Generic class for all game characters.
 
     New characters should subclass this class and extend the __init__ method.
-    The following attributes should be changed to suit the new character:
-        self.attributes
-        self.attacks
-        self.desc
+    New character classes should define the following properties:
+        self.attributes = {
+            'str': int,
+            'dex': int,
+            'reflex': int,
+            'AC': int,
+            'max_HP': int,
+            'max_mana': int
+        }
+        self.attacks = {
+            'name1': combat.Attack1(),
+            'name2': combat.Attack2()
+            ...
+        }
+        self.desc = {
+            'name': string,
+            'job': string,
+            'desc': string
+        }
     """
 
     def __init__(self):
-        # base attributes
-#        self.attributes = {
-#            'str': 0,
-#            'dex': 0,
-#            'reflex': 0,
-#            'AC': 0,
-#            'max_HP': 0,
-#            'max_mana': 0
-#        }
-#        self.attacks = {}
-#        self.desc = {
-#            'name': None,
-#            'job': None,
-#            'desc': None
-#        } 
         self.health = {
             'HP': 0,
             'mana': 0
