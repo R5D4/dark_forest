@@ -59,9 +59,9 @@ you expected and you were "volunteered" for a more dangerous task.
 
 ## How to Play
 ### Map Commands
-  * 'l' - lowercase 'L' to look around
-  * 'climb' - to climb any climbable trees in the area
-  * 'down' - to come down from a tree once you're up
+  * 'look' - look around (hint: you get a better view from high up)
+  * 'up' - climb any climbable trees in the area 
+  * 'down' - come down from a tree once you're up
   * 'n', 'e', 's', 'w', etc. - to move out to another area in that direction
   * 'attack' - to attack the enemy once you see it
 
