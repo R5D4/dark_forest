@@ -1,18 +1,23 @@
-# module to handle combat
+"""
+Combat-related resources.
+
+Contains the function begin_combat and the Attack class.
+"""
 
 from random import randint
 from random import choice
-import char
 
 # user types this to signal attack
 ATTACK = 'attack'
 
-
-# Combat! Yay!
-# returns either 'death' or 'win'
-# no running! battle to the death
 def begin_combat(characters):
+    """
+    Start combat.
 
+    Start combat between the 'player' and 'boar' characters.
+    Return 'death' if player dies or 'win' if boar dies.
+    There is currently no way to exit combat in any other way once entered.
+    """
     player = characters['player']
     boar = characters['boar']
 
@@ -20,7 +25,7 @@ def begin_combat(characters):
     print " Entering combat! ",
     print "*" * 10
     
-    ########## INITIATIVE ##########
+    # Determine initiative
 
     print "Rolling initiatives:"
     player_init = roll('1d20', True)[0]
@@ -35,7 +40,8 @@ def begin_combat(characters):
     print "{} goes first.".format(turn),
     raw_input("Press any key to continue")
 
-    ########## COMBAT LOOP ##########
+    # Start combat loop
+
     while True:
         print '-' * 20
         if turn == 'player':
@@ -65,30 +71,38 @@ def begin_combat(characters):
             return 'win' 
 
 
-# Parses the dice roll formatting string
-
 def parse_roll(formatting):
+    """
+    Parse the dice roll formatting string. 
 
+    Return the number of dice rolls and the type of die as a tuple:
+    e.g. parse_roll('2d10') -> (2, 10)
+    """
     extracted = formatting.split('d')
-    times = int(extracted[0])
+    n = int(extracted[0])
     die_max = int(extracted[1])
-    #print "extracted: times = %d, die_max = %d" % (times, die_max)
-    return (times, die_max)
+    #print "extracted: n = %d, die_max = %d" % (n, die_max)
+    return (n, die_max)
     
 
-# Roll dice of the specified type and number of times
-# e.g. '1d20' will simulate rolling a 20-sided die (1-20) once
-# '2d6' will simulate rolling a 6-sided die (1-6) twice
-# output = True will output dice roll details, False will be silent
-
 def roll(formatting, output):
+    """
+    Roll the specified number of dice of a certain type.
 
+    e.g. '1d20' rolls a 20-sided die.
+         '2d6' rolls two 6-sided dice.
+    Return the sum of the rolled dice and the maximum sum possible as a tuple.
+
+    If output is True, this function prints the following message:
+    e.g. 'Rolling 2d6... 10!'
+    If output is False, this function prints nothing.
+    """
     if output:
         print "Rolling %s..." % formatting,
-    times, die_max = parse_roll(formatting)
+    n, die_max = parse_roll(formatting)
     total = 0
     max_roll = 0
-    for i in range(1, times+1):
+    for i in range(1, n+1):
         total += randint(1, die_max)
         max_roll += die_max
     if output:
@@ -96,40 +110,41 @@ def roll(formatting, output):
     return (total, max_roll)
 
 
-# holds information about an attack
-
 class Attack(object):
+    """
+    Base class for an attack.
+
+    New attacks should subclass this class and override the __init__ method.
+    New attack subclasses need to define self.details.
+    """
 
     def __init__(self):
-        # override this
+        """
+        __init__ method in Attack class does nothing.
+
+        Subclasses need to define self.details as follows in their __init__.
         self.details = {
-            'prep_msg': None,
-            'hit_crit_msg': None,
-            'hit_success_msg': None,
-            'hit_fail_msg': None,
-            'hit_attr': None,
-            'hit_roll': None,
-            'hit_against': None,
-            'dmg_roll': None,
-            'dmg_base': None
+            'prep_msg': string - msg printed when attack begins
+            'hit_crit_msg': string - msg printed when critical is rolled
+            'hit_success_msg': string - msg printed when successful attack
+            'hit_fail_msg': string - msg when attack fails
+            'hit_attr': character attribute to add to hit chance e.g. 'str'
+            'hit_roll': dice roll format e.g. '1d10'
+            'hit_against': enemy attribute to hit against e.g. 'AC'
+            'dmg_roll': dice roll format e.g. '2d6'
+            'dmg_base': integer - min damage if successful hit
         }
-
-
-    # Attack from from_char to to_char
-    # Determine hit or not hit, damage, and apply damage if any
-    # Hit formula:
-    #   attacker's hit_attr attribute + hit_roll VS
-    #   defender's hit_against attribute
-    # Dmg formula:
-    #   Critical roll and hit = max damage for the attack type
-    #   Critical roll and miss = roll for normal damage
-    #   Normal damage = attack's dmg_base + dmg_roll
+        """
 
     def attack(self, from_char, to_char):
+        """ Perform an attack represented by self from from_char to to_char."""
 
         print self.details['prep_msg'] % (from_char.desc['job'], 
                                       to_char.desc['job'])
         # calculate hit
+        # Hit formula:
+        #   attacker's hit_attr attribute + hit_roll VS
+        #   defender's hit_against attribute
         print "Calculating hit chance:",
         hit_attr = from_char.attributes[self.details['hit_attr']]
         hit_roll, crit_roll = roll(self.details['hit_roll'], True)
@@ -137,8 +152,14 @@ class Attack(object):
         hit = hit_attr + hit_roll
         print "%d against %d" % (hit, hit_against)
         
-        # damage calculation
+        # calculate damage
+        # Dmg formula:
+        #   Critical roll and hit = max damage
+        #   Critical roll and miss = roll for normal damage
+        #   Noncrit roll and miss = 0 damage
+        #   Normal damage = attack's dmg_base + dmg_roll
         if hit_roll == crit_roll:
+            # crit and successful hit, max damage
             if hit > hit_against:
                 print "Critical Hit! Max Damage!"
                 print self.details['hit_crit_msg']

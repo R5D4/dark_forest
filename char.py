@@ -9,7 +9,6 @@ Contains the following classes:
 
 from random import randint
 from random import choice
-import map_
 import combat
 
 class Character(object):
