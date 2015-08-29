@@ -27,8 +27,8 @@ class Character(object):
             'max_mana': int
         }
         self.attacks = {
-            'name1': combat.Attack1(),
-            'name2': combat.Attack2()
+            'name1': Attack1(),
+            'name2': Attack2()
             ...
         }
         self.desc = {
@@ -70,6 +70,8 @@ class Character(object):
         print "The %s took %d damage!" % (self.desc['job'], dmg)
 
 
+########## PLAYER CHARACTER ##########
+
 class Player(Character):
     """ Player class."""
 
@@ -85,9 +87,9 @@ class Player(Character):
             'max_mana': 5
         }
         self.attacks = {
-            'slash': combat.Slash(),
-            'stab': combat.Stab(),
-            'shoot': combat.Shoot()
+            'slash': Slash(),
+            'stab': Stab(),
+            'shoot': Shoot()
         }
         self.desc = {
             'name': 'Hallas',
@@ -98,6 +100,8 @@ the North.'
         super(Player, self).__init__()
         self.print_stats()
 
+
+########## BOSS CHARACTER ##########
 
 class Boar(Character):
     """ Boar class (boss)."""
@@ -114,9 +118,9 @@ class Boar(Character):
             'max_mana': 0
         }
         self.attacks = {
-            'charge': combat.Charge(),
-            'kick': combat.Kick(),  
-            'bite': combat.Bite()
+            'charge': Charge(),
+            'kick': Kick(),  
+            'bite': Bite()
         }
         self.desc = {
             'name': 'Unknown',
@@ -126,3 +130,104 @@ tusks.'
         } 
         super(Boar, self).__init__()
         self.print_stats()
+
+
+########## PLAYER ATTACKS ##########
+
+class Slash(combat.Attack):
+    
+    def __init__(self):
+        self.details = {
+            'prep_msg': "The %s slashes the %s with his elven long-knife!",
+            'hit_crit_msg': "The elven long-knife opens up a gushing wound!",
+            'hit_success_msg': "The elven long-knife cuts through!",
+            'hit_fail_msg': "The elven long-knife bounces off!",
+            'hit_attr': 'str',
+            'hit_roll': '1d20',
+            'hit_against': 'AC',
+            'dmg_roll': '1d8',
+            'dmg_base': 3
+        }
+
+
+class Shoot(combat.Attack):
+    
+    def __init__(self):
+        self.details = {
+            'prep_msg': "The %s lets fly an arrow from his longbow at the %s!",
+            'hit_crit_msg': "The arrow pierces a vital organ!",
+            'hit_success_msg': "The arrow pierces through!",
+            'hit_fail_msg': "The arrow glances off!",
+            'hit_attr': 'dex',
+            'hit_roll': '1d20',
+            'hit_against': 'AC',
+            'dmg_roll': '1d8',
+            'dmg_base': 3
+        }
+
+
+class Stab(combat.Attack):
+    
+    def __init__(self):
+        self.details = {
+            'prep_msg': "The %s stabs the %s with his hunting knife!",
+            'hit_crit_msg': "The blade finds a softspot and sinks in!",
+            'hit_success_msg': "The blade punctures through!",
+            'hit_fail_msg': "The blade bounces off!",
+            'hit_attr': 'str',
+            'hit_roll': '1d10',
+            'hit_against': 'AC',
+            'dmg_roll': '1d8',
+            'dmg_base': 1
+        }
+
+
+########## BOSS ATTACKS ##########
+
+class Charge(combat.Attack):
+    
+    def __init__(self):
+        self.details = {
+            'prep_msg': "The %s charges the %s, leading with its tusks!",
+            'hit_crit_msg': "The charge connects! The tusks are buried deep!",
+            'hit_success_msg': "The tusks pierce the defences!",
+            'hit_fail_msg': "The charge misses!",
+            'hit_attr': 'dex',
+            'hit_roll': '1d10',
+            'hit_against': 'reflex',
+            'dmg_roll': '1d10',
+            'dmg_base': 7 
+        }
+
+
+class Kick(combat.Attack):
+    
+    def __init__(self):
+        self.details = {
+            'prep_msg': "The %s kicks the %s with its hooves!",
+            'hit_crit_msg': "The kick lands square on!",
+            'hit_success_msg': "The kick connects!",
+            'hit_fail_msg': "The kick misses!",
+            'hit_attr': 'str',
+            'hit_roll': '1d10',
+            'hit_against': 'reflex',
+            'dmg_roll': '1d8',
+            'dmg_base': 3
+        }
+
+
+class Bite(combat.Attack):
+    
+    def __init__(self):
+        self.details = {
+            'prep_msg': "The %s bites at the %s!",
+            'hit_crit_msg': "An artery is opened by the razor-sharp teeth!",
+            'hit_success_msg': "The teeth sink in!",
+            'hit_fail_msg': "The teeth do not penetrate!",
+            'hit_attr': 'str',
+            'hit_roll': '1d20',
+            'hit_against': 'AC',
+            'dmg_roll': '1d8',
+            'dmg_base': 2
+        }
+
