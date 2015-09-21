@@ -41,6 +41,7 @@ you expected and you were "volunteered" for a more dangerous task.
   * Ignores distance
 
 ## Planned Features
+1. Procedural map generation
 1. Arena Mode
 3. Combat
   * More accurate D&D combat system
