@@ -1,5 +1,8 @@
 """ This module contains the Engine class (game engine)."""
 
+from sys import exit
+
+
 class Engine(object):
     """ The game engine that gets and runs the next scene from the map."""
 
@@ -13,3 +16,8 @@ class Engine(object):
         while True:
             next_scene_name = current_scene.enter()
             current_scene = self.scene_map.next_scene(next_scene_name)
+
+    def arena(self):
+        """ Start arena mode."""
+        print "Entering the arena!"
+        exit(1)
