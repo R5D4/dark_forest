@@ -41,13 +41,14 @@ you expected and you were "volunteered" for a more dangerous task.
   * Ignores distance
 
 ## Planned Features
+1. Arena Mode
+3. Combat
+  * More accurate D&D combat system
+2. Characters
+  * More accurate D&D character stats
 1. Map
   * In-game help messages
   * Tracking/hunting system (procedurally generated environmental clues)
-2. Characters
-  * More accurate D&D character stats
-3. Combat
-  * More accurate D&D combat system
 4. Interface
   * More interactive game interface with curses
 
