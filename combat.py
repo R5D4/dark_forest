@@ -19,6 +19,7 @@ def begin_combat(characters):
     Return 'death' if player dies or 'win' if boar dies.
     There is currently no way to exit combat in any other way once entered.
     """
+    # characters is a dict with an entry for key 'player' and 'boar'
     player = characters['player']
     boar = characters['boar']
 
