@@ -9,6 +9,7 @@ from sys import exit
 from random import randint
 import char
 import combat
+import map_gen
 
 
 class Map(object):
@@ -37,15 +38,15 @@ class Map(object):
             'death': Death(self.characters),
             'win': Win(self.characters),
             'quit': Quit(self.characters),
-            'start_area': StartArea(self.characters),
-            'dead_log_area': DeadLogArea(self.characters),
-            'ponds_area': PondsArea(self.characters),
-            'dead_end': DeadEnd(self.characters),
-            'brook_area': BrookArea(self.characters),
-            'tall_tree_area': TallTreeArea(self.characters),
-            'glade_area': GladeArea(self.characters),
-            'exit_sw': ExitSW(self.characters),
-            'exit_e': ExitE(self.characters)
+            'entrance': map_gen.make_entrance(self.characters)
+            #'dead_log_area': DeadLogArea(self.characters),
+            #'ponds_area': PondsArea(self.characters),
+            #'dead_end': DeadEnd(self.characters),
+            #'brook_area': BrookArea(self.characters),
+            #'tall_tree_area': TallTreeArea(self.characters),
+            #'glade_area': GladeArea(self.characters),
+            #'exit_sw': ExitSW(self.characters),
+            #'exit_e': ExitE(self.characters)
         }
 
     def next_scene(self, scene_name):
@@ -81,9 +82,6 @@ class Scene(object):
     def __init__(self, characters):
         """
         Set default attributes.
-
-        Subclasse should _extend_ this method if the scene requires different
-        attributes or values than the default.
         """
         self.characters = characters
         self.exits = {}
@@ -92,23 +90,29 @@ class Scene(object):
             'encounter': False,
             'can_leave': True 
         }
+        self.description = "No description available."
 
     def process_action(self, action):
-        """
-        Process user action.
-
-        Currently needs to be overrode in a subclass. It is used to handle
-        user actions to do with environmental interaction.
-        """
-        print "Please override this method."
+        """ Process user action."""
+        ENV_ACTIONS = {
+            'look': ['l', 'look'],
+        }
+        # make single list of supported actions to check against user action
+        SUPPORTED_ACTIONS = \
+            [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
+        
+        if action in SUPPORTED_ACTIONS:
+            if action in ENV_ACTIONS['look']:
+                self.describe()
+                self.print_encounter_msg()
+        else:
+            print "You can't do that."
 
     def describe(self): 
         """
         Print a description of the scene.
-
-        Needs to be overrode in a subclass. 
         """
-        print "Please override this method."
+        print self.description
     
     def print_encounter_msg(self):
         """ Print a message indicating if the boss is in the area."""
@@ -127,10 +131,6 @@ class Scene(object):
     def enter(self):
         """
         Execute actions upon entering a scene.
-
-        The set of actions is the same for all interactive scenes. For
-        special scenes like winning, dying, and quitting that are not
-        interactive, override this method.
         """
         # 1. Print scene description
         self.describe()
@@ -226,7 +226,7 @@ class Story(Scene):
     def enter(self):
         """ Print description and return first map area scene."""
         self.describe()
-        return 'start_area'
+        return 'entrance'
 
 
 ##########  MAP AREA SCENES ##########
