@@ -6,10 +6,11 @@ import random
 import map_
 
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
-CANOPY = ['oak', 'hickory', 'pine']
-UNDERSTORY = ['dogwood', 'cedar', 'holly', 'young chestnut']
-SHRUBS = ['blackberry', 'honeysuckle', 'poison ivy']
+CANOPY = ['none', 'oak', 'hickory', 'pine']
+UNDERSTORY = ['none', 'dogwood', 'cedar', 'holly', 'young chestnut']
+SHRUBS = ['none', 'blackberry', 'honeysuckle', 'poison ivy']
 FLOOR = ['leafy', 'dirt', 'rocky']
+
 
 def new_scene(characters):
     scene = map_.Scene(characters)
@@ -18,28 +19,33 @@ def new_scene(characters):
     scene.features = {}
     return scene
 
+
 def make_entrance(characters):
     """
     Generate an entrance scene.
     """
     scene = new_scene(characters)
-    scene.flags['encounter_chance'] = 0.5
+
+    scene.flags['encounter_chance'] = 0.3
+
     scene.features['canopy'] = random.choice(CANOPY)
     scene.features['understory'] = random.choice(UNDERSTORY)
     scene.features['shrubs'] = random.choice(SHRUBS)
     scene.features['floor'] = random.choice(FLOOR)
-    scene.description = "The canopy is {}. The understory is {}, the shrubs\
- are {}. The floor is {}.".format(scene.features['canopy'],
-                                  scene.features['understory'],
-                                  scene.features['shrubs'],
-                                  scene.features['floor'])
+
+    scene.description = ""
+    for feature in scene.features.keys():
+        scene.description += "The {} is {}. ".format(feature, 
+                                                     scene.features[feature])
     return scene
+
 
 def make_exit():
     """
     Generate an exit scene.
     """
     pass
+
 
 def make_random():
     """
