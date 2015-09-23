@@ -33,11 +33,11 @@ class Map(object):
         self.characters = {};
         self.add_player()
         self.add_boar()
-        self.scenes = {
-            'story': Story(self.characters),
-            'death': Death(self.characters),
-            'win': Win(self.characters),
-            'quit': Quit(self.characters)
+        self.scenes = {}
+            #'story': Story(self.characters),
+            #'death': Death(self.characters),
+            #'win': Win(self.characters),
+            #'quit': Quit(self.characters)
             #'dead_log_area': DeadLogArea(self.characters),
             #'ponds_area': PondsArea(self.characters),
             #'dead_end': DeadEnd(self.characters),
@@ -46,7 +46,6 @@ class Map(object):
             #'glade_area': GladeArea(self.characters),
             #'exit_sw': ExitSW(self.characters),
             #'exit_e': ExitE(self.characters)
-        }
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -86,6 +85,7 @@ class Scene(object):
         """
         Set default attributes.
         """
+        self.name = None
         self.characters = characters
         self.exits = {}
         self.flags = {
@@ -93,6 +93,7 @@ class Scene(object):
             'encounter': False,
             'can_leave': True 
         }
+        self.features = {}
         self.description = "No description available."
 
     def process_action(self, action):
