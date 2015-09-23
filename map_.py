@@ -68,6 +68,13 @@ class Map(object):
         self.scenes.update({name: scene})
 
 
+    def print_map(self):
+        """ Print out the map."""
+        for scene in self.scenes.values():
+            print "{}: ".format(scene.name)
+            print "    exits: {}".format(scene.exits)
+
+
 class Scene(object):
     """ Defines a generic scene."""
 
