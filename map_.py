@@ -30,22 +30,8 @@ class Map(object):
     def __init__(self, start_scene_name):
         """ Set start scene name, create characters, create scene objects."""
         self.start_scene_name = start_scene_name
-        self.characters = {};
-        self.add_player()
-        self.add_boar()
         self.scenes = {}
-            #'story': Story(self.characters),
-            #'death': Death(self.characters),
-            #'win': Win(self.characters),
-            #'quit': Quit(self.characters)
-            #'dead_log_area': DeadLogArea(self.characters),
-            #'ponds_area': PondsArea(self.characters),
-            #'dead_end': DeadEnd(self.characters),
-            #'brook_area': BrookArea(self.characters),
-            #'tall_tree_area': TallTreeArea(self.characters),
-            #'glade_area': GladeArea(self.characters),
-            #'exit_sw': ExitSW(self.characters),
-            #'exit_e': ExitE(self.characters)
+        self.characters = {};
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -54,6 +40,10 @@ class Map(object):
     def opening_scene(self):
         """ Return the Scene object for the opening scene."""
         return self.next_scene(self.start_scene_name)
+
+    def add_characters(self):
+        self.add_player()
+        self.add_boar()
 
     def add_player(self):
         """ Create player character. Allow user to re-roll."""

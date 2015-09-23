@@ -17,6 +17,7 @@ while True:
     action = raw_input("Choose a number: ")
     if action == "1":
         a_map = map_gen.new_map()
+        a_map.add_characters()
         a_game = engine.Engine()
         a_game.add_map(a_map)
         a_game.play_story()
