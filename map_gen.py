@@ -34,16 +34,7 @@ def new_map():
     a_map.add_scene('entrance', entrance_scene)
 
     # add middle scenes
-    random_scene = make_random(a_map)
-    link_scene(a_map, random_scene)
-    a_map.add_scene(random_scene.name, random_scene)
-
-    # add middle scenes
-    random_scene = make_random(a_map)
-    link_scene(a_map, random_scene)
-    a_map.add_scene(random_scene.name, random_scene)
-
-    # add exit scenes
+    generate_scenes(a_map)
 
     update_exits(a_map)
 
@@ -53,6 +44,16 @@ def new_map():
     a_map.add_scene('win', map_.Win(a_map.characters))
     a_map.add_scene('quit', map_.Quit(a_map.characters))
     return a_map
+
+
+def generate_scenes(a_map):
+    """ Creates a predefined number of scenes, links and adds them to map."""
+    n = randint(6, 11)
+    # create 5 to 10 scenes
+    for i in range(1, n):
+        random_scene = make_random(a_map)
+        link_scene(a_map, random_scene)
+        a_map.add_scene(random_scene.name, random_scene)
 
 
 def new_scene(a_map, name):
