@@ -38,6 +38,11 @@ def new_map():
     link_scene(a_map, random_scene)
     a_map.add_scene(random_scene.name, random_scene)
 
+    # add middle scenes
+    random_scene = make_random(a_map)
+    link_scene(a_map, random_scene)
+    a_map.add_scene(random_scene.name, random_scene)
+
     # add exit scenes
 
     update_exits(a_map)
@@ -102,7 +107,7 @@ def link_scene(a_map, scene):
                 else: # the opposite exit isn't available in the new scene
                     # remove the original exit from potential exits
                     s1.unused_exits.remove(s1_exit)
-    else:
+    else: # this is the first scene, no need to add exits
         pass
 
 
