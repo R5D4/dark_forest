@@ -37,8 +37,7 @@ class Map(object):
             'story': Story(self.characters),
             'death': Death(self.characters),
             'win': Win(self.characters),
-            'quit': Quit(self.characters),
-            'entrance': map_gen.make_entrance(self.characters)
+            'quit': Quit(self.characters)
             #'dead_log_area': DeadLogArea(self.characters),
             #'ponds_area': PondsArea(self.characters),
             #'dead_end': DeadEnd(self.characters),
@@ -74,6 +73,10 @@ class Map(object):
             print "-" * 20
             self.characters['boar'] = char.Boar()
             response = raw_input("Reroll character? (y/n): ")
+
+    def add_scene(self, name, scene):
+        """ Add a scene to the map with 'name' as the key to the dict."""
+        self.scenes.update({name: scene})
 
 
 class Scene(object):

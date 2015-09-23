@@ -12,6 +12,13 @@ SHRUBS = ['none', 'blackberry', 'honeysuckle', 'poison ivy']
 FLOOR = ['leafy', 'dirt', 'rocky']
 
 
+def new_map():
+    """ Generates a new map with random scenes."""
+    a_map = map_.Map('story')
+    entrance_scene = make_entrance(a_map.characters)
+    a_map.add_scene('entrance', entrance_scene)
+    return a_map
+
 def new_scene(characters):
     scene = map_.Scene(characters)
     scene.exits = {}
@@ -26,7 +33,7 @@ def make_entrance(characters):
     """
     scene = new_scene(characters)
 
-    scene.flags['encounter_chance'] = 0.3
+    scene.flags['encounter_chance'] = 1
 
     scene.features['canopy'] = random.choice(CANOPY)
     scene.features['understory'] = random.choice(UNDERSTORY)
