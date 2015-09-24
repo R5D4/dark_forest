@@ -50,7 +50,6 @@ you expected and you were "volunteered" for a more dangerous task.
   * More accurate D&D character stats
 1. Map
   * In-game help messages
-  * Tracking/hunting system (procedurally generated environmental clues)
 4. Interface
   * More interactive game interface with curses
 
