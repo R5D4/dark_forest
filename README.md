@@ -41,8 +41,9 @@ you expected and you were "volunteered" for a more dangerous task.
   * Ignores distance
 
 ## Planned Features
-1. Procedural map generation
-1. Arena Mode
+1. Improve procedural map generation
+2. Tracking/Hunting System
+3. Day/Night System
 3. Combat
   * More accurate D&D combat system
 2. Characters
