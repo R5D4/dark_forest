@@ -1,5 +1,5 @@
 """
-Procedurally generates map scenes.
+Procedurally generate map scenes.
 """
 
 from random import randint
@@ -7,6 +7,9 @@ from random import choice
 import random
 import map_
 
+MIN_SCENES = 7
+MAX_SCENES = 11
+GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
 ID_SEQ = 1 # part of name for generated scenes
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
 OPPOSITE_EXITS = {
@@ -27,16 +30,9 @@ FLOOR = ['leafy', 'dirt', 'rocky']
 
 def new_map():
     """ Generates a new map with random scenes."""
-    a_map = map_.Map('story')
+    a_map = map_.Map('story') # first scene is 'story'
 
-    # add entrance scene
-    entrance_scene = make_entrance(a_map)
-    a_map.add_scene('entrance', entrance_scene)
-
-    # add middle scenes
     generate_scenes(a_map)
-
-    update_exits(a_map)
     a_map.print_map()
 
     # add special scenes
@@ -48,20 +44,54 @@ def new_map():
 
 
 def generate_scenes(a_map):
-    """ Creates a predefined number of scenes, links and adds them to map."""
-    n = randint(6, 11)
-    # create 5 to 10 scenes
-    for i in range(1, n):
-        random_scene = make_random(a_map)
-        link_scene(a_map, random_scene)
-        a_map.add_scene(random_scene.name, random_scene)
+    """ Creates a predefined number of scenes and creates links b/w them."""
+    scenes = {} # list of created scenes with empty adjacent locations
+
+    # pick a starting location for entrance scene
+    x = randint(1, GRID_SIZE)
+    y = randint(1, GRID_SIZE)
+
+    # add entrance scene to list of created scenes
+    scenes[(x, y)] = new_scene(a_map, 'entrance')
+
+    # randomly calculate number of total scenes
+    n = randint(MIN_SCENES, MAX_SCENES)
+    added = 1 # number of scenes added
+
+    while added < n:
+        # pick an existing scene as a reference location
+        ref_loc, sc = choice(scenes.items())
+        # pick an empty adjacent location for the new scene
+        x, y = empty_adjacent(ref_loc, scenes)
+        # create a new scene at the empty location found above
+        if (x, y) != (0, 0):
+            new_sc = new_scene(a_map, 'random')
+            scenes[(x, y)] = new_sc
+            a_map.add_scene(new_sc)
+            added += 1
+        else: # we cannot add any more adjacent scenes to the ref location
+            scenes.pop(ref_loc)
 
 
-def new_scene(a_map, name):
-    """ Generate a new random scene."""
+def empty_adjacent(ref_loc, scenes):
+    """ 
+    Return an empty adjacent location to the reference location.
+
+    ref_loc: reference location on the grid
+    scenes: list of existing scenes
+    """
+    # generate list of potential adjacent locations
+    # pick a location at random and check if it's already occupied
+    # if not occupied, return this location
+    # if occupied, remove this location and pick another
+    # if all adjacent locations occupied, return (0, 0)
+
+
+def new_scene(a_map, scene_type):
+    """ Create a new scene and fill it with details."""
     scene = map_.Scene(a_map.characters)
 
-    scene.name = name
+    scene.name = make_name(scene_type)
     scene.flags['encounter_chance'] = 1
 
     scene.features['canopy'] = random.choice(CANOPY)
@@ -74,6 +104,29 @@ def new_scene(a_map, name):
         scene.description += "The {} is {}. ".format(feature, 
                                                      scene.features[feature])
     return scene
+
+
+def make_name(scene_type):
+    """ Return an appropriate scene name."""
+    global ID_SEQ
+    if scene_type == 'entrance':
+        name = 'entrance'
+    elif scene_type == 'random':
+        name = "random{}".format(ID_SEQ)
+        ID_SEQ += 1
+    elif scene_type == 'exit':
+        name = "exit{}".format(ID_SEQ)
+        ID_SEQ += 1
+    else:
+        pass
+    return name
+        
+
+def update_exits(a_map):
+    """ Update description of exits in all scenes in the map."""
+    for scene in a_map.scenes.values():
+        scene.description += "The path leads towards {}".format(
+                                                            scene.exits.keys())
 
 
 def link_scene(a_map, scene):
@@ -114,37 +167,3 @@ def link_scene(a_map, scene):
                         s1.unused_exits.remove(s1_exit)
     else: # this is the first scene, no need to add exits
         pass
-
-
-def update_exits(a_map):
-    """ Update description of exits in all scenes in the map."""
-    for scene in a_map.scenes.values():
-        scene.description += "The path leads towards {}".format(
-                                                            scene.exits.keys())
-
-
-def make_entrance(a_map):
-    """
-    Generate an entrance scene.
-    """
-    return new_scene(a_map, 'entrance')
-
-
-def make_exit():
-    """
-    Generate an exit scene.
-    """
-    global ID_SEQ
-    name = "scene{}".format(ID_SEQ)
-    ID_SEQ += 1
-    return new_scene(a_map, name)
-
-
-def make_random(a_map):
-    """
-    Generate a scene.
-    """
-    global ID_SEQ
-    name = "scene{}".format(ID_SEQ)
-    ID_SEQ += 1
-    return new_scene(a_map, name)

@@ -67,7 +67,6 @@ class Map(object):
         """ Add a scene to the map with 'name' as the key to the dict."""
         self.scenes.update({name: scene})
 
-
     def print_map(self):
         """ Print out the map."""
         for scene in self.scenes.values():
