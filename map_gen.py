@@ -7,8 +7,8 @@ from random import choice
 import random
 import map_
 
-MIN_SCENES = 7
-MAX_SCENES = 11
+MIN_SCENES = 10
+MAX_SCENES = 15
 GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
 ID_SEQ = 1 # part of name for generated scenes
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
@@ -44,7 +44,7 @@ def new_map():
 
 
 def generate_scenes(a_map):
-    """ Creates a predefined number of scenes and creates links b/w them."""
+    """ Creates a predefined number of scenes."""
     scenes = {} # list of created scenes with empty adjacent locations
 
     # pick a starting location for entrance scene
@@ -60,6 +60,7 @@ def generate_scenes(a_map):
 
     while added < n:
         # pick an existing scene as a reference location
+        print "scenes: {}.".format(scenes)
         ref_loc, sc = choice(scenes.items())
         # pick an empty adjacent location for the new scene
         x, y = empty_adjacent(ref_loc, scenes)
@@ -67,7 +68,7 @@ def generate_scenes(a_map):
         if (x, y) != (0, 0):
             new_sc = new_scene(a_map, 'random')
             scenes[(x, y)] = new_sc
-            a_map.add_scene(new_sc)
+            a_map.add_scene(new_sc.name, new_sc)
             added += 1
         else: # we cannot add any more adjacent scenes to the ref location
             scenes.pop(ref_loc)
@@ -80,11 +81,35 @@ def empty_adjacent(ref_loc, scenes):
     ref_loc: reference location on the grid
     scenes: list of existing scenes
     """
-    # generate list of potential adjacent locations
-    # pick a location at random and check if it's already occupied
-    # if not occupied, return this location
-    # if occupied, remove this location and pick another
+    # generate list of all possible adjacent locations
+    locations = [] # array of (x, y) tuples
+    ref_x, ref_y = ref_loc
+    for new_x in range(ref_x - 1, ref_x + 2):
+        for new_y in range(ref_y - 1, ref_x + 2):
+            new_loc = (new_x, new_y)
+            if (new_x, new_y) != ref_loc and valid_location(new_loc):
+                locations.append(new_loc)
+    # while there are still locations with possible free adjacent locations
+    while locations:
+        # pick a location at random and check if it's already occupied
+        loc = choice(locations)
+        # if not occupied, return this location
+        if loc not in scenes:
+            return loc
+        # if occupied, remove this location and pick another
+        else:
+            locations.remove(loc)
     # if all adjacent locations occupied, return (0, 0)
+    return (0, 0)
+
+
+def valid_location(location):
+    """ Determine if a location is valid based on grid size."""
+    x, y = location
+    if x < 1 or x > GRID_SIZE or y < 1 or y > GRID_SIZE:
+        return False
+    else:
+        return True
 
 
 def new_scene(a_map, scene_type):
