@@ -74,6 +74,21 @@ def generate_scenes(a_map):
             scenes.pop(ref_loc)
 
 
+def link_scenes(a_map):
+    """ Randomly create exits between scenes."""
+    # for each created scene, make 1-2 exits to other scenes if possible
+
+    # for each scene s1 in a_map.scenes
+        # make a list S of all scenes in a_map.scenes adjacent to s
+        # determine number of desired links to make from s1 (1 or 2)
+        # while we still need to make more links and there are adjacent scenes
+            # pick a scene s2 from S
+            # determine link direction from s1 to s2 based on position
+            # check if there's already a link between s1 and s2
+                # if yes, remove s2 from S, continue
+                # else if no, make a link b/w s1 and s2 
+    
+
 def empty_adjacent(ref_loc, scenes):
     """ 
     Return an empty adjacent location to the reference location.
@@ -153,42 +168,3 @@ def update_exits(a_map):
         scene.description += "The path leads towards {}".format(
                                                             scene.exits.keys())
 
-
-def link_scene(a_map, scene):
-    """ Creates links (exits) between the new scene and existing scenes."""
-    if a_map.scenes: # at least one existing scene
-        # construct list of existing scenes to be potentially linked
-        scene_list = a_map.scenes.values()
-        # at the beginning, we can use any exit of the new scene
-        scene_unused_exits = list(EXITS) # make a copy
-
-        # link new scene with 1-3 different scenes
-        n = randint(1, 3)
-        linked = 0 # number of scenes successfully linked
-        # while less than the desired links and there are more scenes to link
-        while linked < n and scene_list:
-            for i in range(1, 2):
-                # pick a scene from the scene list we made earlier
-                s1 = choice(scene_list)
-                # make a list of unused exits in the scene
-                s1_unused_exits = list(set(EXITS).difference(s1.exits.keys()))
-
-                # while there are still unused exits 
-                while s1_unused_exits:
-                    # pick an unused exit in the scene
-                    s1_exit = choice(s1_unused_exits)
-                    # look up opposite exit
-                    scene_exit = OPPOSITE_EXITS[s1_exit]
-                    # if the opposite exit is unused in the new scene
-                    if scene_exit in scene_unused_exits:
-                        # link the two scenes using their respective exits
-                        s1.exits[s1_exit] = scene.name
-                        scene.exits[scene_exit] = s1.name
-                        linked += 1
-                        scene_list.remove(s1)
-                        break
-                    else: # the opposite exit isn't available in the new scene
-                        # remove the original exit from potential exits
-                        s1.unused_exits.remove(s1_exit)
-    else: # this is the first scene, no need to add exits
-        pass
