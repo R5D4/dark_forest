@@ -33,7 +33,9 @@ def new_map():
     a_map = map_.Map('story') # first scene is 'story'
 
     generate_scenes(a_map)
+    link_scenes(a_map)
     a_map.print_map()
+    update_exits(a_map)
 
     # add special scenes
     a_map.add_scene('story', map_.Story(a_map.characters))
@@ -68,6 +70,7 @@ def generate_scenes(a_map):
         if (x, y) != (0, 0):
             new_sc = new_scene(a_map, 'random')
             scenes[(x, y)] = new_sc
+            new_sc.location = (x, y)
             a_map.add_scene(new_sc.name, new_sc)
             added += 1
         else: # we cannot add any more adjacent scenes to the ref location
@@ -79,15 +82,45 @@ def link_scenes(a_map):
     # for each created scene, make 1-2 exits to other scenes if possible
 
     # for each scene s1 in a_map.scenes
+    for s1 in a_map.scenes:
         # make a list S of all scenes in a_map.scenes adjacent to s
+        adjacent_scenes = all_adjacent(a_map.scenes, s1)
         # determine number of desired links to make from s1 (1 or 2)
+        n = randint(1, 2)
+        linked = 0
         # while we still need to make more links and there are adjacent scenes
+        while linked < n and adjacent_scenes:
             # pick a scene s2 from S
+            sc = choice(adjacent_scenes)
             # determine link direction from s1 to s2 based on position
+            dir1to2 = link_direction(s1.location, s2.location)
             # check if there's already a link between s1 and s2
+            if has_link(s1, dir1to2, s2):
                 # if yes, remove s2 from S, continue
+                adjacent_scenes.remove(s2)
+            else
                 # else if no, make a link b/w s1 and s2 
+                create_link(s1, dir1to2, s2)
     
+
+def all_adjacent(a_map.scenes, s1):
+    """ Return a list S of Scene objects that are adjacent to s1."""
+    return []
+
+
+def link_direction(loc1, loc2):
+    """ Return the direction of the exit from loc1 to loc2."""
+    return ""
+
+
+def has_link(s1, dir1to2, s2):
+    """ Return True if s1 has a link to s2 in direction dir1to2. Else false."""
+    return False
+
+
+def create_link(s1, dir1to2, s2):
+    """ Create a exit link between s1 and s2 in the direction of dir1to2."""
+
 
 def empty_adjacent(ref_loc, scenes):
     """ 

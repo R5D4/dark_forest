@@ -82,6 +82,7 @@ class Scene(object):
         Set default attributes.
         """
         self.name = None
+        self.location = ()
         self.characters = characters
         self.exits = {}
         self.flags = {
