@@ -182,15 +182,15 @@ def empty_adjacent(ref_loc, scenes):
     # generate list of all possible adjacent locations
     locations = [] # array of (x, y) tuples
     ref_x, ref_y = ref_loc
-    print "ref_loc = {}".format(ref_loc)
+    #print "ref_loc = {}".format(ref_loc)
     for new_x in range(ref_x - 1, ref_x + 2):
         for new_y in range(ref_y - 1, ref_y + 2):
             new_loc = (new_x, new_y)
-            print "new_loc = {}".format(new_loc)
+            #print "new_loc = {}".format(new_loc)
             if (new_x, new_y) != ref_loc and valid_location(new_loc):
                 locations.append(new_loc)
     # while there are still locations with possible free adjacent locations
-    print "locations = {}".format(locations)
+    #print "locations = {}".format(locations)
     while locations:
         # pick a location at random and check if it's already occupied
         loc = choice(locations)
