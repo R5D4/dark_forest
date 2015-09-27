@@ -7,6 +7,8 @@ from random import choice
 import random
 import map_
 
+########## GLOBAL THINGIES ##########
+
 MIN_SCENES = 10
 MAX_SCENES = 15
 GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
@@ -28,6 +30,8 @@ SHRUBS = ['none', 'blackberry', 'honeysuckle', 'poison ivy']
 FLOOR = ['leafy', 'dirt', 'rocky']
 
 
+########## PUBLIC FUNCTION ##########
+
 def new_map():
     """ Generates a new map with random scenes."""
     a_map = map_.Map('story') # first scene is 'story'
@@ -46,6 +50,8 @@ def new_map():
     a_map.add_scene('quit', map_.Quit(a_map.characters))
     return a_map
 
+
+########## HELPER FUNCTIONS ##########
 
 def generate_scenes(a_map):
     """ Creates a predefined number of scenes."""
@@ -87,7 +93,7 @@ def link_scenes(a_map):
     # for each scene s1 in a_map.scenes
     for s1 in a_map.scenes.values():
         # make a list S of all scenes in a_map.scenes adjacent to s
-        adjacent_scenes = all_adjacent(scene_dict, s1)
+        adjacent_scenes = adjacent_scenes(scene_dict, s1)
         # determine number of desired links to make from s1 (1 or 2)
         n = randint(1, 2)
         linked = 0
@@ -115,7 +121,7 @@ def create_scene_dict(a_map):
     return scene_dict
 
 
-def all_adjacent(scene_dict, s1):
+def adjacent_scenes(scene_dict, s1):
     """ Return a list S of Scene objects that are adjacent to s1."""
     # loop through all 9 possible locations centered at s1's location
     adjacent_scenes = []
