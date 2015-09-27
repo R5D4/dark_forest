@@ -31,6 +31,8 @@ FLOOR = ['leafy', 'dirt', 'rocky']
 def new_map():
     """ Generates a new map with random scenes."""
     a_map = map_.Map('story') # first scene is 'story'
+    global ID_SEQ 
+    ID_SEQ = 1 # reset sequence number for new map
 
     generate_scenes(a_map)
     link_scenes(a_map)
@@ -62,13 +64,9 @@ def generate_scenes(a_map):
 
     while added < n:
         # pick an existing scene as a reference location
-        print '\n'
-        print "Scenes: {}".format(scenes)
-        print '\n'
         ref_loc, sc = choice(scenes.items())
         # pick an empty adjacent location for the new scene
         x, y = empty_adjacent(ref_loc, scenes)
-        print "empty_adjacent returns: {}".format((x, y))
         # create a new scene at the empty location found above
         if (x, y) != (0, 0):
             new_sc = new_scene(a_map, 'random')
@@ -78,10 +76,6 @@ def generate_scenes(a_map):
             added += 1
         else: # we cannot add any more adjacent scenes to the ref location
             scenes.pop(ref_loc)
-
-    print '\n'
-    a_map.print_map()
-    print '\n'
 
 
 def link_scenes(a_map):
@@ -127,7 +121,7 @@ def all_adjacent(scene_dict, s1):
     adjacent_scenes = []
     s1_x, s1_y = s1.location
     for new_x in range(s1_x - 1, s1_x + 2):
-        for new_y in range(s1_y - 1, s1_x + 2):
+        for new_y in range(s1_y - 1, s1_y + 2):
             new_loc = (new_x, new_y)
             if (new_x, new_y) != s1.location and valid_location(new_loc):
                 # if there is a scene from scene_dict in that location
@@ -188,12 +182,15 @@ def empty_adjacent(ref_loc, scenes):
     # generate list of all possible adjacent locations
     locations = [] # array of (x, y) tuples
     ref_x, ref_y = ref_loc
+    print "ref_loc = {}".format(ref_loc)
     for new_x in range(ref_x - 1, ref_x + 2):
-        for new_y in range(ref_y - 1, ref_x + 2):
+        for new_y in range(ref_y - 1, ref_y + 2):
             new_loc = (new_x, new_y)
+            print "new_loc = {}".format(new_loc)
             if (new_x, new_y) != ref_loc and valid_location(new_loc):
                 locations.append(new_loc)
     # while there are still locations with possible free adjacent locations
+    print "locations = {}".format(locations)
     while locations:
         # pick a location at random and check if it's already occupied
         loc = choice(locations)

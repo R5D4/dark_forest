@@ -70,7 +70,7 @@ class Map(object):
     def print_map(self):
         """ Print out the map."""
         for scene in self.scenes.values():
-            print "{}: ".format(scene.name)
+            print "name: {}, location: {}".format(scene.name, scene.location)
             print "    exits: {}".format(scene.exits)
 
 
