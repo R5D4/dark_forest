@@ -62,10 +62,13 @@ def generate_scenes(a_map):
 
     while added < n:
         # pick an existing scene as a reference location
-        print "scenes: {}.".format(scenes)
+        print '\n'
+        print "Scenes: {}".format(scenes)
+        print '\n'
         ref_loc, sc = choice(scenes.items())
         # pick an empty adjacent location for the new scene
         x, y = empty_adjacent(ref_loc, scenes)
+        print "empty_adjacent returns: {}".format((x, y))
         # create a new scene at the empty location found above
         if (x, y) != (0, 0):
             new_sc = new_scene(a_map, 'random')
@@ -76,41 +79,94 @@ def generate_scenes(a_map):
         else: # we cannot add any more adjacent scenes to the ref location
             scenes.pop(ref_loc)
 
+    print '\n'
+    a_map.print_map()
+    print '\n'
+
 
 def link_scenes(a_map):
     """ Randomly create exits between scenes."""
     # for each created scene, make 1-2 exits to other scenes if possible
+    # create a dictionary of (x, y): Scene object items for easy search
+    scene_dict = create_scene_dict(a_map)
 
     # for each scene s1 in a_map.scenes
-    for s1 in a_map.scenes:
+    for s1 in a_map.scenes.values():
         # make a list S of all scenes in a_map.scenes adjacent to s
-        adjacent_scenes = all_adjacent(a_map.scenes, s1)
+        adjacent_scenes = all_adjacent(scene_dict, s1)
         # determine number of desired links to make from s1 (1 or 2)
         n = randint(1, 2)
         linked = 0
         # while we still need to make more links and there are adjacent scenes
         while linked < n and adjacent_scenes:
             # pick a scene s2 from S
-            sc = choice(adjacent_scenes)
+            s2 = choice(adjacent_scenes)
             # determine link direction from s1 to s2 based on position
             dir1to2 = link_direction(s1.location, s2.location)
             # check if there's already a link between s1 and s2
             if has_link(s1, dir1to2, s2):
                 # if yes, remove s2 from S, continue
                 adjacent_scenes.remove(s2)
-            else
+            else:
                 # else if no, make a link b/w s1 and s2 
                 create_link(s1, dir1to2, s2)
+                link += 1
     
 
-def all_adjacent(a_map.scenes, s1):
+def create_scene_dict(a_map):
+    """ Create dict with key=location, value=scene object."""
+    scene_dict = {}
+    for sc in a_map.scenes.values():
+        scene_dict[sc.location] = sc
+    return scene_dict
+
+
+def all_adjacent(scene_dict, s1):
     """ Return a list S of Scene objects that are adjacent to s1."""
-    return []
+    # loop through all 9 possible locations centered at s1's location
+    adjacent_scenes = []
+    s1_x, s1_y = s1.location
+    for new_x in range(s1_x - 1, s1_x + 2):
+        for new_y in range(s1_y - 1, s1_x + 2):
+            new_loc = (new_x, new_y)
+            if (new_x, new_y) != s1.location and valid_location(new_loc):
+                # if there is a scene from scene_dict in that location
+                if new_loc in scene_dict:
+                    # add the scene to S
+                    adjacent_scenes.append(scene_dict[new_loc])
+                else: # if there's no scene in that location
+                    pass
+    return adjacent_scenes
 
 
 def link_direction(loc1, loc2):
     """ Return the direction of the exit from loc1 to loc2."""
-    return ""
+    x1, y1 = loc1
+    x2, y2 = loc2
+    direction = ''
+    if x2 < x1:
+        if y2 < y1:
+            direction = 'sw'
+        elif y2 == y1:
+            direction = 'w'
+        elif y2 > y1:
+            direction = 'nw'
+    elif x2 == x1:
+        if y2 < y1:
+            direction = 's'
+        elif y2 == y1:
+            # loc1 == loc2, shouldn't happen
+            direction = None
+        elif y2 > y1:
+            direction = 'n'
+    elif x2 > x1:
+        if y2 < y1:
+            direction = 'se'
+        elif y2 == y1:
+            direction = 'e'
+        elif y2 > y1:
+            direction = 'ne'
+    return direction
 
 
 def has_link(s1, dir1to2, s2):
