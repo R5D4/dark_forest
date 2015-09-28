@@ -93,6 +93,76 @@ def adjacent_scenes_test():
     ok_(scene_dict[(6, 6)] in adj_scenes)
 
 
+def link_direction_test():
+    loc1 = (5, 5)
+    # north
+    loc2 = (5, 6)
+    ok_(map_gen.link_direction(loc1, loc2) == 'n')
+    # north-east
+    loc2 = (6, 6)
+    ok_(map_gen.link_direction(loc1, loc2) == 'ne')
+    # east
+    loc2 = (6, 5)
+    ok_(map_gen.link_direction(loc1, loc2) == 'e')
+    # south-east
+    loc2 = (6, 4)
+    ok_(map_gen.link_direction(loc1, loc2) == 'se')
+    # south
+    loc2 = (5, 4)
+    ok_(map_gen.link_direction(loc1, loc2) == 's')
+    # south-west
+    loc2 = (4, 4)
+    ok_(map_gen.link_direction(loc1, loc2) == 'sw')
+    # west
+    loc2 = (4, 5)
+    ok_(map_gen.link_direction(loc1, loc2) == 'w')
+    # north-west
+    loc2 = (4, 6)
+    ok_(map_gen.link_direction(loc1, loc2) == 'nw')
+    
+
+def has_link_test():
+    a_map = map_.Map('story')
+
+    # case 1: east-west link
+    s1 = map_gen.new_scene(a_map, 'scene1', (5, 5))
+    s1.name = 'scene1'
+    s2 = map_gen.new_scene(a_map, 'scene2', (6, 5))
+    s2.name = 'scene2'
+    s1.exits['e'] = 'scene2'
+    s2.exits['w'] = 'scene1'
+    ok_(map_gen.has_link(s1, s2) is True)
+    ok_(map_gen.has_link(s2, s1) is True)
+
+    # case 2: north-south link
+    s3 = map_gen.new_scene(a_map, 'scene3', (5, 6))
+    s3.name = 'scene3'
+    s1.exits['n'] = 'scene3'
+    s3.exits['s'] = 'scene1'
+    ok_(map_gen.has_link(s1, s3) is True)
+    ok_(map_gen.has_link(s3, s1) is True)
+
+    # case 3: nw-se link
+    s4 = map_gen.new_scene(a_map, 'scene4', (4, 6))
+    s4.name = 'scene4'
+    s1.exits['nw'] = 'scene4'
+    s4.exits['se'] = 'scene1'
+    ok_(map_gen.has_link(s1, s4) is True)
+    ok_(map_gen.has_link(s4, s1) is True)
+
+    # case 4: not adjacent (and therefore cannot be linked)
+    s5 = map_gen.new_scene(a_map, 'scene5', (9, 9))
+    s5.name = 'scene5'
+    ok_(map_gen.has_link(s1, s5) is False)
+    ok_(map_gen.has_link(s5, s1) is False)
+    
+    # case 5: adjacent (ne-sw) but no links
+    s6 = map_gen.new_scene(a_map, 'scene6', (6, 6))
+    s6.name = 'scene6'
+    ok_(map_gen.has_link(s1, s6) is False)
+    ok_(map_gen.has_link(s6, s1) is False)
+    
+
 ########## HELPER FUNCTIONS ##########
 
 def all_adjacent(ref_loc):

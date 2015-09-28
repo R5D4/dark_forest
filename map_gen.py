@@ -93,7 +93,7 @@ def link_scenes(a_map):
 
     # for each scene s1 in a_map.scenes
     for s1 in a_map.scenes.values():
-        # make a list S of all scenes in a_map.scenes adjacent to s
+        # make a list S of all scenes in a_map.scenes adjacent to s1
         adjacent_scenes = adjacent_scenes(scene_dict, s1.location)
         # determine number of desired links to make from s1 (1 or 2)
         n = randint(1, 2)
@@ -102,15 +102,13 @@ def link_scenes(a_map):
         while linked < n and adjacent_scenes:
             # pick a scene s2 from S
             s2 = choice(adjacent_scenes)
-            # determine link direction from s1 to s2 based on position
-            dir1to2 = link_direction(s1.location, s2.location)
             # check if there's already a link between s1 and s2
-            if has_link(s1, dir1to2, s2):
+            if has_link(s1, s2):
                 # if yes, remove s2 from S, continue
                 adjacent_scenes.remove(s2)
             else:
                 # else if no, make a link b/w s1 and s2 
-                create_link(s1, dir1to2, s2)
+                create_link(s1, s2)
                 link += 1
     
 
@@ -144,6 +142,10 @@ def link_direction(loc1, loc2):
     """ Return the direction of the exit from loc1 to loc2."""
     x1, y1 = loc1
     x2, y2 = loc2
+    # not adjacent
+    if not is_adjacent(loc1, loc2):
+        return None
+
     direction = ''
     if x2 < x1:
         if y2 < y1:
@@ -170,13 +172,32 @@ def link_direction(loc1, loc2):
     return direction
 
 
-def has_link(s1, dir1to2, s2):
-    """ Return True if s1 has a link to s2 in direction dir1to2. Else false."""
+def is_adjacent(loc1, loc2):
+    """ Determine if loc1 and loc2 are adjacent."""
+    x1, y1 = loc1
+    x2, y2 = loc2
+    return abs(x1 - x2) <= 1 and abs(y1 - y2) <= 1
+
+
+def has_link(s1, s2):
+    """ Return True if proper link b/w s1 and s2. Else false."""
+    # determine link directions
+    dir1 = link_direction(s1.location, s2.location)
+    dir2 = link_direction(s2.location, s1.location)
+    # check if links exist
+    if dir1 in s1.exits and dir2 in s2.exits:
+        # check if link in proper direction
+        if s1.exits[dir1] == s2.name and s2.exits[dir2] == s1.name:
+            return True
     return False
 
 
-def create_link(s1, dir1to2, s2):
-    """ Create a exit link between s1 and s2 in the direction of dir1to2."""
+def create_link(s1, s2):
+    """ Create a exit link between s1 and s2 based on relative position."""
+    # determine direction of s1's exit to s2
+    # add s2 as the destination of s1's exit
+    # determine direction of s2's exit to s1
+    # add s1 as the destination of s2's exit
 
 
 def empty_adjacent(ref_loc, scenes):
