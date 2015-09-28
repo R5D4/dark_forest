@@ -76,7 +76,3 @@ def all_adjacent(ref_loc):
                 locations.append(new_loc)
     return locations
 
-
-def all_adjacent_test():
-    pass
-

@@ -10,7 +10,7 @@ import map_
 ########## GLOBAL THINGIES ##########
 
 MIN_SCENES = 10
-MAX_SCENES = 15
+MAX_SCENES = 10
 GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
 ID_SEQ = 1 # part of name for generated scenes
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
@@ -56,16 +56,19 @@ def new_map():
 def generate_scenes(a_map):
     """ Creates a predefined number of scenes."""
     scenes = {} # list of created scenes with empty adjacent locations
+    n = randint(MIN_SCENES, MAX_SCENES)
 
     # pick a starting location for entrance scene
     x = randint(1, GRID_SIZE)
     y = randint(1, GRID_SIZE)
 
     # add entrance scene to list of created scenes
-    scenes[(x, y)] = new_scene(a_map, 'entrance')
+    new_sc = new_scene(a_map, 'entrance')
+    new_sc.location = (x, y)
+    scenes[(x, y)] = new_sc
+    a_map.add_scene(new_sc.name, new_sc)
 
     # randomly calculate number of total scenes
-    n = randint(MIN_SCENES, MAX_SCENES)
     added = 1 # number of scenes added
 
     while added < n:
