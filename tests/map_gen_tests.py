@@ -64,6 +64,37 @@ def generate_scenes_test():
                 scene_dict))
     
 
+def adjacent_scenes_test():
+    a_map = map_.Map('story')
+    location = (5, 5)
+
+    # one adjacent scene
+    scene_dict = {
+                 (5, 5): map_gen.new_scene(a_map, 'entrance', (5, 5)),
+                 (4, 6): map_gen.new_scene(a_map, 'scene1', (4, 6)),
+                 }
+    adj_scenes = map_gen.adjacent_scenes(scene_dict, location)
+    print adj_scenes
+    ok_(scene_dict[(4, 6)] in adj_scenes)
+
+    # two adjacent scenes
+    scene_dict[(6, 5)] = map_gen.new_scene(a_map, 'scene2', (6, 5)), 
+    adj_scenes = map_gen.adjacent_scenes(scene_dict, location)
+    print adj_scenes
+    ok_(scene_dict[(4, 6)] in adj_scenes)
+    ok_(scene_dict[(6, 5)] in adj_scenes)
+
+    # three adjacent scenes
+    scene_dict[(6, 6)] = map_gen.new_scene(a_map, 'scene3', (6, 6)), 
+    adj_scenes = map_gen.adjacent_scenes(scene_dict, location)
+    print adj_scenes
+    ok_(scene_dict[(4, 6)] in adj_scenes)
+    ok_(scene_dict[(6, 5)] in adj_scenes)
+    ok_(scene_dict[(6, 6)] in adj_scenes)
+
+
+########## HELPER FUNCTIONS ##########
+
 def all_adjacent(ref_loc):
     """ Returns a list of all adjacent locations to ref_loc."""
     # generate list of all possible adjacent locations

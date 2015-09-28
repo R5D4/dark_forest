@@ -63,8 +63,7 @@ def generate_scenes(a_map):
     y = randint(1, GRID_SIZE)
 
     # add entrance scene to list of created scenes
-    new_sc = new_scene(a_map, 'entrance')
-    new_sc.location = (x, y)
+    new_sc = new_scene(a_map, 'entrance', (x, y))
     scenes[(x, y)] = new_sc
     a_map.add_scene(new_sc.name, new_sc)
 
@@ -78,9 +77,8 @@ def generate_scenes(a_map):
         x, y = empty_adjacent(ref_loc, scenes)
         # create a new scene at the empty location found above
         if (x, y) != (0, 0):
-            new_sc = new_scene(a_map, 'random')
+            new_sc = new_scene(a_map, 'random', (x, y))
             scenes[(x, y)] = new_sc
-            new_sc.location = (x, y)
             a_map.add_scene(new_sc.name, new_sc)
             added += 1
         else: # we cannot add any more adjacent scenes to the ref location
@@ -96,7 +94,7 @@ def link_scenes(a_map):
     # for each scene s1 in a_map.scenes
     for s1 in a_map.scenes.values():
         # make a list S of all scenes in a_map.scenes adjacent to s
-        adjacent_scenes = adjacent_scenes(scene_dict, s1)
+        adjacent_scenes = adjacent_scenes(scene_dict, s1.location)
         # determine number of desired links to make from s1 (1 or 2)
         n = randint(1, 2)
         linked = 0
@@ -124,15 +122,15 @@ def create_scene_dict(a_map):
     return scene_dict
 
 
-def adjacent_scenes(scene_dict, s1):
-    """ Return a list S of Scene objects that are adjacent to s1."""
-    # loop through all 9 possible locations centered at s1's location
+def adjacent_scenes(scene_dict, location):
+    """ Return a list S of Scene objects that are adjacent to location."""
+    # loop through all 9 possible locations centered at the given location
     adjacent_scenes = []
-    s1_x, s1_y = s1.location
+    s1_x, s1_y = location
     for new_x in range(s1_x - 1, s1_x + 2):
         for new_y in range(s1_y - 1, s1_y + 2):
             new_loc = (new_x, new_y)
-            if (new_x, new_y) != s1.location and valid_location(new_loc):
+            if new_loc != location and valid_location(new_loc):
                 # if there is a scene from scene_dict in that location
                 if new_loc in scene_dict:
                     # add the scene to S
@@ -222,11 +220,12 @@ def valid_location(location):
         return True
 
 
-def new_scene(a_map, scene_type):
+def new_scene(a_map, scene_type, location):
     """ Create a new scene and fill it with details."""
     scene = map_.Scene(a_map.characters)
 
     scene.name = make_name(scene_type)
+    scene.location = location
     scene.flags['encounter_chance'] = 1
 
     scene.features['canopy'] = random.choice(CANOPY)
@@ -253,7 +252,7 @@ def make_name(scene_type):
         name = "exit{}".format(ID_SEQ)
         ID_SEQ += 1
     else:
-        pass
+        name = None
     return name
         
 
