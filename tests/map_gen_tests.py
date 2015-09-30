@@ -1,5 +1,5 @@
 """
-Tests functions is map_gen.py
+Tests functions in map_gen.py
 """
 
 from nose.tools import *

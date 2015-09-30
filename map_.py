@@ -75,8 +75,7 @@ class Map(object):
 
     def draw_map(self):
         """ Draw the map, showing topography."""
-        # convert scenes dict into a tree
-        # traverse the tree and print to screen
+        pass
 
 
 class Scene(object):
