@@ -158,28 +158,28 @@ def link_direction_test():
     loc1 = (5, 5)
     # north
     loc2 = (5, 6)
-    ok_(map_gen.link_direction(loc1, loc2) == 'n')
+    ok_(map_gen.link_direction(loc1, loc2) == 's')
     # north-east
     loc2 = (6, 6)
-    ok_(map_gen.link_direction(loc1, loc2) == 'ne')
+    ok_(map_gen.link_direction(loc1, loc2) == 'se')
     # east
     loc2 = (6, 5)
     ok_(map_gen.link_direction(loc1, loc2) == 'e')
     # south-east
     loc2 = (6, 4)
-    ok_(map_gen.link_direction(loc1, loc2) == 'se')
+    ok_(map_gen.link_direction(loc1, loc2) == 'ne')
     # south
     loc2 = (5, 4)
-    ok_(map_gen.link_direction(loc1, loc2) == 's')
+    ok_(map_gen.link_direction(loc1, loc2) == 'n')
     # south-west
     loc2 = (4, 4)
-    ok_(map_gen.link_direction(loc1, loc2) == 'sw')
+    ok_(map_gen.link_direction(loc1, loc2) == 'nw')
     # west
     loc2 = (4, 5)
     ok_(map_gen.link_direction(loc1, loc2) == 'w')
     # north-west
     loc2 = (4, 6)
-    ok_(map_gen.link_direction(loc1, loc2) == 'nw')
+    ok_(map_gen.link_direction(loc1, loc2) == 'sw')
     
 
 def has_link_test():
@@ -198,16 +198,16 @@ def has_link_test():
     # case 2: north-south link
     s3 = map_gen.new_scene(a_map, 'scene3', (5, 6))
     s3.name = 'scene3'
-    s1.exits['n'] = 'scene3'
-    s3.exits['s'] = 'scene1'
+    s1.exits['s'] = 'scene3'
+    s3.exits['n'] = 'scene1'
     ok_(map_gen.has_link(s1, s3) is True)
     ok_(map_gen.has_link(s3, s1) is True)
 
     # case 3: nw-se link
     s4 = map_gen.new_scene(a_map, 'scene4', (4, 6))
     s4.name = 'scene4'
-    s1.exits['nw'] = 'scene4'
-    s4.exits['se'] = 'scene1'
+    s1.exits['sw'] = 'scene4'
+    s4.exits['ne'] = 'scene1'
     ok_(map_gen.has_link(s1, s4) is True)
     ok_(map_gen.has_link(s4, s1) is True)
 
@@ -238,20 +238,20 @@ def create_link_test():
     s3 = map_gen.new_scene(a_map, None, (5, 6))
     s3.name = 'scene3'
     map_gen.create_link(s1, s3)
-    ok_(s1.exits['n'] == 'scene3')
-    ok_(s3.exits['s'] == 'scene1')
+    ok_(s1.exits['s'] == 'scene3')
+    ok_(s3.exits['n'] == 'scene1')
     # nw-se
     s4 = map_gen.new_scene(a_map, None, (4, 6))
     s4.name = 'scene4'
     map_gen.create_link(s1, s4)
-    ok_(s1.exits['nw'] == 'scene4')
-    ok_(s4.exits['se'] == 'scene1')
+    ok_(s1.exits['sw'] == 'scene4')
+    ok_(s4.exits['ne'] == 'scene1')
     # ne-sw
     s5 = map_gen.new_scene(a_map, None, (6, 6))
     s5.name = 'scene5'
     map_gen.create_link(s1, s5)
-    ok_(s1.exits['ne'] == 'scene5')
-    ok_(s5.exits['sw'] == 'scene1')
+    ok_(s1.exits['se'] == 'scene5')
+    ok_(s5.exits['nw'] == 'scene1')
 
 
 ########## HELPER FUNCTIONS ##########

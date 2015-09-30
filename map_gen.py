@@ -238,26 +238,26 @@ def link_direction(loc1, loc2):
     direction = ''
     if x2 < x1:
         if y2 < y1:
-            direction = 'sw'
+            direction = 'nw'
         elif y2 == y1:
             direction = 'w'
         elif y2 > y1:
-            direction = 'nw'
+            direction = 'sw'
     elif x2 == x1:
         if y2 < y1:
-            direction = 's'
+            direction = 'n'
         elif y2 == y1:
             # loc1 == loc2, shouldn't happen
             direction = None
         elif y2 > y1:
-            direction = 'n'
+            direction = 's'
     elif x2 > x1:
         if y2 < y1:
-            direction = 'se'
+            direction = 'ne'
         elif y2 == y1:
             direction = 'e'
         elif y2 > y1:
-            direction = 'ne'
+            direction = 'se'
     return direction
 
 
