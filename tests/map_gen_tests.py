@@ -163,6 +163,37 @@ def has_link_test():
     ok_(map_gen.has_link(s6, s1) is False)
     
 
+def create_link_test():
+    a_map = map_.Map('story')
+    # east-west
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    map_gen.create_link(s1, s2)
+    ok_(s1.exits['e'] == 'scene2')
+    ok_(s2.exits['w'] == 'scene1')
+    # north-south
+    s3 = map_gen.new_scene(a_map, None, (5, 6))
+    s3.name = 'scene3'
+    map_gen.create_link(s1, s3)
+    ok_(s1.exits['n'] == 'scene3')
+    ok_(s3.exits['s'] == 'scene1')
+    # nw-se
+    s4 = map_gen.new_scene(a_map, None, (4, 6))
+    s4.name = 'scene4'
+    map_gen.create_link(s1, s4)
+    ok_(s1.exits['nw'] == 'scene4')
+    ok_(s4.exits['se'] == 'scene1')
+    # ne-sw
+    s5 = map_gen.new_scene(a_map, None, (6, 6))
+    s5.name = 'scene5'
+    map_gen.create_link(s1, s5)
+    ok_(s1.exits['ne'] == 'scene5')
+    ok_(s5.exits['sw'] == 'scene1')
+
+
+
 ########## HELPER FUNCTIONS ##########
 
 def all_adjacent(ref_loc):

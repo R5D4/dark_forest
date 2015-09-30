@@ -195,9 +195,13 @@ def has_link(s1, s2):
 def create_link(s1, s2):
     """ Create a exit link between s1 and s2 based on relative position."""
     # determine direction of s1's exit to s2
+    dir1 = link_direction(s1.location, s2.location)
     # add s2 as the destination of s1's exit
+    s1.exits[dir1] = s2.name
     # determine direction of s2's exit to s1
+    dir2 = OPPOSITE_EXITS[dir1]
     # add s1 as the destination of s2's exit
+    s2.exits[dir2] = s1.name
 
 
 def empty_adjacent(ref_loc, scenes):
