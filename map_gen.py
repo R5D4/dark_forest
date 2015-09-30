@@ -10,7 +10,7 @@ import map_
 ########## GLOBAL THINGIES ##########
 
 MIN_SCENES = 10
-MAX_SCENES = 10
+MAX_SCENES = 15
 GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
 ID_SEQ = 1 # part of name for generated scenes
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
@@ -162,22 +162,22 @@ def link_scenes(a_map):
     # for each scene s1 in a_map.scenes
     for s1 in a_map.scenes.values():
         # make a list S of all scenes in a_map.scenes adjacent to s1
-        adjacent_scenes = adjacent_scenes(scene_dict, s1.location)
+        adj_scenes = adjacent_scenes(scene_dict, s1.location)
         # determine number of desired links to make from s1 (1 or 2)
         n = randint(1, 2)
         linked = 0
         # while we still need to make more links and there are adjacent scenes
-        while linked < n and adjacent_scenes:
+        while linked < n and adj_scenes:
             # pick a scene s2 from S
-            s2 = choice(adjacent_scenes)
+            s2 = choice(adj_scenes)
             # check if there's already a link between s1 and s2
             if has_link(s1, s2):
                 # if yes, remove s2 from S, continue
-                adjacent_scenes.remove(s2)
+                adj_scenes.remove(s2)
             else:
                 # else if no, make a link b/w s1 and s2 
                 create_link(s1, s2)
-                link += 1
+                linked += 1
     
 
 def create_scene_dict(a_map):

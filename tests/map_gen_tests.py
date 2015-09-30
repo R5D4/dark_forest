@@ -9,6 +9,43 @@ import map_gen
 import map_
 
 
+def link_scenes_test():
+    ### simple scenarios ###
+
+    # two scenes, all links mandatory
+    a_map = map_.Map('story')
+
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1.name, s1)
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    a_map.add_scene(s2.name, s2)
+
+    map_gen.link_scenes(a_map)
+    ok_(s1.exits['e'] == s2.name)
+    ok_(s2.exits['w'] == s1.name)
+
+    # three scenes, all links mandatory
+    a_map = map_.Map('story')
+
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1.name, s1)
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    a_map.add_scene(s2.name, s2)
+    s3 = map_gen.new_scene(a_map, None, (4, 5))
+    s3.name = 'scene3'
+    a_map.add_scene(s3.name, s3)
+
+    map_gen.link_scenes(a_map)
+    ok_(s1.exits['e'] == s2.name)
+    ok_(s2.exits['w'] == s1.name)
+    ok_(s1.exits['w'] == s3.name)
+    ok_(s3.exits['e'] == s1.name)
+
+
 def empty_adjacent_test():
     for x in range(1, 101):
         loc = (randint(1, 9), randint(1, 9))
@@ -193,7 +230,6 @@ def create_link_test():
     ok_(s5.exits['sw'] == 'scene1')
 
 
-
 ########## HELPER FUNCTIONS ##########
 
 def all_adjacent(ref_loc):
@@ -207,4 +243,17 @@ def all_adjacent(ref_loc):
             if (new_x, new_y) != ref_loc and map_gen.valid_location(new_loc):
                 locations.append(new_loc)
     return locations
+
+
+def validate_links(a_map):
+    #""" Validate all links b/w each pair of scenes in a_map."""
+    ## for each scene s1 in a_map
+    #for s1 in a_map.scenes.values():
+    #    # for each exit in s1
+    #    for dir1, s2 in s1.exits.items():
+    #        # verify correct link direction w.r.t. linked scene s2
+    #        # 
+    #        # if verification fails, return False
+    ## if no verification failed, return True
+    pass
 
