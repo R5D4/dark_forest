@@ -85,6 +85,74 @@ def generate_scenes(a_map):
             scenes.pop(ref_loc)
 
 
+def new_scene(a_map, scene_type, location):
+    """ Create a new scene and fill it with details."""
+    scene = map_.Scene(a_map.characters)
+
+    scene.name = make_name(scene_type)
+    scene.location = location
+    scene.flags['encounter_chance'] = 1
+
+    scene.features['canopy'] = random.choice(CANOPY)
+    scene.features['understory'] = random.choice(UNDERSTORY)
+    scene.features['shrubs'] = random.choice(SHRUBS)
+    scene.features['floor'] = random.choice(FLOOR)
+
+    scene.description = ""
+    for feature in scene.features.keys():
+        scene.description += "The {} is {}. ".format(feature, 
+                                                     scene.features[feature])
+    return scene
+
+
+def make_name(scene_type):
+    """ Return an appropriate scene name."""
+    global ID_SEQ
+    if scene_type == 'entrance':
+        name = 'entrance'
+    elif scene_type == 'random':
+        name = "random{}".format(ID_SEQ)
+        ID_SEQ += 1
+    elif scene_type == 'exit':
+        name = "exit{}".format(ID_SEQ)
+        ID_SEQ += 1
+    else:
+        name = None
+    return name
+        
+
+def empty_adjacent(ref_loc, scenes):
+    """ 
+    Return an empty adjacent location to the reference location.
+
+    ref_loc: reference location on the grid
+    scenes: list of existing scenes
+    """
+    # generate list of all possible adjacent locations
+    locations = [] # array of (x, y) tuples
+    ref_x, ref_y = ref_loc
+    #print "ref_loc = {}".format(ref_loc)
+    for new_x in range(ref_x - 1, ref_x + 2):
+        for new_y in range(ref_y - 1, ref_y + 2):
+            new_loc = (new_x, new_y)
+            #print "new_loc = {}".format(new_loc)
+            if (new_x, new_y) != ref_loc and valid_location(new_loc):
+                locations.append(new_loc)
+    # while there are still locations with possible free adjacent locations
+    #print "locations = {}".format(locations)
+    while locations:
+        # pick a location at random and check if it's already occupied
+        loc = choice(locations)
+        # if not occupied, return this location
+        if loc not in scenes:
+            return loc
+        # if occupied, remove this location and pick another
+        else:
+            locations.remove(loc)
+    # if all adjacent locations occupied, return (0, 0)
+    return (0, 0)
+
+
 def link_scenes(a_map):
     """ Randomly create exits between scenes."""
     # for each created scene, make 1-2 exits to other scenes if possible
@@ -138,6 +206,28 @@ def adjacent_scenes(scene_dict, location):
     return adjacent_scenes
 
 
+def valid_location(location):
+    """ Determine if a location is valid based on grid size."""
+    x, y = location
+    if x < 1 or x > GRID_SIZE or y < 1 or y > GRID_SIZE:
+        return False
+    else:
+        return True
+
+
+def has_link(s1, s2):
+    """ Return True if proper link b/w s1 and s2. Else false."""
+    # determine link directions
+    dir1 = link_direction(s1.location, s2.location)
+    dir2 = link_direction(s2.location, s1.location)
+    # check if links exist
+    if dir1 in s1.exits and dir2 in s2.exits:
+        # check if link in proper direction
+        if s1.exits[dir1] == s2.name and s2.exits[dir2] == s1.name:
+            return True
+    return False
+
+
 def link_direction(loc1, loc2):
     """ Return the direction of the exit from loc1 to loc2."""
     x1, y1 = loc1
@@ -179,19 +269,6 @@ def is_adjacent(loc1, loc2):
     return abs(x1 - x2) <= 1 and abs(y1 - y2) <= 1
 
 
-def has_link(s1, s2):
-    """ Return True if proper link b/w s1 and s2. Else false."""
-    # determine link directions
-    dir1 = link_direction(s1.location, s2.location)
-    dir2 = link_direction(s2.location, s1.location)
-    # check if links exist
-    if dir1 in s1.exits and dir2 in s2.exits:
-        # check if link in proper direction
-        if s1.exits[dir1] == s2.name and s2.exits[dir2] == s1.name:
-            return True
-    return False
-
-
 def create_link(s1, s2):
     """ Create a exit link between s1 and s2 based on relative position."""
     # determine direction of s1's exit to s2
@@ -203,83 +280,6 @@ def create_link(s1, s2):
     # add s1 as the destination of s2's exit
     s2.exits[dir2] = s1.name
 
-
-def empty_adjacent(ref_loc, scenes):
-    """ 
-    Return an empty adjacent location to the reference location.
-
-    ref_loc: reference location on the grid
-    scenes: list of existing scenes
-    """
-    # generate list of all possible adjacent locations
-    locations = [] # array of (x, y) tuples
-    ref_x, ref_y = ref_loc
-    #print "ref_loc = {}".format(ref_loc)
-    for new_x in range(ref_x - 1, ref_x + 2):
-        for new_y in range(ref_y - 1, ref_y + 2):
-            new_loc = (new_x, new_y)
-            #print "new_loc = {}".format(new_loc)
-            if (new_x, new_y) != ref_loc and valid_location(new_loc):
-                locations.append(new_loc)
-    # while there are still locations with possible free adjacent locations
-    #print "locations = {}".format(locations)
-    while locations:
-        # pick a location at random and check if it's already occupied
-        loc = choice(locations)
-        # if not occupied, return this location
-        if loc not in scenes:
-            return loc
-        # if occupied, remove this location and pick another
-        else:
-            locations.remove(loc)
-    # if all adjacent locations occupied, return (0, 0)
-    return (0, 0)
-
-
-def valid_location(location):
-    """ Determine if a location is valid based on grid size."""
-    x, y = location
-    if x < 1 or x > GRID_SIZE or y < 1 or y > GRID_SIZE:
-        return False
-    else:
-        return True
-
-
-def new_scene(a_map, scene_type, location):
-    """ Create a new scene and fill it with details."""
-    scene = map_.Scene(a_map.characters)
-
-    scene.name = make_name(scene_type)
-    scene.location = location
-    scene.flags['encounter_chance'] = 1
-
-    scene.features['canopy'] = random.choice(CANOPY)
-    scene.features['understory'] = random.choice(UNDERSTORY)
-    scene.features['shrubs'] = random.choice(SHRUBS)
-    scene.features['floor'] = random.choice(FLOOR)
-
-    scene.description = ""
-    for feature in scene.features.keys():
-        scene.description += "The {} is {}. ".format(feature, 
-                                                     scene.features[feature])
-    return scene
-
-
-def make_name(scene_type):
-    """ Return an appropriate scene name."""
-    global ID_SEQ
-    if scene_type == 'entrance':
-        name = 'entrance'
-    elif scene_type == 'random':
-        name = "random{}".format(ID_SEQ)
-        ID_SEQ += 1
-    elif scene_type == 'exit':
-        name = "exit{}".format(ID_SEQ)
-        ID_SEQ += 1
-    else:
-        name = None
-    return name
-        
 
 def update_exits(a_map):
     """ Update description of exits in all scenes in the map."""
