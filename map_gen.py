@@ -40,7 +40,6 @@ def new_map():
 
     generate_scenes(a_map)
     link_scenes(a_map)
-    a_map.print_map()
     update_exits(a_map)
 
     # add special scenes
@@ -91,7 +90,7 @@ def new_scene(a_map, scene_type, location):
 
     scene.name = make_name(scene_type)
     scene.location = location
-    scene.flags['encounter_chance'] = 1
+    scene.flags['encounter_chance'] = 0.5
 
     scene.features['canopy'] = random.choice(CANOPY)
     scene.features['understory'] = random.choice(UNDERSTORY)

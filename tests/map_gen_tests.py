@@ -45,6 +45,30 @@ def link_scenes_test():
     ok_(s1.exits['w'] == s3.name)
     ok_(s3.exits['e'] == s1.name)
 
+    # three scenes, all links mandatory
+    a_map = map_.Map('story')
+
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1.name, s1)
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    a_map.add_scene(s2.name, s2)
+    s3 = map_gen.new_scene(a_map, None, (7, 5))
+    s3.name = 'scene3'
+    a_map.add_scene(s3.name, s3)
+    s4 = map_gen.new_scene(a_map, None, (8, 5))
+    s4.name = 'scene4'
+    a_map.add_scene(s4.name, s4)
+
+    map_gen.link_scenes(a_map)
+    ok_(s1.exits['e'] == s2.name)
+    ok_(s2.exits['w'] == s1.name)
+    ok_(s2.exits['e'] == s3.name)
+    ok_(s3.exits['w'] == s2.name)
+    ok_(s3.exits['e'] == s4.name)
+    ok_(s4.exits['w'] == s3.name)
+
 
 def empty_adjacent_test():
     for x in range(1, 101):

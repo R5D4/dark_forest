@@ -68,10 +68,15 @@ class Map(object):
         self.scenes.update({name: scene})
 
     def print_map(self):
-        """ Print out the map."""
+        """ Print out the map by printing each scene's exits."""
         for scene in self.scenes.values():
             print "name: {}, location: {}".format(scene.name, scene.location)
             print "    exits: {}".format(scene.exits)
+
+    def draw_map(self):
+        """ Draw the map, showing topography."""
+        # convert scenes dict into a tree
+        # traverse the tree and print to screen
 
 
 class Scene(object):
