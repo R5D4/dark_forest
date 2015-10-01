@@ -40,7 +40,15 @@ def draw_map(a_map):
 
 def get_canvas_scene_location(location):
     """ Return corresponding location on the canvas."""
-    pass
+    x, y = location
+    # step 1: subtract 1 from x, y since canvas array starts from [0][0]
+    x1 = x - 1
+    y1 = y - 1
+    # step 2: if x or y is greater than 1, add that different for links
+    x2 = x1 + (x - 1)
+    y2 = y1 + (y - 1)
+    print "Canvas location: {}".format((x, y))
+    return (x2, y2)
 
 
 def get_canvas_link_location(sc_location, direction):
