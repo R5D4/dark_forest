@@ -4,6 +4,48 @@ Test function in draw_map.py
 
 from nose.tools import *
 import draw_map
+import map_
+import map_gen
+
+
+def draw_map_test():
+    ## Case 1
+    a_map = map_.Map('story')
+
+    # scene1
+    s1 = map_gen.new_scene(a_map, None, (2, 1))
+    s1.name = 'scene1'
+    s1.exits.update({'s': 'scene2', 
+                     'e': 'scene3',
+                     'se': 'scene4'})
+    a_map.add_scene(s1.name, s1)
+    # scene2
+    s2 = map_gen.new_scene(a_map, None, (2, 2))
+    s2.name = 'scene2'
+    s2.exits.update({'n': 'scene1',
+                     'ne': 'scene3'})
+    a_map.add_scene(s2.name, s2)
+    # scene3
+    s3 = map_gen.new_scene(a_map, None, (3, 1))
+    s3.name = 'scene3'
+    s3.exits.update({'w': 'scene1',
+                     'sw': 'scene2'})
+    a_map.add_scene(s3.name, s3)
+    # scene4
+    s4 = map_gen.new_scene(a_map, None, (3, 2))
+    s4.name = 'scene4'
+    s4.exits.update({'nw': 'scene1'})
+    a_map.add_scene(s4.name, s4)
+
+    canvas = draw_map.draw_map(a_map)
+
+    ok_(canvas[2][0] == '#') 
+    ok_(canvas[2][2] == '#') 
+    ok_(canvas[4][0] == '#') 
+    ok_(canvas[4][2] == '#') 
+    ok_(canvas[2][1] == '|') 
+    ok_(canvas[3][0] == '-') 
+    ok_(canvas[3][1] == 'X') 
 
 
 def get_canvas_scene_location_test():
