@@ -66,10 +66,10 @@ def new_map():
     update_exits(a_map)
 
     # add special scenes
-    a_map.add_scene('story', map_.Story(a_map.characters))
-    a_map.add_scene('death', map_.Death(a_map.characters))
-    a_map.add_scene('win', map_.Win(a_map.characters))
-    a_map.add_scene('quit', map_.Quit(a_map.characters))
+    a_map.add_special_scene('story', map_.Story(a_map.characters))
+    a_map.add_special_scene('death', map_.Death(a_map.characters))
+    a_map.add_special_scene('win', map_.Win(a_map.characters))
+    a_map.add_special_scene('quit', map_.Quit(a_map.characters))
     return a_map
 
 

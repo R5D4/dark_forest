@@ -14,6 +14,7 @@ SYMBOL_LINK = {
                 'sw': '/',
                 'w': '-',
                 'nw': '\\',
+                'cross': 'X'
               }
 
 
@@ -33,8 +34,10 @@ def draw_map(a_map):
             # determine canvas location to put the link symbol
             x, y = get_canvas_link_location(s1.location, dir1)
             # choose link symbol
-            # if the canvas location isn't a space, draw an 'x' for crossroad
-            if canvas[x][y] != ' ':
+            # if the paths cross, draw an 'x' for crossroad
+            # NOTE: needs work
+            if dir1 in ['ne', 'sw'] and canvas[x][y] == '\\' \
+                or dir1 in ['nw', 'se'] and canvas[x][y] == '/':
                 link_symbol = SYMBOL_LINK['cross']
             else:
                 link_symbol = SYMBOL_LINK[dir1]
@@ -67,7 +70,7 @@ def get_canvas_link_location(location, direction):
     # calculate canvas location for the link based on link direction
     dx, dy = map_gen.DIR_TO_DIFF[direction]
     link_loc = (x + dx, y + dy)
-    print "Canvas link location: {}".format(link_loc)
+    #print "Canvas link location: {}".format(link_loc)
     return link_loc
 
 

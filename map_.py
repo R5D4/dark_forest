@@ -19,6 +19,7 @@ class Map(object):
     Instance variables:
         self.characters
         self.scenes
+        self.special_scenes
         self.start_scene_name
     Methods:
         __init__(self, start_scene_name)
@@ -31,11 +32,15 @@ class Map(object):
         """ Set start scene name, create characters, create scene objects."""
         self.start_scene_name = start_scene_name
         self.scenes = {}
+        self.special_scenes = {}
         self.characters = {};
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
-        return self.scenes.get(scene_name)
+        if scene_name in self.scenes:
+            return self.scenes.get(scene_name)
+        elif scene_name in self.special_scenes:
+            return self.special_scenes.get(scene_name)
 
     def opening_scene(self):
         """ Return the Scene object for the opening scene."""
@@ -66,6 +71,10 @@ class Map(object):
     def add_scene(self, name, scene):
         """ Add a scene to the map with 'name' as the key to the dict."""
         self.scenes.update({name: scene})
+
+    def add_special_scene(self, name, scene):
+        """ Add a special scene."""
+        self.special_scenes.update({name: scene})
 
     def print_map(self):
         """ Print out the map by printing each scene's exits."""
