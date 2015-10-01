@@ -24,16 +24,28 @@ OPPOSITE_EXITS = {
                  'w': 'e', 
                  'nw': 'se'
                  }
-LINK_DIR = {
-           (-1, -1): 'nw',
-           (-1, 0): 'w',
-           (-1, 1): 'sw',
-           (0, -1): 'n',
-           (0, 0): None,
-           (0, 1): 's',
-           (1, -1): 'ne',
-           (1, 0): 'e',
-           (1, 1): 'se'
+# location difference to link direction
+DIFF_TO_DIR = {
+              (-1, -1): 'nw',
+              (-1, 0): 'w',
+              (-1, 1): 'sw',
+              (0, -1): 'n',
+              (0, 0): None,
+              (0, 1): 's',
+              (1, -1): 'ne',
+              (1, 0): 'e',
+              (1, 1): 'se'
+              }
+# link direction to location difference
+DIR_TO_DIFF = {
+           'nw': (-1, -1),
+           'w': (-1, 0),
+           'sw': (-1, 1),
+           'n': (0, -1),
+           's': (0, 1),
+           'ne': (1, -1),
+           'e': (1, 0),
+           'se': (1, 1)
            }
 CANOPY = ['none', 'oak', 'hickory', 'pine']
 UNDERSTORY = ['none', 'dogwood', 'cedar', 'holly', 'young chestnut']
@@ -246,7 +258,7 @@ def link_direction(loc1, loc2):
     x1, y1 = loc1
     x2, y2 = loc2
     diff = (x2 - x1, y2 - y1)
-    return LINK_DIR[diff]
+    return DIFF_TO_DIR[diff]
 
 
 def is_adjacent(loc1, loc2):
