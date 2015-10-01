@@ -24,6 +24,17 @@ OPPOSITE_EXITS = {
                  'w': 'e', 
                  'nw': 'se'
                  }
+LINK_DIR = {
+           (-1, -1): 'nw',
+           (-1, 0): 'w',
+           (-1, 1): 'sw',
+           (0, -1): 'n',
+           (0, 0): None,
+           (0, 1): 's',
+           (1, -1): 'ne',
+           (1, 0): 'e',
+           (1, 1): 'se'
+           }
 CANOPY = ['none', 'oak', 'hickory', 'pine']
 UNDERSTORY = ['none', 'dogwood', 'cedar', 'holly', 'young chestnut']
 SHRUBS = ['none', 'blackberry', 'honeysuckle', 'poison ivy']
@@ -229,36 +240,13 @@ def has_link(s1, s2):
 
 def link_direction(loc1, loc2):
     """ Return the direction of the exit from loc1 to loc2."""
-    x1, y1 = loc1
-    x2, y2 = loc2
     # not adjacent
     if not is_adjacent(loc1, loc2):
         return None
-
-    direction = ''
-    if x2 < x1:
-        if y2 < y1:
-            direction = 'nw'
-        elif y2 == y1:
-            direction = 'w'
-        elif y2 > y1:
-            direction = 'sw'
-    elif x2 == x1:
-        if y2 < y1:
-            direction = 'n'
-        elif y2 == y1:
-            # loc1 == loc2, shouldn't happen
-            direction = None
-        elif y2 > y1:
-            direction = 's'
-    elif x2 > x1:
-        if y2 < y1:
-            direction = 'ne'
-        elif y2 == y1:
-            direction = 'e'
-        elif y2 > y1:
-            direction = 'se'
-    return direction
+    x1, y1 = loc1
+    x2, y2 = loc2
+    diff = (x2 - x1, y2 - y1)
+    return LINK_DIR[diff]
 
 
 def is_adjacent(loc1, loc2):

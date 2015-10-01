@@ -44,16 +44,20 @@ def get_canvas_scene_location(location):
     # step 1: subtract 1 from x, y since canvas array starts from [0][0]
     x1 = x - 1
     y1 = y - 1
-    # step 2: if x or y is greater than 1, add that different for links
+    # step 2: if x or y is greater than 1, add that difference
     x2 = x1 + (x - 1)
     y2 = y1 + (y - 1)
     print "Canvas location: {}".format((x, y))
     return (x2, y2)
 
 
-def get_canvas_link_location(sc_location, direction):
-    """ Return link location on canvas  given scene's location."""
-    pass
+def get_canvas_link_location(location, direction):
+    """ Return link location on canvas given scene's location."""
+    # get canvas location for the scene
+    x, y = get_canvas_scene_location(location)
+    # calculate canvas location for the link based on link direction
+
+    
 
 
 def print_canvas(canvas):
