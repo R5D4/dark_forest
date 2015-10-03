@@ -10,6 +10,7 @@ from random import randint
 import char
 import combat
 import map_gen
+import draw_map
 
 
 class Map(object):
@@ -83,8 +84,8 @@ class Map(object):
             print "    exits: {}".format(scene.exits)
 
     def draw_map(self):
-        """ Draw the map, showing topography."""
-        pass
+        """ Draw the map in ASCII graphics."""
+        draw_map.print_canvas(draw_map.prepare_canvas(self))
 
 
 class Scene(object):

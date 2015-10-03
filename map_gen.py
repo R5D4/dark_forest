@@ -188,7 +188,7 @@ def add_links(a_map):
     for s1 in a_map.scenes.values():
         # make a list S of all scenes in a_map.scenes adjacent to s1
         adj_scenes = adjacent_scenes(scene_dict, s1.location)
-        # determine number of desired links to make from s1 (1 or 2)
+        # determine number of desired links to make from s1 (0 or 1)
         n = randint(0, 1)
         linked = 0
         # while we still need to make more links and there are adjacent scenes

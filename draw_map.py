@@ -18,7 +18,7 @@ SYMBOL_LINK = {
               }
 
 
-def draw_map(a_map):
+def prepare_canvas(a_map):
     """ Draw the map with ASCII characters."""
     # create empty canvas (max grid of scenes and links)
     c_size = 2*map_gen.GRID_SIZE - 1
@@ -42,8 +42,6 @@ def draw_map(a_map):
                 link_symbol = SYMBOL_LINK[dir1]
             # add the link symbol to determined canvas location
             canvas[x][y] = link_symbol
-    # draw the canvas
-    print_canvas(canvas)
     return canvas
 
 
