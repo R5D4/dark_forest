@@ -9,10 +9,11 @@ import map_gen
 import map_
 
 
-def link_scenes_test():
-    ### simple scenarios ###
+def add_links_test():
+    # Test if map_gen.add_links function actually adds between 0 and 1 link
+    # per scene.
 
-    # two scenes, all links mandatory
+    # two scenes, max two new links
     a_map = map_.Map('story')
 
     s1 = map_gen.new_scene(a_map, None, (5, 5))
@@ -22,11 +23,11 @@ def link_scenes_test():
     s2.name = 'scene2'
     a_map.add_scene(s2.name, s2)
 
-    map_gen.link_scenes(a_map)
-    ok_(s1.exits['e'] == s2.name)
-    ok_(s2.exits['w'] == s1.name)
+    map_gen.add_links(a_map)
+    ok_(count_links(a_map) <= 2)
 
-    # three scenes, all links mandatory
+
+    # three scenes, max three new links
     a_map = map_.Map('story')
 
     s1 = map_gen.new_scene(a_map, None, (5, 5))
@@ -39,13 +40,10 @@ def link_scenes_test():
     s3.name = 'scene3'
     a_map.add_scene(s3.name, s3)
 
-    map_gen.link_scenes(a_map)
-    ok_(s1.exits['e'] == s2.name)
-    ok_(s2.exits['w'] == s1.name)
-    ok_(s1.exits['w'] == s3.name)
-    ok_(s3.exits['e'] == s1.name)
+    map_gen.add_links(a_map)
+    ok_(count_links(a_map) <= 3)
 
-    # three scenes, all links mandatory
+    # four scenes, max four new links
     a_map = map_.Map('story')
 
     s1 = map_gen.new_scene(a_map, None, (5, 5))
@@ -61,13 +59,8 @@ def link_scenes_test():
     s4.name = 'scene4'
     a_map.add_scene(s4.name, s4)
 
-    map_gen.link_scenes(a_map)
-    ok_(s1.exits['e'] == s2.name)
-    ok_(s2.exits['w'] == s1.name)
-    ok_(s2.exits['e'] == s3.name)
-    ok_(s3.exits['w'] == s2.name)
-    ok_(s3.exits['e'] == s4.name)
-    ok_(s4.exits['w'] == s3.name)
+    map_gen.add_links(a_map)
+    ok_(count_links(a_map) <= 4)
 
 
 def empty_adjacent_test():
@@ -280,4 +273,10 @@ def validate_links(a_map):
     #        # if verification fails, return False
     ## if no verification failed, return True
     pass
+
+
+def count_links(a_map):
+    """ Return the total number of links in the map."""
+    # number of links =  sum of the number of exits in each scene / 2
+    return sum([ len(sc.exits) for sc in a_map.scenes.values() ]) / 2 
 

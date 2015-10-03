@@ -62,7 +62,7 @@ def new_map():
     ID_SEQ = 1 # reset sequence number for new map
 
     generate_scenes(a_map)
-    link_scenes(a_map)
+    add_links(a_map)
     update_exits(a_map)
 
     # add special scenes
@@ -76,7 +76,7 @@ def new_map():
 ########## HELPER FUNCTIONS ##########
 
 def generate_scenes(a_map):
-    """ Creates a predefined number of scenes."""
+    """ Generate scenes for the new map."""
     scenes = {} # list of created scenes with empty adjacent locations
     n = randint(MIN_SCENES, MAX_SCENES)
 
@@ -96,11 +96,14 @@ def generate_scenes(a_map):
         # pick an existing scene as a reference location
         ref_loc, sc = choice(scenes.items())
         # pick an empty adjacent location for the new scene
-        x, y = empty_adjacent(ref_loc, scenes)
+        new_loc = empty_adjacent(ref_loc, scenes)
         # create a new scene at the empty location found above
-        if (x, y) != (0, 0):
-            new_sc = new_scene(a_map, 'random', (x, y))
-            scenes[(x, y)] = new_sc
+        if new_loc:
+            new_sc = new_scene(a_map, 'random', new_loc)
+            scenes[new_loc] = new_sc
+            # add a link between the reference scene and the new scene
+            # this ensures that the map is a connected graph
+            create_link(new_sc, sc)
             a_map.add_scene(new_sc.name, new_sc)
             added += 1
         else: # we cannot add any more adjacent scenes to the ref location
@@ -172,12 +175,12 @@ def empty_adjacent(ref_loc, scenes):
         else:
             locations.remove(loc)
     # if all adjacent locations occupied, return (0, 0)
-    return (0, 0)
+    return None
 
 
-def link_scenes(a_map):
-    """ Randomly create exits between scenes."""
-    # for each created scene, make 1-2 exits to other scenes if possible
+def add_links(a_map):
+    """ Add additional links between scenes in the map.""" 
+    # for each created scene, make 0-1 exit to other scenes if possible
     # create a dictionary of (x, y): Scene object items for easy search
     scene_dict = create_scene_dict(a_map)
 
@@ -186,7 +189,7 @@ def link_scenes(a_map):
         # make a list S of all scenes in a_map.scenes adjacent to s1
         adj_scenes = adjacent_scenes(scene_dict, s1.location)
         # determine number of desired links to make from s1 (1 or 2)
-        n = randint(1, 2)
+        n = randint(0, 1)
         linked = 0
         # while we still need to make more links and there are adjacent scenes
         while linked < n and adj_scenes:
