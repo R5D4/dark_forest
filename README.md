@@ -53,6 +53,9 @@ you expected and you were "volunteered" for a more dangerous task.
 4. Interface
   * More interactive game interface with curses
 
+## Next Action
+* Add map command to UI to show map
+
 ## How to Play
 ### Map Commands
   * 'look' - look around (hint: you get a better view from high up)
