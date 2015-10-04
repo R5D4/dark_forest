@@ -96,32 +96,20 @@ def valid_location_test():
     ok_(map_gen.valid_location(loc) is False)
 
 
-def generate_scenes_test():
-    # 100 trials
-    for x in range(1, 101):
-        a_map = map_.Map('story')
-        map_gen.ID_SEQ = 1
-        map_gen.generate_scenes(a_map)
-        scene_dict = map_gen.create_scene_dict(a_map)
+def DFS_test():
+    # test for the helper function DFS
+    a_map = map_.Map('story')
 
-        # Test if every generated scene is adjacent to at least one other scene
-        for s in a_map.scenes.values():
-            # create list of all adjacent locations to s
-            adj_list = all_adjacent(s.location)
-            linked = False
-            # test if there is at least one adjacent scene to s
-            for adj_loc in adj_list:
-                if adj_loc in scene_dict:
-                    linked = True
-                else:
-                    pass
-            ok_(linked is True, "Unconnected scene at {}: {}".format(
-                s.location, 
-                scene_dict))
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    a_map.add_scene(s2)
+    map_gen.create_link(s1, s2)
+    ok_(set(DFS(s1, a_map)) == set([s1, s2]))
+    ok_(set(DFS(s2, a_map)) == set([s1, s2]))
 
-        # test for map connectedness
-        ok_(check_map_connectedness(a_map))
-    
 
 def adjacent_scenes_test():
     a_map = map_.Map('story')
@@ -252,20 +240,32 @@ def create_link_test():
     ok_(s5.exits['nw'] == 'scene1')
 
 
-def DFS_test():
-    # test for the helper function DFS
-    a_map = map_.Map('story')
+def generate_scenes_test():
+    # 100 trials
+    #for x in range(1, 101):
+    for x in range(1, 1):
+        a_map = map_.Map('story')
+        map_gen.ID_SEQ = 1
+        map_gen.generate_scenes(a_map)
+        scene_dict = map_gen.create_scene_dict(a_map)
 
-    s1 = map_gen.new_scene(a_map, None, (5, 5))
-    s1.name = 'scene1'
-    a_map.add_scene(s1)
-    s2 = map_gen.new_scene(a_map, None, (6, 5))
-    s2.name = 'scene2'
-    a_map.add_scene(s2)
-    map_gen.create_link(s1, s2)
-    scene_dict = map_gen.create_scene_dict(a_map)
-    ok_(set(DFS(s1, None, [], scene_dict)) == set([s1, s2]))
-    ok_(set(DFS(s2, None, [], scene_dict)) == set([s1, s2]))
+        # Test if every generated scene is adjacent to at least one other scene
+        for s in a_map.scenes.values():
+            # create list of all adjacent locations to s
+            adj_list = all_adjacent(s.location)
+            linked = False
+            # test if there is at least one adjacent scene to s
+            for adj_loc in adj_list:
+                if adj_loc in scene_dict:
+                    linked = True
+                else:
+                    pass
+            ok_(linked is True, "Unconnected scene at {}: {}".format(
+                s.location, 
+                scene_dict))
+
+        # test for map connectedness
+        ok_(check_map_connectedness(a_map))
 
 
 ########## HELPER FUNCTIONS ##########
@@ -284,38 +284,58 @@ def all_adjacent(ref_loc):
 
 
 def check_map_connectedness(a_map):
-    # Check if every scene is accessible using DFS search
-    # for each scene in the map
-    scene_dict = map_gen.create_scene_dict(a_map)
-    for sc in a_map.scenes.values():
-        # Get list of visited scenes using DFS traversal
-        visited = DFS(sc, None, [], scene_dict)
-        # test if list of visited scenes contains all the scenes in the map 
-        ok_(set(DFS(sc, None, [], scene_dict)) == set(a_map.scenes.values()))
-
-
-def DFS(scene, parent, visited, scene_dict):
     """ 
-    Return list of visited scenes using Depth-First traversal.
-    
-    Call DFS(scene, None, [], scene_dict)
-    scene_dict = {location: scene object}, use map_gen.create_scene_dict
-    """
-    # add the scene to the list of visited scenes
-    #print "Visiting {}".format(scene.name)
-    visited.append(scene)
-    # construct list of adjacent scenes (children), excluding the parent
-    children = map_gen.adjacent_scenes(scene_dict, scene.location)
-    #print "Children = {}".format(children)
-    if parent in children: # not None
-        children.remove(parent)
+    Check if the map represents a connected graph.
 
-    if not children: # no children
-        return visited
-    else:
+    Only use for maps created by map_gen.generate_scenes, as it will be a tree.
+    Maps generated using map_gen.new_map has loops due to extra links added.
+    """
+    # Check if every scene is accessible using DFS search 
+    # Successful DFS traversal from any scene proves connectedness since
+    # links are bidirectional
+    sc = choice(a_map.scenes.values())
+    # Get list of visited scenes using DFS traversal
+    visited = DFS(sc, a_map)
+    # test if list of visited scenes contains all the scenes in the map 
+    ok_(set(visited) == set(a_map.scenes.values()))
+
+
+def DFS(start_scene, a_map):
+    """
+    Return list of visited scenes using iterative Depth-First traversal.
+    """
+    visited = []
+    stack = [(None, start_scene)] # (parent, node)
+    while stack: # not empty
+        #print_stack(stack)
+        #print_visited(visited)
+        parent, scene = stack.pop()
+        visited.append(scene)
+        # get list of children 
+        children = [ a_map.scenes[name] for name in scene.exits.values() ]
+        if parent in children: # not None
+            children.remove(parent)
         for child in children:
-            visited = DFS(child, scene, visited, scene_dict)
-    return visited 
+            stack.append((scene, child))
+    return visited
+
+
+def print_stack(stack):
+    """ Prints the stack nicely to debug DFS."""
+    raw_input('------------------------------')
+    for parent, scene in stack:
+        if parent is not None:
+            p_name = parent.name
+        else:
+            p_name = None
+        print "P: {}, Scene: {}, Location: {}".format(p_name,
+                                                      scene.name,
+                                                      scene.location)
+
+def print_visited(visited):
+    """ Prints list of visited scenes during DFS traversal."""
+    for sc in visited:
+        print "Name: {}, Location: {}".format(sc.name, sc.location)
 
 
 def count_links(a_map):

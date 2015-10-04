@@ -214,7 +214,11 @@ def create_scene_dict(a_map):
 
 
 def adjacent_scenes(scene_dict, location):
-    """ Return a list S of Scene objects that are adjacent to location."""
+    """
+    Return a list of Scene objects that are adjacent to location.
+    
+    Contains scenes that are adjacent, not necessarily linked.
+    """
     # loop through all 9 possible locations centered at the given location
     adjacent_scenes = []
     s1_x, s1_y = location
