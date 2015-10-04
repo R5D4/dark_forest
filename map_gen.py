@@ -87,7 +87,7 @@ def generate_scenes(a_map):
     # add entrance scene to list of created scenes
     new_sc = new_scene(a_map, 'entrance', (x, y))
     scenes[(x, y)] = new_sc
-    a_map.add_scene(new_sc.name, new_sc)
+    a_map.add_scene(new_sc)
 
     # randomly calculate number of total scenes
     added = 1 # number of scenes added
@@ -104,7 +104,7 @@ def generate_scenes(a_map):
             # add a link between the reference scene and the new scene
             # this ensures that the map is a connected graph
             create_link(new_sc, sc)
-            a_map.add_scene(new_sc.name, new_sc)
+            a_map.add_scene(new_sc)
             added += 1
         else: # we cannot add any more adjacent scenes to the ref location
             scenes.pop(ref_loc)

@@ -69,7 +69,7 @@ class Map(object):
             self.characters['boar'] = char.Boar()
             response = raw_input("Reroll character? (y/n): ")
 
-    def add_scene(self, name, scene):
+    def add_scene(self, scene):
         """ Add a scene to the map with 'name' as the key to the dict."""
         scene.scene_map = self
         self.scenes.update({scene.name: scene})

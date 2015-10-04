@@ -18,24 +18,24 @@ def draw_map_test():
     s1.exits.update({'s': 'scene2', 
                      'e': 'scene3',
                      'se': 'scene4'})
-    a_map.add_scene(s1.name, s1)
+    a_map.add_scene(s1)
     # scene2
     s2 = map_gen.new_scene(a_map, None, (2, 2))
     s2.name = 'scene2'
     s2.exits.update({'n': 'scene1',
                      'ne': 'scene3'})
-    a_map.add_scene(s2.name, s2)
+    a_map.add_scene(s2)
     # scene3
     s3 = map_gen.new_scene(a_map, None, (3, 1))
     s3.name = 'scene3'
     s3.exits.update({'w': 'scene1',
                      'sw': 'scene2'})
-    a_map.add_scene(s3.name, s3)
+    a_map.add_scene(s3)
     # scene4
     s4 = map_gen.new_scene(a_map, None, (3, 2))
     s4.name = 'scene4'
     s4.exits.update({'nw': 'scene1'})
-    a_map.add_scene(s4.name, s4)
+    a_map.add_scene(s4)
 
     canvas = draw_map.prepare_canvas(a_map)
 
