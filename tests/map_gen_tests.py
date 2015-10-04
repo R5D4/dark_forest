@@ -120,7 +120,7 @@ def generate_scenes_test():
                 scene_dict))
 
         # test for map connectedness
-        #ok_(check_map_connectedness(a_map))
+        ok_(check_map_connectedness(a_map))
     
 
 def adjacent_scenes_test():
@@ -284,12 +284,14 @@ def all_adjacent(ref_loc):
 
 
 def check_map_connectedness(a_map):
-    # Check if every scene is is accessible (map represents a aconnected graph)
-    # using DFS search
+    # Check if every scene is accessible using DFS search
     # for each scene in the map
+    scene_dict = map_gen.create_scene_dict(a_map)
+    for sc in a_map.scenes.values():
         # Get list of visited scenes using DFS traversal
+        visited = DFS(sc, None, [], scene_dict)
         # test if list of visited scenes contains all the scenes in the map 
-    pass
+        ok_(set(DFS(sc, None, [], scene_dict)) == set(a_map.scenes.values()))
 
 
 def DFS(scene, parent, visited, scene_dict):
