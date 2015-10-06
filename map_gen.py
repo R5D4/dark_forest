@@ -77,37 +77,38 @@ def new_map():
 
 def generate_scenes(a_map):
     """ Generate scenes for the new map."""
-    scenes = {} # list of created scenes with empty adjacent locations
+    candidate_scenes = [] # list of scenes with empty adjacent locations
+    occupied_locs = [] # list of occupied locations
     n = randint(MIN_SCENES, MAX_SCENES)
 
     # pick a starting location for entrance scene
-    x = randint(1, GRID_SIZE)
-    y = randint(1, GRID_SIZE)
+    loc = (randint(1, GRID_SIZE), randint(1, GRID_SIZE))
 
-    # add entrance scene to list of created scenes
-    new_sc = new_scene(a_map, 'entrance', (x, y))
-    scenes[(x, y)] = new_sc
+    # create a new scene at the starting location
+    new_sc = new_scene(a_map, 'entrance', loc)
+    candidate_scenes.append(new_sc) 
+    occupied_locs.append(loc)
     a_map.add_scene(new_sc)
 
-    # randomly calculate number of total scenes
     added = 1 # number of scenes added
 
     while added < n:
         # pick an existing scene as a reference location
-        ref_loc, sc = choice(scenes.items())
+        sc = choice(candidate_scenes)
         # pick an empty adjacent location for the new scene
-        new_loc = empty_adjacent(ref_loc, scenes)
+        new_loc = empty_adjacent(sc.location, occupied_locs)
         # create a new scene at the empty location found above
-        if new_loc:
+        if new_loc: # not None
             new_sc = new_scene(a_map, 'random', new_loc)
-            scenes[new_loc] = new_sc
             # add a link between the reference scene and the new scene
             # this ensures that the map is a connected graph
             create_link(new_sc, sc)
+            candidate_scenes.append(new_sc)
+            occupied_locs.append(new_loc)
             a_map.add_scene(new_sc)
             added += 1
         else: # we cannot add any more adjacent scenes to the ref location
-            scenes.pop(ref_loc)
+            candidate_scenes.remove(sc)
 
 
 def new_scene(a_map, scene_type, location):
@@ -146,36 +147,40 @@ def make_name(scene_type):
     return name
         
 
-def empty_adjacent(ref_loc, scenes):
+def empty_adjacent(ref_loc, occupied_locs):
     """ 
     Return an empty adjacent location to the reference location.
 
     ref_loc: reference location on the grid
-    scenes: list of existing scenes
+    occupied_locs: list of occupied locations
     """
     # generate list of all possible adjacent locations
-    locations = [] # array of (x, y) tuples
-    ref_x, ref_y = ref_loc
-    #print "ref_loc = {}".format(ref_loc)
-    for new_x in range(ref_x - 1, ref_x + 2):
-        for new_y in range(ref_y - 1, ref_y + 2):
-            new_loc = (new_x, new_y)
-            #print "new_loc = {}".format(new_loc)
-            if (new_x, new_y) != ref_loc and valid_location(new_loc):
-                locations.append(new_loc)
-    # while there are still locations with possible free adjacent locations
-    #print "locations = {}".format(locations)
+    locations = all_adjacent(ref_loc)
+
     while locations:
         # pick a location at random and check if it's already occupied
         loc = choice(locations)
         # if not occupied, return this location
-        if loc not in scenes:
+        if loc not in occupied_locs:
             return loc
         # if occupied, remove this location and pick another
         else:
             locations.remove(loc)
-    # if all adjacent locations occupied, return (0, 0)
+    # all adjacent locations occupied
     return None
+
+
+def all_adjacent(ref_loc):
+    """ Returns a list of all adjacent locations to ref_loc."""
+    # generate list of all possible adjacent locations
+    locations = [] # array of (x, y) tuples
+    ref_x, ref_y = ref_loc
+    for new_x in range(ref_x - 1, ref_x + 2):
+        for new_y in range(ref_y - 1, ref_y + 2):
+            new_loc = (new_x, new_y)
+            if (new_x, new_y) != ref_loc and valid_location(new_loc):
+                locations.append(new_loc)
+    return locations
 
 
 def add_links(a_map):

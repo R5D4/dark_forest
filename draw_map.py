@@ -19,7 +19,7 @@ SYMBOL_LINK = {
 
 
 def prepare_canvas(a_map):
-    """ Draw the map with ASCII characters."""
+    """ Create a 2D list representation of the map with ASCII symbols."""
     # create empty canvas (max grid of scenes and links)
     c_size = 2*map_gen.GRID_SIZE - 1
     canvas = [ [ ' ' for i in xrange(c_size) ] for j in xrange(c_size) ]

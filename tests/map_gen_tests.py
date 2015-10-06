@@ -248,21 +248,19 @@ def generate_scenes_test():
         map_gen.generate_scenes(a_map)
         scene_dict = map_gen.create_scene_dict(a_map)
 
+        # Test if any scenes overlap in location
+        so_far = []
+        for sc in a_map.scenes.values():
+            ok_(sc.location not in so_far)
+            so_far.append(sc.location)
+
         # Test if enough links are added for a connected map
-        link1 = count_links(a_map) 
-        link2 = len(a_map.scenes.values())-1
-        if link1 != link2:
-            print "Counted {} links. Map should have {} links".format(link1,
-                                                                      link2)
-            a_map.draw_map()
-            a_map.print_map()
         ok_(count_links(a_map) == len(a_map.scenes.values())-1)
-        
 
         # Test if every generated scene is adjacent to at least one other scene
         for s in a_map.scenes.values():
             # create list of all adjacent locations to s
-            adj_list = all_adjacent(s.location)
+            adj_list = map_gen.all_adjacent(s.location)
             linked = False
             # test if there is at least one adjacent scene to s
             for adj_loc in adj_list:
@@ -279,19 +277,6 @@ def generate_scenes_test():
 
 
 ########## HELPER FUNCTIONS ##########
-
-def all_adjacent(ref_loc):
-    """ Returns a list of all adjacent locations to ref_loc."""
-    # generate list of all possible adjacent locations
-    locations = [] # array of (x, y) tuples
-    ref_x, ref_y = ref_loc
-    for new_x in range(ref_x - 1, ref_x + 2):
-        for new_y in range(ref_y - 1, ref_y + 2):
-            new_loc = (new_x, new_y)
-            if (new_x, new_y) != ref_loc and map_gen.valid_location(new_loc):
-                locations.append(new_loc)
-    return locations
-
 
 def check_map_connectedness(a_map):
     """ 
