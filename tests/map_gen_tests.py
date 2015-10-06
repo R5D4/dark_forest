@@ -242,12 +242,22 @@ def create_link_test():
 
 def generate_scenes_test():
     # 100 trials
-    #for x in range(1, 101):
-    for x in range(1, 1):
+    for x in range(1, 101):
         a_map = map_.Map('story')
         map_gen.ID_SEQ = 1
         map_gen.generate_scenes(a_map)
         scene_dict = map_gen.create_scene_dict(a_map)
+
+        # Test if enough links are added for a connected map
+        link1 = count_links(a_map) 
+        link2 = len(a_map.scenes.values())-1
+        if link1 != link2:
+            print "Counted {} links. Map should have {} links".format(link1,
+                                                                      link2)
+            a_map.draw_map()
+            a_map.print_map()
+        ok_(count_links(a_map) == len(a_map.scenes.values())-1)
+        
 
         # Test if every generated scene is adjacent to at least one other scene
         for s in a_map.scenes.values():
@@ -297,7 +307,7 @@ def check_map_connectedness(a_map):
     # Get list of visited scenes using DFS traversal
     visited = DFS(sc, a_map)
     # test if list of visited scenes contains all the scenes in the map 
-    ok_(set(visited) == set(a_map.scenes.values()))
+    return set(visited) == set(a_map.scenes.values())
 
 
 def DFS(start_scene, a_map):
