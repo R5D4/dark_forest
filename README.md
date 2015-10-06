@@ -20,11 +20,7 @@ you expected and you were "volunteered" for a more dangerous task.
 
 ## Current Features
 1. Map
-  * 9 predefined areas
-  * Boss encounter based on probability (different for each area)
-  * Movement between areas 
-  * Simple predefined interactions (look, climb up trees, climb down trees)
-  * Can quit game early if you find exits in the map (you lose tho)
+  * All scene descriptions and map topography are procedurally generated!
 2. Characters
   * 1 Player character and 1 Boss character
   * Predefined character attacks
@@ -41,20 +37,18 @@ you expected and you were "volunteered" for a more dangerous task.
   * Ignores distance
 
 ## Planned Features
-1. Improve procedural map generation
+1. Improve procedural Scene generation (more details)
 2. Tracking/Hunting System
 3. Day/Night System
 3. Combat
   * More accurate D&D combat system
 2. Characters
   * More accurate D&D character stats
-1. Map
-  * In-game help messages
 4. Interface
   * More interactive game interface with curses
 
 ## Next Action
-* Add map command to UI to show map
+* Show where the player is on the map
 
 ## How to Play
 ### Map Commands
