@@ -37,8 +37,8 @@ you expected and you were "volunteered" for a more dangerous task.
   * Ignores distance
 
 ## Planned Features
-1. Improve procedural Scene generation (more details)
 2. Tracking/Hunting System
+1. Improve procedural Scene generation (more details)
 3. Day/Night System
 3. Combat
   * More accurate D&D combat system
@@ -48,7 +48,7 @@ you expected and you were "volunteered" for a more dangerous task.
   * More interactive game interface with curses
 
 ## Next Action
-* Show where the player is on the map
+* Tracking system
 
 ## How to Play
 ### Map Commands
