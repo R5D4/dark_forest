@@ -4,7 +4,8 @@ Draw the map with ASCII characters.
 
 import map_gen
 
-SYMBOL_SCENE = '#'
+SYMBOL_SCENE = '#' # symbol on the map that represents a scene
+SYMBOL_PLAYER = 'P' # symbol on the map that represents player's location
 SYMBOL_LINK = {
                 'n': '|',
                 'ne': '/',
@@ -18,17 +19,22 @@ SYMBOL_LINK = {
               }
 
 
-def prepare_canvas(a_map):
+def prepare_canvas(a_map, player_loc):
     """ Create a 2D list representation of the map with ASCII symbols."""
     # create empty canvas (max grid of scenes and links)
     c_size = 2*map_gen.GRID_SIZE - 1
     canvas = [ [ ' ' for i in xrange(c_size) ] for j in xrange(c_size) ]
     # for each scene in the map
     for s1 in a_map.scenes.values():
+        # determine the symbol to put on canvas for the scene
+        if s1.location  == player_loc: # scene is where the player is
+            symbol = SYMBOL_PLAYER
+        else:
+            symbol = SYMBOL_SCENE
         # determine canvas location of x and y
         x, y = get_canvas_scene_location(s1.location)
-        # add '#' to canvas at new location
-        canvas[x][y] = SYMBOL_SCENE
+        # put a symbol on the canvas for the scene
+        canvas[x][y] = symbol
         # for each exit from the scene
         for dir1 in s1.exits.keys():
             # determine canvas location to put the link symbol

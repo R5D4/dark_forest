@@ -37,9 +37,9 @@ def draw_map_test():
     s4.exits.update({'nw': 'scene1'})
     a_map.add_scene(s4)
 
-    canvas = draw_map.prepare_canvas(a_map)
+    canvas = draw_map.prepare_canvas(a_map, (2, 1))
 
-    ok_(canvas[2][0] == '#') 
+    ok_(canvas[2][0] == 'P') 
     ok_(canvas[2][2] == '#') 
     ok_(canvas[4][0] == '#') 
     ok_(canvas[4][2] == '#') 

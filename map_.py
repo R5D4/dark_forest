@@ -84,9 +84,9 @@ class Map(object):
             print "name: {}, location: {}".format(scene.name, scene.location)
             print "    exits: {}".format(scene.exits)
 
-    def draw_map(self):
+    def draw_map(self, current_loc):
         """ Draw the map in ASCII graphics."""
-        draw_map.print_canvas(draw_map.prepare_canvas(self))
+        draw_map.print_canvas(draw_map.prepare_canvas(self, current_loc))
 
 
 class Scene(object):
@@ -98,7 +98,7 @@ class Scene(object):
         """
         self.scene_map = None # the map to which this scene belongs
         self.name = None
-        self.location = ()
+        self.location = None
         self.characters = characters
         self.exits = {}
         self.flags = {
@@ -124,7 +124,7 @@ class Scene(object):
                 self.describe()
                 self.print_encounter_msg()
             elif action in ENV_ACTIONS['map']:
-                self.scene_map.draw_map()
+                self.scene_map.draw_map(self.location)
         else:
             print "You can't do that."
 
