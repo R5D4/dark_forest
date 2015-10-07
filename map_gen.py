@@ -9,8 +9,8 @@ import map_
 
 ########## GLOBAL THINGIES ##########
 
-MIN_SCENES = 10
-MAX_SCENES = 15
+MIN_SCENES = 30
+MAX_SCENES = 50
 GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
 ID_SEQ = 1 # part of name for generated scenes
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']

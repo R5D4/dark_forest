@@ -39,7 +39,8 @@ you expected and you were "volunteered" for a more dangerous task.
 ## Planned Features
 2. Tracking/Hunting System
 1. Improve procedural Scene generation (more details)
-3. Day/Night System
+3. Game Clock (day/night)
+4. Weather (includes phase of the moon)
 3. Combat
   * More accurate D&D combat system
 2. Characters
@@ -48,7 +49,7 @@ you expected and you were "volunteered" for a more dangerous task.
   * More interactive game interface with curses
 
 ## Next Action
-* Tracking system
+* Game Clock + Day/Night Cycle
 
 ## How to Play
 ### Map Commands
