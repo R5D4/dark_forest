@@ -14,6 +14,16 @@ import draw_map
 import game_clock
 
 
+BASE_ENCOUNTER = 1 # 1% base encounter chance
+# time-based bonus for encounter chance (%)
+TIME_ENCOUNTER = { 
+                 'dawn': 3,
+                 'dusk': 3,
+                 'night1': 5,
+                 'night2': 5
+                 }
+
+
 class Map(object):
     """
     A game map. 
@@ -95,7 +105,7 @@ class Scene(object):
         self.characters = characters
         self.exits = {}
         self.flags = {
-            'encounter_chance': 0,            
+            'encounter_chance': BASE_ENCOUNTER,
             'encounter': False,
             'can_leave': True 
         }
@@ -103,7 +113,7 @@ class Scene(object):
         self.description = "No description available."
 
     def process_action(self, action):
-        """ Process user action."""
+        """ Process user action that doesn't change scenes."""
         ENV_ACTIONS = {
             'look': ['l', 'look'],
             'map': ['m', 'map'],
@@ -131,7 +141,7 @@ class Scene(object):
                 print "You rest for 3 hours."
                 self.scene_map.clock.advance_time('rest')
             elif action in ENV_ACTIONS['pray']:
-                print "You offer a prayer to Elbereth."
+                print "You offer a prayer to Elbereth (1 hour)."
                 self.scene_map.clock.advance_time('pray')
         else:
             print "You can't do that."
@@ -147,14 +157,18 @@ class Scene(object):
         if self.flags['encounter']:
             print "You see the boar! You don't think it notices you."
 
-    def encounter(self, chance):
+    def encounter(self):
         """
         Calculate and return if the player has encountered the boss.
 
-        chance: encounter probability in (0, 1).
         return True or False.
         """
-        return randint(1,10) <= (chance * 10)
+        base = self.flags['encounter_chance']
+        time_mod = TIME_ENCOUNTER[self.scene_map.clock.time_period()]
+        environ_mod = 0 # environmental bonus
+        clue_mod = 0 # signs of activity bonus
+        chance = base + time_mod + environ_mod + clue_mod
+        return randint(1,100) <= chance
 
     def enter(self):
         """
@@ -171,7 +185,6 @@ class Scene(object):
         # 3. Enter user-input loop
         while True:
             action = raw_input("> ")
-            # trying to leave
             if action in self.exits.keys() and self.flags['can_leave']:
                 self.scene_map.clock.advance_time('travel')
                 return self.exits.get(action) 

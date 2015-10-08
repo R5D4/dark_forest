@@ -117,8 +117,6 @@ def new_scene(a_map, scene_type, location):
 
     scene.name = make_name(scene_type)
     scene.location = location
-    scene.flags['encounter_chance'] = 0.5
-
     scene.features['canopy'] = random.choice(CANOPY)
     scene.features['understory'] = random.choice(UNDERSTORY)
     scene.features['shrubs'] = random.choice(SHRUBS)
