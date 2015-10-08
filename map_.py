@@ -11,22 +11,14 @@ import char
 import combat
 import map_gen
 import draw_map
+import game_clock
 
 
 class Map(object):
     """
-    Defines the map. 
-
-    Instance variables:
-        self.characters
-        self.scenes
-        self.special_scenes
-        self.start_scene_name
-    Methods:
-        __init__(self, start_scene_name)
-        next_scene(self, scene_name)
-        opening_scene(self)
-        roll_characters(self)
+    A game map. 
+    
+    Contains scenes, characters, and various methods.
     """
 
     def __init__(self, start_scene_name):
@@ -35,6 +27,7 @@ class Map(object):
         self.scenes = {}
         self.special_scenes = {}
         self.characters = {};
+        self.clock = game_clock.GameClock()
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -113,7 +106,11 @@ class Scene(object):
         """ Process user action."""
         ENV_ACTIONS = {
             'look': ['l', 'look'],
-            'map': ['m', 'map']
+            'map': ['m', 'map'],
+            'time': ['t', 'time'],
+            'wait': ['wait'],
+            'rest': ['r', 'rest'],
+            'pray': ['p', 'pray']
         }
         # make single list of supported actions to check against user action
         SUPPORTED_ACTIONS = \
@@ -125,6 +122,17 @@ class Scene(object):
                 self.print_encounter_msg()
             elif action in ENV_ACTIONS['map']:
                 self.scene_map.draw_map(self.location)
+            elif action in ENV_ACTIONS['time']:
+                print "Time is {}:00".format(self.scene_map.clock.time)
+            elif action in ENV_ACTIONS['wait']:
+                print "You wait for 1 hour."
+                self.scene_map.clock.advance_time('wait')
+            elif action in ENV_ACTIONS['rest']:
+                print "You rest for 3 hours."
+                self.scene_map.clock.advance_time('rest')
+            elif action in ENV_ACTIONS['pray']:
+                print "You offer a prayer to Elbereth."
+                self.scene_map.clock.advance_time('pray')
         else:
             print "You can't do that."
 
@@ -165,6 +173,7 @@ class Scene(object):
             action = raw_input("> ")
             # trying to leave
             if action in self.exits.keys() and self.flags['can_leave']:
+                self.scene_map.clock.advance_time('travel')
                 return self.exits.get(action) 
             elif combat.ATTACK in action and self.flags['encounter']:
                 return combat.begin_combat(self.characters)
