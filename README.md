@@ -21,6 +21,7 @@ you expected and you were "volunteered" for a more dangerous task.
 ## Current Features
 1. Map
   * All scene descriptions and map topography are procedurally generated!
+  * 24-hour game clock with gradual day/night cycle
 2. Characters
   * 1 Player character and 1 Boss character
   * Predefined character attacks
@@ -39,7 +40,6 @@ you expected and you were "volunteered" for a more dangerous task.
 ## Planned Features
 2. Tracking/Hunting System
 1. Improve procedural Scene generation (more details)
-3. Game Clock (day/night)
 4. Weather (includes phase of the moon)
 3. Combat
   * More accurate D&D combat system
@@ -49,7 +49,7 @@ you expected and you were "volunteered" for a more dangerous task.
   * More interactive game interface with curses
 
 ## Next Action
-* Game Clock + Day/Night Cycle
+* Implement additional landmarks
 
 ## How to Play
 ### Map Commands
@@ -57,6 +57,11 @@ you expected and you were "volunteered" for a more dangerous task.
   * 'n', 'e', 's', 'w', etc. - to move out to another area in that direction
   * 'map' - draw the map
   * 'attack' - to attack the enemy once you see it
+  * 'time' - tell the time of day
+  * 'wait' - Wait for 1 hour
+  * 'rest' - Rest for 3 hours
+  * 'pray' - Pray to Elbereth (takes 1 hour)
+  * 'stats' - Print character stats
 
 ### Combat Commands
   * The player currently has three attacks. Type them once you're in combat.
