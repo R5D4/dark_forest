@@ -17,10 +17,13 @@ import game_clock
 BASE_ENCOUNTER = 1 # 1% base encounter chance
 # time-based bonus for encounter chance (%)
 TIME_ENCOUNTER = { 
-                 'dawn': 3,
-                 'dusk': 3,
-                 'night1': 5,
-                 'night2': 5
+                 'sunrise': 2,
+                 'dawn': 1,
+                 'dusk': 1,
+                 'sundown': 2,
+                 'night1': 3,
+                 'midnight': 3,
+                 'night2': 3 
                  }
 
 
@@ -38,6 +41,7 @@ class Map(object):
         self.special_scenes = {}
         self.characters = {};
         self.clock = game_clock.GameClock()
+
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -136,13 +140,16 @@ class Scene(object):
                 print "Time is {}:00".format(self.scene_map.clock.time)
             elif action in ENV_ACTIONS['wait']:
                 print "You wait for 1 hour."
-                self.scene_map.clock.advance_time('wait')
+                self.advance_clock('wait')
+                self.update_encounter()
             elif action in ENV_ACTIONS['rest']:
                 print "You rest for 3 hours."
-                self.scene_map.clock.advance_time('rest')
+                self.advance_clock('rest')
+                self.update_encounter()
             elif action in ENV_ACTIONS['pray']:
                 print "You offer a prayer to Elbereth (1 hour)."
-                self.scene_map.clock.advance_time('pray')
+                self.advance_clock('pray')
+                self.update_encounter()
         else:
             print "You can't do that."
 
@@ -150,6 +157,7 @@ class Scene(object):
         """
         Print a description of the scene.
         """
+        print '-' * 40
         print self.description
     
     def print_encounter_msg(self):
@@ -157,18 +165,29 @@ class Scene(object):
         if self.flags['encounter']:
             print "You see the boar! You don't think it notices you."
 
-    def encounter(self):
+    def update_encounter(self):
         """
-        Calculate and return if the player has encountered the boss.
+        Determine if player encounters the boss and print a message.
 
-        return True or False.
+        Only recalculate after time has passed.
         """
+        # Calculate encounter chance
         base = self.flags['encounter_chance']
-        time_mod = TIME_ENCOUNTER[self.scene_map.clock.time_period()]
+        time_mod = TIME_ENCOUNTER.get(self.scene_map.clock.time_period(), 0)
         environ_mod = 0 # environmental bonus
         clue_mod = 0 # signs of activity bonus
         chance = base + time_mod + environ_mod + clue_mod
-        return randint(1,100) <= chance
+        print "Encounter chance: {}".format(chance)
+        # Determine if boss is encountered
+        self.flags['encounter'] = randint(1,100) <= chance
+        # Print encounter message
+        self.print_encounter_msg()
+
+    def advance_clock(self, action):
+        """ 
+        Advance the clock by duration of action
+        """
+        self.scene_map.clock.advance_time(action)
 
     def enter(self):
         """
@@ -178,15 +197,13 @@ class Scene(object):
         self.describe()
 
         # 2. Calculate encounter chance and print encounter message
-        chance = self.flags['encounter_chance']
-        self.flags['encounter'] = self.encounter(chance)
-        self.print_encounter_msg()
-        
+        self.update_encounter()
+
         # 3. Enter user-input loop
         while True:
             action = raw_input("> ")
             if action in self.exits.keys() and self.flags['can_leave']:
-                self.scene_map.clock.advance_time('travel')
+                self.advance_clock('travel')
                 return self.exits.get(action) 
             elif combat.ATTACK in action and self.flags['encounter']:
                 return combat.begin_combat(self.characters)
