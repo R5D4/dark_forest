@@ -93,7 +93,7 @@ class Player(Character):
         self.desc = {
             'name': 'Hallas',
             'job': 'ranger',
-            'desc': '"Tall-Leaf" in the common speech. An exiled ranger from \
+            'desc': '"Tall-Leaf" in the common speech. A ranger from \
 the North.'
         } 
         super(Player, self).__init__()

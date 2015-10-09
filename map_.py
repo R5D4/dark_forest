@@ -116,6 +116,27 @@ class Scene(object):
         self.features = {}
         self.description = "No description available."
 
+    def enter(self):
+        """
+        Execute actions upon entering a scene.
+        """
+        # 1. Print scene description
+        self.describe()
+
+        # 2. Calculate encounter chance and print encounter message
+        self.update_encounter()
+
+        # 3. Enter user-input loop
+        while True:
+            action = raw_input("> ")
+            if action in self.exits.keys() and self.flags['can_leave']:
+                self.advance_clock('travel')
+                return self.exits.get(action) 
+            elif combat.ATTACK in action and self.flags['encounter']:
+                return combat.begin_combat(self.characters)
+            else: 
+                self.process_action(action)
+
     def process_action(self, action):
         """ Process user action that doesn't change scenes."""
         ENV_ACTIONS = {
@@ -124,7 +145,8 @@ class Scene(object):
             'time': ['t', 'time'],
             'wait': ['wait'],
             'rest': ['r', 'rest'],
-            'pray': ['p', 'pray']
+            'pray': ['p', 'pray'],
+            'stats': ['stats']
         }
         # make single list of supported actions to check against user action
         SUPPORTED_ACTIONS = \
@@ -150,6 +172,8 @@ class Scene(object):
                 print "You offer a prayer to Elbereth (1 hour)."
                 self.advance_clock('pray')
                 self.update_encounter()
+            elif action in ENV_ACTIONS['stats']:
+                self.characters['player'].print_stats()
         else:
             print "You can't do that."
 
@@ -188,27 +212,6 @@ class Scene(object):
         Advance the clock by duration of action
         """
         self.scene_map.clock.advance_time(action)
-
-    def enter(self):
-        """
-        Execute actions upon entering a scene.
-        """
-        # 1. Print scene description
-        self.describe()
-
-        # 2. Calculate encounter chance and print encounter message
-        self.update_encounter()
-
-        # 3. Enter user-input loop
-        while True:
-            action = raw_input("> ")
-            if action in self.exits.keys() and self.flags['can_leave']:
-                self.advance_clock('travel')
-                return self.exits.get(action) 
-            elif combat.ATTACK in action and self.flags['encounter']:
-                return combat.begin_combat(self.characters)
-            else: 
-                self.process_action(action)
 
 
 ##########  SPECIAL SCENES  ##########
