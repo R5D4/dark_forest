@@ -9,10 +9,25 @@ import map_
 
 ########## GLOBAL THINGIES ##########
 
-MIN_SCENES = 30
-MAX_SCENES = 50
+## Settings
+MIN_SCENES = 30 # recommend > 10
+MAX_SCENES = 50 # hard limit is GRID_SIZE^2, recommend less
 GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
+
+## Counts and sequence numbers
 ID_SEQ = 1 # part of name for generated scenes
+# map global limit on type of landmark instance
+# NOTE: needs work
+LANDMARK_LIMIT = { # name: (min, max, actual)
+                 'wallow': (0, 0, 0),
+                 'rooting': (0, 0, 0),
+                 'damaged_tree': (0, 0, 0),
+                 'dead_wood': (0, 0, 0),
+                 'bed': (0, 0, 0),
+                 'track': (0, 0, 0)
+                 }
+
+## Data constants
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
 OPPOSITE_EXITS = {
                  'n': 's',
@@ -60,6 +75,7 @@ def new_map():
     a_map = map_.Map('story') # first scene is 'story'
     global ID_SEQ 
     ID_SEQ = 1 # reset sequence number for new map
+    #self.init_landmark_count()
 
     generate_scenes(a_map)
     add_links(a_map)

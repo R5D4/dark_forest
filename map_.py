@@ -2,7 +2,7 @@
 This module provides the map and the scenes of the map.
 
 Contains the Map class.
-Contains the generic Scene class and all map area scene subclasses.
+Contains the Scene class and all special scene subclasses.
 """
 
 from sys import exit
