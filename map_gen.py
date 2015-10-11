@@ -140,7 +140,7 @@ def init_landmark_limits(n):
     goal = max(base, rand_goal)
     limits['damaged_tree'] = (0, goal)
     # number of chewed open dead wood on map
-    goal = randint(0, int(0.05 * n)) # random bounded goal
+    goal = randint(1, int(0.05 * n)) # random bounded goal
     limits['dead_wood'] = (0, goal)
     # number of hog bed on map
     goal = randint(1, 2) # random bounded goal
