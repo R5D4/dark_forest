@@ -17,15 +17,7 @@ GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
 ## Counts and sequence numbers
 ID_SEQ = 1 # part of name for generated scenes
 # map global limit on type of landmark instance
-# NOTE: needs work
-LANDMARK_LIMIT = { # name: (min, max, actual)
-                 'wallow': (0, 0, 0),
-                 'rooting': (0, 0, 0),
-                 'damaged_tree': (0, 0, 0),
-                 'dead_wood': (0, 0, 0),
-                 'bed': (0, 0, 0),
-                 'track': (0, 0, 0)
-                 }
+LANDMARK_LIMITS = {} # landmark type: (created so far, goal) 
 
 ## Data constants
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
@@ -96,6 +88,8 @@ def generate_scenes(a_map):
     candidate_scenes = [] # list of scenes with empty adjacent locations
     occupied_locs = [] # list of occupied locations
     n = randint(MIN_SCENES, MAX_SCENES)
+    global LANDMARK_LIMITS
+    LANDMARK_LIMITS = init_landmark_limits(n)
 
     # pick a starting location for entrance scene
     loc = (randint(1, GRID_SIZE), randint(1, GRID_SIZE))
@@ -125,6 +119,39 @@ def generate_scenes(a_map):
             added += 1
         else: # we cannot add any more adjacent scenes to the ref location
             candidate_scenes.remove(sc)
+
+
+def init_landmark_limits(n):
+    """ Return limits for each landmark type."""
+    limits = {}
+    # number of wallows on map
+    base = 1 # lower limit
+    rand_goal = randint(0, int(0.1 * n)) # random bounded goal
+    goal = max(base, rand_goal)
+    limits['wallow'] = (0, goal) # (so far, goal)
+    # number of rootings on map
+    base = 2 # lower limit
+    rand_goal = randint(0, int(0.2 * n)) # random bounded goal
+    goal = max(base, rand_goal)
+    limits['rooting'] = (0, goal)
+    # number of damaged trees on map
+    base = 0 # lower limit
+    rand_goal = randint(0, int(0.05 * n)) # random bounded goal
+    goal = max(base, rand_goal)
+    limits['damaged_tree'] = (0, goal)
+    # number of chewed open dead wood on map
+    goal = randint(0, int(0.05 * n)) # random bounded goal
+    limits['dead_wood'] = (0, goal)
+    # number of hog bed on map
+    goal = randint(1, 2) # random bounded goal
+    limits['bed'] = (0, goal)
+    # number of track on map
+    base = 5 # lower limit
+    rand_goal = randint(0, int(0.2 * n)) # random bounded goal
+    goal = max(base, rand_goal)
+    limits['track'] = (0, goal)
+    
+    return limits
 
 
 def new_scene(a_map, scene_type, location):

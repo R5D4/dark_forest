@@ -9,6 +9,19 @@ import map_gen
 import map_
 
 
+def init_landmark_limits_test():
+    # check if generated values are within limits
+    n = 100
+    limits = map_gen.init_landmark_limits(n)
+    print limits
+    ok_(limits['wallow'][1] >= 1 and limits['wallow'][1] <= 10)
+    ok_(limits['rooting'][1] >= 2 and limits['rooting'][1] <= 20)
+    ok_(limits['damaged_tree'][1] >= 0 and limits['damaged_tree'][1] <= 5)
+    ok_(limits['dead_wood'][1] >= 1 and limits['dead_wood'][1] <= 5)
+    ok_(limits['bed'][1] >= 1 and limits['bed'][1] <= 2)
+    ok_(limits['track'][1] >= 5 and limits['track'][1] <= 20)
+
+
 def add_links_test():
     # Test if map_gen.add_links function actually adds between 0 and 1 link
     # per scene.
