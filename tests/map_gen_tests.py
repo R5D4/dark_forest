@@ -9,8 +9,21 @@ import map_gen
 import map_
 
 
+def add_features_test():
+    # test if all types of environmental features are added
+    a_map = map_.Map('story')
+    for i in xrange(0, 100): # 100 trials
+        scene = map_gen.new_scene(a_map, 'random', (1, 1))
+        map_gen.add_features(scene)
+        print scene.features
+        ok_(scene.features['canopy'] in map_gen.CANOPY)
+        ok_(scene.features['understory'] in map_gen.UNDERSTORY)
+        ok_(scene.features['shrubs'] in map_gen.SHRUBS)
+        ok_(scene.features['floor'] in map_gen.FLOOR)
+
+
 def init_landmark_limits_test():
-    # check if generated values are within limits
+    # test if generated values are within limits
     n = 100
     for i in xrange(0, 100): # 100 trials
         limits = map_gen.init_landmark_limits(n)
@@ -286,8 +299,11 @@ def generate_scenes_test():
                 s.location, 
                 scene_dict))
 
-        # test for map connectedness
+        # Test for map connectedness
         ok_(check_map_connectedness(a_map))
+
+        # Test if each scene is well-formed (features, landmarks)
+        # NOTE: Implement this
 
 
 ########## HELPER FUNCTIONS ##########

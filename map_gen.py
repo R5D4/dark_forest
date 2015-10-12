@@ -16,8 +16,6 @@ GRID_SIZE = 9 # scenes created in virtual grid of size GRID_SIZE x GRID_SIZE
 
 ## Counts and sequence numbers
 ID_SEQ = 1 # part of name for generated scenes
-# map global limit on type of landmark instance
-LANDMARK_LIMITS = {} # landmark type: (created so far, goal) 
 
 ## Data constants
 EXITS = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
@@ -54,10 +52,13 @@ DIR_TO_DIFF = {
            'e': (1, 0),
            'se': (1, 1)
            }
+# one each
 CANOPY = ['none', 'oak', 'hickory', 'pine']
 UNDERSTORY = ['none', 'dogwood', 'cedar', 'holly', 'young chestnut']
 SHRUBS = ['none', 'blackberry', 'honeysuckle', 'poison ivy']
 FLOOR = ['leafy', 'dirt', 'rocky']
+# multiple
+LANDMARKS = ['wallow', 'rooting', 'damaged_tree', 'dead_wood', 'bed', 'track']
 
 
 ########## PUBLIC FUNCTION ##########
@@ -67,11 +68,11 @@ def new_map():
     a_map = map_.Map('story') # first scene is 'story'
     global ID_SEQ 
     ID_SEQ = 1 # reset sequence number for new map
-    #self.init_landmark_count()
 
     generate_scenes(a_map)
+    add_landmarks(a_map)
     add_links(a_map)
-    update_exits(a_map)
+    add_description(a_map)
 
     # add special scenes
     a_map.add_special_scene('story', map_.Story(a_map.characters))
@@ -84,24 +85,29 @@ def new_map():
 ########## HELPER FUNCTIONS ##########
 
 def generate_scenes(a_map):
-    """ Generate scenes for the new map."""
+    """ 
+    Generate scenes for the new map.
+    
+    Add between MIN_SCENES and MAX_SCENES number of scenes to the map.
+    Link the created scene such that there is a path between each pair of
+        scenes.
+    Each scene has a name, location, and exits created in the linking stage.
+    """
     candidate_scenes = [] # list of scenes with empty adjacent locations
     occupied_locs = [] # list of occupied locations
     n = randint(MIN_SCENES, MAX_SCENES)
-    global LANDMARK_LIMITS
-    LANDMARK_LIMITS = init_landmark_limits(n)
 
     # pick a starting location for entrance scene
     loc = (randint(1, GRID_SIZE), randint(1, GRID_SIZE))
 
     # create a new scene at the starting location
     new_sc = new_scene(a_map, 'entrance', loc)
+    add_features(new_sc)
     candidate_scenes.append(new_sc) 
     occupied_locs.append(loc)
     a_map.add_scene(new_sc)
 
     added = 1 # number of scenes added
-
     while added < n:
         # pick an existing scene as a reference location
         sc = choice(candidate_scenes)
@@ -110,6 +116,7 @@ def generate_scenes(a_map):
         # create a new scene at the empty location found above
         if new_loc: # not None
             new_sc = new_scene(a_map, 'random', new_loc)
+            add_features(new_sc)
             # add a link between the reference scene and the new scene
             # this ensures that the map is a connected graph
             create_link(new_sc, sc)
@@ -122,7 +129,11 @@ def generate_scenes(a_map):
 
 
 def init_landmark_limits(n):
-    """ Return limits for each landmark type."""
+    """ 
+    Return limits for each landmark type.
+    
+    n: number of scenes
+    """
     limits = {}
     # number of wallows on map
     base = 1 # lower limit
@@ -150,25 +161,19 @@ def init_landmark_limits(n):
     rand_goal = randint(0, int(0.2 * n)) # random bounded goal
     goal = max(base, rand_goal)
     limits['track'] = (0, goal)
-    
+
     return limits
 
 
 def new_scene(a_map, scene_type, location):
-    """ Create a new scene and fill it with details."""
+    """ 
+    Create a new scene in a_map at location.
+    
+    Set scene name depending on scene type.
+    """
     scene = map_.Scene(a_map.characters)
-
     scene.name = make_name(scene_type)
     scene.location = location
-    scene.features['canopy'] = random.choice(CANOPY)
-    scene.features['understory'] = random.choice(UNDERSTORY)
-    scene.features['shrubs'] = random.choice(SHRUBS)
-    scene.features['floor'] = random.choice(FLOOR)
-
-    scene.description = ""
-    for feature in scene.features.keys():
-        scene.description += "The {} is {}. ".format(feature, 
-                                                     scene.features[feature])
     return scene
 
 
@@ -187,6 +192,34 @@ def make_name(scene_type):
         name = None
     return name
         
+
+def add_features(scene):
+    """ Add environmental features."""
+    scene.features['canopy'] = random.choice(CANOPY)
+    scene.features['understory'] = random.choice(UNDERSTORY)
+    scene.features['shrubs'] = random.choice(SHRUBS)
+    scene.features['floor'] = random.choice(FLOOR)
+
+
+def add_landmarks(a_map):
+    """ Add landmarks to the map."""
+    limits = init_landmark_limits(len(a_map.scenes))
+    # NOTE: Implement this
+    pass
+
+
+def add_description(a_map):
+    """ Construct a description for each scene in a_map."""
+    for scene in a_map.scenes.values():
+        # Update description of features
+        scene.description = ""
+        for feature in scene.features.keys():
+            scene.description += "The {} is {}. ".format(feature, 
+                                                       scene.features[feature])
+        # Update description of exits
+        scene.description += "The path leads towards {}".format(
+                                                            scene.exits.keys())
+
 
 def empty_adjacent(ref_loc, occupied_locs):
     """ 
@@ -332,10 +365,4 @@ def create_link(s1, s2):
     # add s1 as the destination of s2's exit
     s2.exits[dir2] = s1.name
 
-
-def update_exits(a_map):
-    """ Update description of exits in all scenes in the map."""
-    for scene in a_map.scenes.values():
-        scene.description += "The path leads towards {}".format(
-                                                            scene.exits.keys())
 
