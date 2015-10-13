@@ -9,10 +9,29 @@ import map_gen
 import map_
 
 
+def add_landmark_test():
+    # Test if a landmark is properly added to a scene
+    for l_type in map_gen.LANDMARKS.keys():
+        sc = map_.Scene(None)
+        map_gen.add_landmark(sc, l_type)
+        ok_(l_type in sc.features)
+        ok_(sc.features[l_type] in map_gen.LANDMARKS[l_type])
+
+
 def add_landmarks_test():
+    a_map = map_.Map('story')
+    map_gen.generate_scenes(a_map)
+    map_gen.add_landmarks(a_map)
+    
     # Test if correct number of landmarks added?
-    # Test that no scene has more than one landmark of same type
-    pass
+    # Test that no scene has more than one landmark
+    for sc in a_map.scenes.values():
+        count = 0
+        for key in sc.features.keys():
+            if key in map_gen.LANDMARKS:
+                count +=1
+        print "count: {}. features: {}".format(count, sc.features.items())
+        ok_(count <= 1)
     
 
 def add_features_test():
@@ -34,12 +53,12 @@ def init_landmark_limits_test():
     for i in xrange(0, 100): # 100 trials
         limits = map_gen.init_landmark_limits(n)
         print limits
-        ok_(limits['wallow'][1] >= 1 and limits['wallow'][1] <= 10)
-        ok_(limits['rooting'][1] >= 2 and limits['rooting'][1] <= 20)
-        ok_(limits['damaged_tree'][1] >= 0 and limits['damaged_tree'][1] <= 5)
-        ok_(limits['dead_wood'][1] >= 1 and limits['dead_wood'][1] <= 5)
-        ok_(limits['bed'][1] >= 1 and limits['bed'][1] <= 2)
-        ok_(limits['track'][1] >= 5 and limits['track'][1] <= 20)
+        ok_(limits['wallow'] >= 1 and limits['wallow'] <= 10)
+        ok_(limits['rooting'] >= 2 and limits['rooting'] <= 20)
+        ok_(limits['damaged_tree'] >= 0 and limits['damaged_tree'] <= 5)
+        ok_(limits['dead_wood'] >= 1 and limits['dead_wood'] <= 5)
+        ok_(limits['bed'] >= 1 and limits['bed'] <= 2)
+        ok_(limits['track'] >= 5 and limits['track'] <= 20)
 
 
 def add_links_test():

@@ -52,13 +52,20 @@ DIR_TO_DIFF = {
            'e': (1, 0),
            'se': (1, 1)
            }
-# one each
+# features
 CANOPY = ['none', 'oak', 'hickory', 'pine']
 UNDERSTORY = ['none', 'dogwood', 'cedar', 'holly', 'young chestnut']
 SHRUBS = ['none', 'blackberry', 'honeysuckle', 'poison ivy']
 FLOOR = ['leafy', 'dirt', 'rocky']
-# multiple
-LANDMARKS = ['wallow', 'rooting', 'damaged_tree', 'dead_wood', 'bed', 'track']
+# landmarks
+LANDMARKS = {
+            'wallow': ['large', 'medium', 'small'], 
+            'rooting': ['large', 'medium', 'small'], 
+            'damaged_tree': ['default'], 
+            'dead_wood': ['default'], 
+            'bed': ['covered', 'open'], 
+            'track': ['wide', 'narrow']
+            }
 
 
 ########## PUBLIC FUNCTION ##########
@@ -139,28 +146,28 @@ def init_landmark_limits(n):
     base = 1 # lower limit
     rand_goal = randint(0, int(0.1 * n)) # random bounded goal
     goal = max(base, rand_goal)
-    limits['wallow'] = (0, goal) # (so far, goal)
+    limits['wallow'] = goal # (so far, goal)
     # number of rootings on map
     base = 2 # lower limit
     rand_goal = randint(0, int(0.2 * n)) # random bounded goal
     goal = max(base, rand_goal)
-    limits['rooting'] = (0, goal)
+    limits['rooting'] = goal
     # number of damaged trees on map
     base = 0 # lower limit
     rand_goal = randint(0, int(0.05 * n)) # random bounded goal
     goal = max(base, rand_goal)
-    limits['damaged_tree'] = (0, goal)
+    limits['damaged_tree'] = goal
     # number of chewed open dead wood on map
     goal = randint(1, int(0.05 * n)) # random bounded goal
-    limits['dead_wood'] = (0, goal)
+    limits['dead_wood'] = goal
     # number of hog bed on map
     goal = randint(1, 2) # random bounded goal
-    limits['bed'] = (0, goal)
+    limits['bed'] = goal
     # number of track on map
     base = 5 # lower limit
     rand_goal = randint(0, int(0.2 * n)) # random bounded goal
     goal = max(base, rand_goal)
-    limits['track'] = (0, goal)
+    limits['track'] = goal
 
     return limits
 
@@ -206,8 +213,8 @@ def add_landmarks(a_map):
     limits = init_landmark_limits(len(a_map.scenes))
     candidates = a_map.scenes.values()
     # for each type of landmark
-    for landmark, value in limits.items():
-        count, goal = value
+    for l_type, goal in limits.items():
+        count = 0
         # loop until we've reached our goal or no more scenes
         while count < goal and candidates:
             # pick random scene from map
@@ -219,6 +226,18 @@ def add_landmarks(a_map):
             candidates.remove(sc)
             # increment count
             count += 1
+
+
+def add_landmark(scene, l_type):
+    """ Add the appropriate type of landmark to a scene."""
+    # handle case if somehow landmark type doesn't exist in LANDMARKS
+    if l_type in LANDMARKS.keys():
+        lm = choice(LANDMARKS[l_type])
+        scene.features[l_type] = lm
+    else:
+        # NOTE: is joke, remove later
+        print "How did this even happen?"
+    
 
 
 def add_description(a_map):

@@ -14,9 +14,9 @@ import draw_map
 import game_clock
 
 
-BASE_ENCOUNTER = 1 # 1% base encounter chance
+ENCOUNTER_BASE = 1 # 1% base encounter chance
 # time-based bonus for encounter chance (%)
-TIME_ENCOUNTER = { 
+ENCOUNTER_TIME = { 
                  'sunrise': 2,
                  'dawn': 1,
                  'dusk': 1,
@@ -25,6 +25,15 @@ TIME_ENCOUNTER = {
                  'midnight': 3,
                  'night2': 3 
                  }
+# environment-based bonus for encounter chance (%)
+ENCOUNTER_ENV = {
+                'wallow': 10,
+                'rooting': 4,
+                'damaged_tree': 3,
+                'dead_wood': 2, 
+                'bed': 5, 
+                'track': 5
+                }
 
 
 class Map(object):
@@ -41,7 +50,6 @@ class Map(object):
         self.special_scenes = {}
         self.characters = {};
         self.clock = game_clock.GameClock()
-
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -109,7 +117,7 @@ class Scene(object):
         self.characters = characters
         self.exits = {}
         self.flags = {
-            'encounter_chance': BASE_ENCOUNTER,
+            'encounter_chance': ENCOUNTER_BASE,
             'encounter': False,
             'can_leave': True 
         }
@@ -197,15 +205,21 @@ class Scene(object):
         """
         # Calculate encounter chance
         base = self.flags['encounter_chance']
-        time_mod = TIME_ENCOUNTER.get(self.scene_map.clock.time_period(), 0)
-        environ_mod = 0 # environmental bonus
-        clue_mod = 0 # signs of activity bonus
+        time_mod = ENCOUNTER_TIME.get(self.scene_map.clock.time_period(), 0)
+        # environmental bonus
+        environ_mod = 0
+        for f in self.features.keys():
+            environ_mod += ENCOUNTER_ENV.get(f, 0)
+        # signs of activity bonus
+        clue_mod = 0 
         chance = base + time_mod + environ_mod + clue_mod
         print "Encounter chance: {}".format(chance)
         # Determine if boss is encountered
         self.flags['encounter'] = randint(1,100) <= chance
         # Print encounter message
         self.print_encounter_msg()
+        # for diagnostic
+        return chance
 
     def advance_clock(self, action):
         """ 
