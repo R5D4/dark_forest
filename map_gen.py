@@ -204,8 +204,21 @@ def add_features(scene):
 def add_landmarks(a_map):
     """ Add landmarks to the map."""
     limits = init_landmark_limits(len(a_map.scenes))
-    # NOTE: Implement this
-    pass
+    candidates = a_map.scenes.values()
+    # for each type of landmark
+    for landmark, value in limits.items():
+        count, goal = value
+        # loop until we've reached our goal or no more scenes
+        while count < goal and candidates:
+            # pick random scene from map
+            sc = choice(candidates)
+            # add the landmark to the scene
+            # NOTE: confusing function name, think of better one
+            add_landmark(sc, l_type)
+            # remove scene from list (we want one landmark/scene if possible)
+            candidates.remove(sc)
+            # increment count
+            count += 1
 
 
 def add_description(a_map):

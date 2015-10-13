@@ -9,6 +9,12 @@ import map_gen
 import map_
 
 
+def add_landmarks_test():
+    # Test if correct number of landmarks added?
+    # Test that no scene has more than one landmark of same type
+    pass
+    
+
 def add_features_test():
     # test if all types of environmental features are added
     a_map = map_.Map('story')
