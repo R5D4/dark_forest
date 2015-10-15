@@ -8,19 +8,14 @@ python game.py
 
 ## Unofficial Story
 Middle-Earth inspired.
-In a world where an ancient evil stirs and the sky grows dark, only one man
-can unite the free lands and fulfil the prophesy... 
-> Renewed shall be blade that was broken,
-> The crownless again shall be king.
-
-You're not playing as him, so relax. You play as ranger who was sent to
-patrol the area near the south-east of Mirkwood. You know, getting kittens out
-of trees and chasing down escaped swans, etc. But there was more trouble than
-you expected and you were "volunteered" for a more dangerous task.
+Update - new background story:
+* Class/race/background TBD
+* Enter forest with minimal equipment
+* Evil power prevents you from leaving, must defeat boss
 
 ## Current Features
 1. Map
-  * All scene descriptions and map topography are procedurally generated!
+  * All scenes and map topography are procedurally generated!
   * 24-hour game clock with gradual day/night cycle
 2. Characters
   * 1 Player character and 1 Boss character
@@ -38,18 +33,25 @@ you expected and you were "volunteered" for a more dangerous task.
   * Ignores distance
 
 ## Planned Features
-2. Tracking/Hunting System
-1. Improve procedural Scene generation (more details)
+1. Exploration System
+  * Certain map areas provide randomized equipment
+1. Character Update
+  * Ability to acquire new equipment and attacks
+2. Combat System Update
+  * Run from combat
+3. Hunting System 
+  * Ability for boss or player to "hunt" if other party runs from combat
+  * Limited to certain number of scene transitions
+1. Flavour text (descriptions)
+  * Extract all flavour text into own file
+  * Expand on descriptions
 4. Weather (includes phase of the moon)
-3. Combat
-  * More accurate D&D combat system
-2. Characters
-  * More accurate D&D character stats
+  * Weather-based special actions
 4. Interface
-  * More interactive game interface with curses
+  * Interactive game interface with curses
 
 ## Next Action
-* Implement additional landmarks
+* Make game support items and equipment
 
 ## How to Play
 ### Map Commands
