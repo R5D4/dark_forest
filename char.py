@@ -45,6 +45,7 @@ class Character(object):
         self.roll_attributes()
         self.health['HP'] = self.attributes['max_HP'] 
         self.health['mana'] = self.attributes['max_mana'] 
+        self.inventory = {}
     
     def roll_attributes(self):
         """ Roll some dice to add to base attribute values."""
