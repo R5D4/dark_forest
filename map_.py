@@ -67,22 +67,16 @@ class Map(object):
         self.add_boar()
 
     def add_player(self):
-        """ Create player character. Allow user to re-roll."""
-        response = 'y'
-        while response == 'y':
-            print "\nRolling player character:"
-            print "-" * 20
-            self.characters['player'] = char.Player()
-            response = raw_input("Reroll character? (y/n): ")
+        """ Create player character."""
+        print "\nRolling player character:"
+        print "-" * 20
+        self.characters['player'] = char.Player()
 
     def add_boar(self):
-        """ Create boss character. Allow user to re-roll."""
-        response = 'y'
-        while response == 'y':
-            print "\nRolling boss character:"
-            print "-" * 20
-            self.characters['boar'] = char.Boar()
-            response = raw_input("Reroll character? (y/n): ")
+        """ Create boss character."""
+        print "\nRolling boss character:"
+        print "-" * 20
+        self.characters['boar'] = char.Boar()
 
     def add_scene(self, scene):
         """ Add a scene to the map with 'name' as the key to the dict."""
