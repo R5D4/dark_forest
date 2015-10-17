@@ -64,6 +64,7 @@ Update - new background story:
   * 'rest' - Rest for 3 hours
   * 'pray' - Pray to Elbereth (takes 1 hour)
   * 'stats' - Print character stats
+  * 'inventory' - Print inventory
 
 ### Combat Commands
   * The player currently has three attacks. Type them once you're in combat.

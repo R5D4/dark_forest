@@ -67,10 +67,13 @@ class Map(object):
         self.add_boar()
 
     def add_player(self):
-        """ Create player character."""
-        print "\nRolling player character:"
-        print "-" * 20
-        self.characters['player'] = char.Player()
+        """ Create player character. Allow user to re-roll."""
+        response = 'y'
+        while response == 'y':
+            print "\nRolling player character:"
+            print "-" * 20
+            self.characters['player'] = char.Player()
+            response = raw_input("Reroll character? (y/n): ")
 
     def add_boar(self):
         """ Create boss character. Allow user to re-roll."""
@@ -151,7 +154,8 @@ class Scene(object):
             'wait': ['wait'],
             'rest': ['r', 'rest'],
             'pray': ['p', 'pray'],
-            'stats': ['stats']
+            'stats': ['stats'],
+            'inventory': ['i', 'inventory']
         }
         # make single list of supported actions to check against user action
         SUPPORTED_ACTIONS = \
@@ -179,6 +183,8 @@ class Scene(object):
                 self.update_encounter()
             elif action in ENV_ACTIONS['stats']:
                 self.characters['player'].print_stats()
+            elif action in ENV_ACTIONS['inventory']:
+                print self.characters['player'].get_inventory()
         else:
             print "You can't do that."
 
