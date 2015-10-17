@@ -11,6 +11,14 @@ from util import roll
 ATTACK = 'attack'
 
 
+########## MODULE FUNCTIONS ##########
+
+
+def new_attack(weapon):
+    """ Generate a new Attack object based on a Weapon object."""
+    pass
+
+
 def begin_combat(characters):
     """
     Start combat.
@@ -72,6 +80,7 @@ def begin_combat(characters):
         elif boar.health['HP'] <= 0:
             return 'win' 
 
+########## ATTACK CLASS ##########
 
 class Attack(object):
     """

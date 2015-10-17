@@ -10,6 +10,7 @@ Contains the following classes:
 from random import randint
 from random import choice
 import combat
+import items
 
 class Character(object):
     """
@@ -45,7 +46,7 @@ class Character(object):
         self.roll_attributes()
         self.health['HP'] = self.attributes['max_HP'] 
         self.health['mana'] = self.attributes['max_mana'] 
-        self.inventory = {}
+        self.inventory = []
     
     def roll_attributes(self):
         """ Roll some dice to add to base attribute values."""
@@ -64,6 +65,18 @@ class Character(object):
         for s in self.attacks.keys():
             print s
 
+    def pick_up(self, item):
+        """ Add item to inventory. item is an Item object."""
+        self.inventory.append(item)
+
+    def get_inventory(self):
+        """ Return inventory desc. Uses index as unique ID for each item."""
+        inv_str = ""
+        for item in self.inventory:
+            inv_str += "{}: {}\n".format(self.inventory.index(item), 
+                                        item.desc['name'])
+        return inv_str
+
     def take_damage(self, dmg):
         """ Take damage. Updates the 'HP' attribute."""
         self.health['HP'] -= dmg
@@ -77,6 +90,12 @@ class Player(Character):
 
     def __init__(self):
         """ Extends Character.__init__"""
+        self.set_base_attr()
+        super(Player, self).__init__()
+        self.roll_items()
+
+    def set_base_attr(self):
+        """ Set base attributes."""
         # base attributes
         self.attributes = {
             'str': 3,
@@ -97,8 +116,11 @@ class Player(Character):
             'desc': '"Tall-Leaf" in the common speech. A ranger from \
 the North.'
         } 
-        super(Player, self).__init__()
-        self.print_stats()
+
+    def roll_items(self):
+        """ Roll random items, weapons and armor."""
+        self.pick_up(items.new_weapon())
+
 
 
 ########## BOSS CHARACTER ##########
