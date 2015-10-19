@@ -1,8 +1,10 @@
 """ Tests for the map_ module."""
 
+from nose.tools import *
 import map_
 import map_gen
-from nose.tools import *
+import char
+import items
 
 
 def update_encounter_test():
@@ -18,3 +20,16 @@ def update_encounter_test():
     a_map.clock.time = 22 # night1 (+3)
     # chance = 10 + 3 + 1 = 14
     ok_(sc.update_encounter() == 14)
+
+
+def process_equip_test():
+    # Test Scene.process_equip method
+    player = char.Player()
+    scene = map_.Scene({'player': player})
+    item_desc = {'name': 'Testing Sword'}
+    item = items.Weapon(item_desc)
+    player.inventory = [item]
+    args = '0'
+    out = scene.process_equip(args)
+    print out
+    ok_(out == 'Equipped Testing Sword.')

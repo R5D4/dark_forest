@@ -86,7 +86,7 @@ class Character(object):
         # NOTE: Test this
         eq = []
         for loc, item in self.equipped.items():
-            eq.append('{}: {}'.format(loc, item))
+            eq.append('{}: {}'.format(loc, item.desc['name']))
         return '\n'.join(eq)
             
     def take_damage(self, dmg):
@@ -141,7 +141,7 @@ the North.'
         """ Roll random items, weapons and armor."""
         self.pick_up(items.new_weapon())
 
-    def equip(item):
+    def equip(self, item):
         """ Equip the item. Return True if success. False otherwise."""
         # Decide where to equip the item
         # for now equip everything in right hand

@@ -165,6 +165,7 @@ class Scene(object):
         # into two vars.
         # NOTE: Test this
         action, args = (' '.join(r_action.split())+' ').split(' ', 1)
+        player = self.characters['player']
         
         if action in SUPPORTED_ACTIONS:
             if action in ENV_ACTIONS['look']:
@@ -187,9 +188,9 @@ class Scene(object):
                 self.advance_clock('pray')
                 self.update_encounter()
             elif action in ENV_ACTIONS['stats']:
-                print self.characters['player'].get_stats()
+                print player.get_stats()
             elif action in ENV_ACTIONS['inventory']:
-                print self.characters['player'].get_inventory()
+                print player.get_inventory()
             elif action in ENV_ACTIONS['equip']:
                 print self.process_equip(args)
                 
@@ -198,22 +199,23 @@ class Scene(object):
 
     def process_equip(self, args):
         """ Process the 'equip' command. Return output string if applicable."""
+        out_str = ''
         player = self.characters['player']
         if args == '': # no argument, print equipped items
-            print player.get_equipped()
+            out_str = player.get_equipped()
         else:
             item = None
             # check if args represents a proper index
             try: 
-                item = inventory[int(args)]
+                item = player.inventory[int(args)]
             except: # catch everything
-                print "No such item."
-                return
+                return "No such item."
             success = player.equip(item)
             if success:
-                print "Equipped {}.".format(item.desc['name'])
+                out_str = "Equipped {}.".format(item.desc['name'])
             else:
-                print "Could not equip {}.".format(item.desc['name'])
+                out_str = "Could not equip {}.".format(item.desc['name'])
+        return out_str
 
     def describe(self): 
         """
