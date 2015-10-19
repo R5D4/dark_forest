@@ -31,10 +31,10 @@ class Weapon(Item):
 
     def get_info(self):
         """ Return string containing formatted weapon description."""
-        info_str = ""
+        info = []
         for s in self.desc.keys():
-            info_str += "{}: {}\n".format(s, self.desc[s])
-        return info_str
+            info.append("{}: {}".format(s, self.desc[s]))
+        return ' '.join(info)
 
 
 class Armor(Item):

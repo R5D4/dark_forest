@@ -12,6 +12,7 @@ from random import choice
 import combat
 import items
 
+
 class Character(object):
     """
     Generic class for all game characters.
@@ -84,8 +85,8 @@ class Character(object):
         self.health['HP'] -= dmg
         print "The %s took %d damage!" % (self.desc['job'], dmg)
 
-
 ########## PLAYER CHARACTER ##########
+
 
 class Player(Character):
     """ Player class."""
@@ -123,9 +124,8 @@ the North.'
         """ Roll random items, weapons and armor."""
         self.pick_up(items.new_weapon())
 
-
-
 ########## BOSS CHARACTER ##########
+
 
 class Boar(Character):
     """ Boar class (boss)."""
@@ -154,8 +154,8 @@ tusks.'
         } 
         super(Boar, self).__init__()
 
-
 ########## PLAYER ATTACKS ##########
+
 
 class Slash(combat.Attack):
     
@@ -204,8 +204,8 @@ class Stab(combat.Attack):
             'dmg_base': 1
         }
 
-
 ########## BOSS ATTACKS ##########
+
 
 class Charge(combat.Attack):
     

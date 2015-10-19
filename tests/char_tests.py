@@ -11,4 +11,4 @@ def get_inventory_test():
     desc = {'name': 'Testing Sword'}
     weapon = items.Weapon(desc)
     player.inventory = [weapon]
-    ok_(player.get_inventory() == "0: Testing Sword\n")
+    ok_(player.get_inventory() == "0: Testing Sword")
