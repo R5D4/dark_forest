@@ -143,7 +143,7 @@ class Scene(object):
             else: 
                 self.process_action(action)
 
-    def process_action(self, action):
+    def process_action(self, r_action):
         """ Process user action that doesn't change scenes."""
         ENV_ACTIONS = {
             'look': ['l', 'look'],
@@ -153,11 +153,18 @@ class Scene(object):
             'rest': ['r', 'rest'],
             'pray': ['p', 'pray'],
             'stats': ['stats'],
-            'inventory': ['i', 'inventory']
+            'inventory': ['i', 'inventory'],
+            'equip': ['q', 'equip']
         }
         # make single list of supported actions to check against user action
         SUPPORTED_ACTIONS = \
             [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
+
+        # The ' '.join and split() ensures only one space between each word.
+        # Then we add another space to make sure we can always unpack 
+        # into two vars.
+        # NOTE: Test this
+        action, args = (' '.join(r_action.split())+' ').split(' ', 1)
         
         if action in SUPPORTED_ACTIONS:
             if action in ENV_ACTIONS['look']:
@@ -183,8 +190,30 @@ class Scene(object):
                 print self.characters['player'].get_stats()
             elif action in ENV_ACTIONS['inventory']:
                 print self.characters['player'].get_inventory()
+            elif action in ENV_ACTIONS['equip']:
+                print self.process_equip(args)
+                
         else:
             print "You can't do that."
+
+    def process_equip(self, args):
+        """ Process the 'equip' command. Return output string if applicable."""
+        player = self.characters['player']
+        if args == '': # no argument, print equipped items
+            print player.get_equipped()
+        else:
+            item = None
+            # check if args represents a proper index
+            try: 
+                item = inventory[int(args)]
+            except: # catch everything
+                print "No such item."
+                return
+            success = player.equip(item)
+            if success:
+                print "Equipped {}.".format(item.desc['name'])
+            else:
+                print "Could not equip {}.".format(item.desc['name'])
 
     def describe(self): 
         """

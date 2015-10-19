@@ -20,14 +20,16 @@ class Item(object):
 
     def __init__(self):
         self.item_type = None
+        self.desc = {'name': "Unidentified item."} # all items must have name
 
 
 class Weapon(Item):
     """ Represents a weapon."""
 
     def __init__(self, desc):
+        super(Weapon, self).__init__()
         self.item_type = TYPE_WEAPON
-        self.desc = desc
+        self.desc.update(desc)
 
     def get_info(self):
         """ Return string containing formatted weapon description."""

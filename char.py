@@ -48,6 +48,7 @@ class Character(object):
         self.health['HP'] = self.attributes['max_HP'] 
         self.health['mana'] = self.attributes['max_mana'] 
         self.inventory = []
+        self.equipped = {}
     
     def roll_attributes(self):
         """ Roll some dice to add to base attribute values."""
@@ -80,6 +81,14 @@ class Character(object):
                                         item.desc['name']))
         return '\n'.join(inv)
 
+    def get_equipped(self):
+        """ Return equipped items' names."""
+        # NOTE: Test this
+        eq = []
+        for loc, item in self.equipped.items():
+            eq.append('{}: {}'.format(loc, item))
+        return '\n'.join(eq)
+            
     def take_damage(self, dmg):
         """ Take damage. Updates the 'HP' attribute."""
         self.health['HP'] -= dmg
@@ -119,10 +128,25 @@ class Player(Character):
             'desc': '"Tall-Leaf" in the common speech. A ranger from \
 the North.'
         } 
+        self.equipped = {
+            'head': None,
+            'torso': None,
+            'L_hand': None,
+            'R_hand': None,
+            'legs': None,
+            'feet': None
+        }
 
     def roll_items(self):
         """ Roll random items, weapons and armor."""
         self.pick_up(items.new_weapon())
+
+    def equip(item):
+        """ Equip the item. Return True if success. False otherwise."""
+        # Decide where to equip the item
+        # for now equip everything in right hand
+        self.equipped['R_hand'] = item
+        return True
 
 ########## BOSS CHARACTER ##########
 
