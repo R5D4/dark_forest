@@ -53,17 +53,19 @@ class Character(object):
         for stat in self.attributes.keys():
             self.attributes[stat] += randint(1, 6) + randint(1, 6)
         
-    def print_stats(self):
-        """ Print character stats."""
-        print "DESCRIPTION"
+    def get_stats(self):
+        """ Return character stats in a formatted string."""
+        stats = []
+        stats.append("DESCRIPTION")
         for s in self.desc.keys():
-            print "%s: %s" % (s, self.desc[s])
-        print "\nATTRIBUTES"
+            stats.append("%s: %s" % (s, self.desc[s]))
+        stats.append("ATTRIBUTES")
         for s in self.attributes.keys():
-            print "%s: %s" % (s, self.attributes[s])
-        print "\nATTACKS"
+            stats.append("%s: %s" % (s, self.attributes[s]))
+        stats.append("ATTACKS")
         for s in self.attacks.keys():
-            print s
+            stats.append(s)
+        return '\n'.join(stats)
 
     def pick_up(self, item):
         """ Add item to inventory. item is an Item object."""
@@ -71,11 +73,11 @@ class Character(object):
 
     def get_inventory(self):
         """ Return inventory desc. Uses index as unique ID for each item."""
-        inv_str = ""
+        inv = []
         for item in self.inventory:
-            inv_str += "{}: {}\n".format(self.inventory.index(item), 
-                                        item.desc['name'])
-        return inv_str
+            inv.append("{}: {}".format(self.inventory.index(item), 
+                                        item.desc['name']))
+        return '\n'.join(inv)
 
     def take_damage(self, dmg):
         """ Take damage. Updates the 'HP' attribute."""
@@ -151,7 +153,6 @@ class Boar(Character):
 tusks.'
         } 
         super(Boar, self).__init__()
-        self.print_stats()
 
 
 ########## PLAYER ATTACKS ##########

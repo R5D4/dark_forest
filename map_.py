@@ -70,13 +70,17 @@ class Map(object):
         """ Create player character."""
         print "\nRolling player character:"
         print "-" * 20
-        self.characters['player'] = char.Player()
+        player = char.Player()
+        print player.get_stats()
+        self.characters['player'] = player
 
     def add_boar(self):
         """ Create boss character."""
         print "\nRolling boss character:"
         print "-" * 20
-        self.characters['boar'] = char.Boar()
+        boar = char.Boar()
+        print boar.get_stats()
+        self.characters['boar'] = boar
 
     def add_scene(self, scene):
         """ Add a scene to the map with 'name' as the key to the dict."""
@@ -176,7 +180,7 @@ class Scene(object):
                 self.advance_clock('pray')
                 self.update_encounter()
             elif action in ENV_ACTIONS['stats']:
-                self.characters['player'].print_stats()
+                print self.characters['player'].get_stats()
             elif action in ENV_ACTIONS['inventory']:
                 print self.characters['player'].get_inventory()
         else:
