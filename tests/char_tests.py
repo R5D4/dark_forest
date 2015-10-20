@@ -10,8 +10,15 @@ def get_inventory_test():
     player = char.Player()
     desc = {'name': 'Testing Sword'}
     weapon = items.Weapon(desc)
-    player.inventory = [weapon]
+    player.inventory = []
+    player.pick_up(weapon)
+
+    # unequipped
     ok_(player.get_inventory() == "0: Testing Sword")
+
+    # equipped
+    player.equip(weapon)
+    ok_(player.get_inventory() == "0: Testing Sword[E]")
 
 
 def get_equipped_test():

@@ -20,6 +20,7 @@ class Item(object):
 
     def __init__(self):
         self.item_type = None
+        self.equipped = False
         self.desc = {'name': "Unidentified item."} # all items must have name
 
 

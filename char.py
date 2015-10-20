@@ -47,7 +47,9 @@ class Character(object):
         self.roll_attributes()
         self.health['HP'] = self.attributes['max_HP'] 
         self.health['mana'] = self.attributes['max_mana'] 
+        # inventory holds <Item obj>
         self.inventory = []
+        # key: <equipment slot>, value: <Item obj>
         self.equipped = {}
     
     def roll_attributes(self):
@@ -76,9 +78,13 @@ class Character(object):
     def get_inventory(self):
         """ Return inventory desc. Uses index as unique ID for each item."""
         inv = []
-        for item in self.inventory:
-            inv.append("{}: {}".format(self.inventory.index(item), 
-                                        item.desc['name']))
+        #print self.inventory
+        for index, item in enumerate(self.inventory):
+            if item.equipped:
+                eq = '[E]'
+            else:
+                eq = ''
+            inv.append( "{}: {}{}".format(index, item.desc['name'], eq) )
         return '\n'.join(inv)
 
     def get_equipped(self):
@@ -154,6 +160,8 @@ the North.'
         # Decide where to equip the item
         # for now equip everything in right hand
         self.equipped['R_hand'] = item
+        # update item's equipped status
+        item.equipped = True
         return True
 
 ########## BOSS CHARACTER ##########
