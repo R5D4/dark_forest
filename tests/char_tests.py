@@ -18,5 +18,6 @@ def get_equipped_test():
     # Test if equipped items are output correctly
     player = char.Player()
     item = items.Item()
-    player.equipped = {'R_hand': item}
-    ok_(player.get_equipped() == "R_hand: Unidentified item.")
+    player.equip(item)
+    print player.get_equipped()
+    ok_("R_hand: Unidentified item." in player.get_equipped())

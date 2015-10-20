@@ -203,7 +203,7 @@ class Scene(object):
         player = self.characters['player']
         if args == '': # no argument, print equipped items
             out_str = player.get_equipped()
-        else:
+        else: # trying to equip something
             item = None
             # check if args represents a proper index
             try: 

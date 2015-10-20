@@ -86,7 +86,11 @@ class Character(object):
         # NOTE: Test this
         eq = []
         for loc, item in self.equipped.items():
-            eq.append('{}: {}'.format(loc, item.desc['name']))
+            if item is None:
+                desc = 'Empty'
+            else:
+                desc = item.desc['name']
+            eq.append('{}: {}'.format(loc, desc))
         return '\n'.join(eq)
             
     def take_damage(self, dmg):
@@ -104,6 +108,7 @@ class Player(Character):
         """ Extends Character.__init__"""
         self.set_base_attr()
         super(Player, self).__init__()
+        self.init_items()
         self.roll_items()
 
     def set_base_attr(self):
@@ -128,6 +133,9 @@ class Player(Character):
             'desc': '"Tall-Leaf" in the common speech. A ranger from \
 the North.'
         } 
+
+    def init_items(self):
+        self.inventory = []
         self.equipped = {
             'head': None,
             'torso': None,
