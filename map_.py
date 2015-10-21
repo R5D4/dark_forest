@@ -154,7 +154,8 @@ class Scene(object):
             'pray': ['p', 'pray'],
             'stats': ['stats'],
             'inventory': ['i', 'inventory'],
-            'equip': ['q', 'equip']
+            'equip': ['q', 'equip'],
+            'unequip': ['u', 'unequip']
         }
         # make single list of supported actions to check against user action
         SUPPORTED_ACTIONS = \
@@ -165,6 +166,7 @@ class Scene(object):
         # into two vars.
         # NOTE: Test this
         action, args = (' '.join(r_action.split())+' ').split(' ', 1)
+        args = args.strip()
         player = self.characters['player']
         
         if action in SUPPORTED_ACTIONS:
@@ -193,9 +195,21 @@ class Scene(object):
                 print player.get_inventory()
             elif action in ENV_ACTIONS['equip']:
                 print self.process_equip(args)
+            elif action in ENV_ACTIONS['unequip']:
+                print self.process_unequip(args)
                 
         else:
             print "You can't do that."
+
+    def process_unequip(self, args):
+        """ Process the 'unequip' command. Return output string."""
+        player = self.characters['player']
+        # if no arguments specified, return error message
+        if not args:
+            message = "Please indicate slot to unequip. E.g. 'unequip R_hand'"
+        else:
+            message = player.unequip(args)
+        return message
 
     def process_equip(self, args):
         """ Process the 'equip' command. Return output string if applicable."""

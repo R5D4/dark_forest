@@ -164,6 +164,25 @@ the North.'
         item.equipped = True
         return True
 
+    def unequip(self, slot):
+        """ Unequip item in given slot. Return message of what happened."""
+        # if there is something equipped in the slot
+        if self.equipped[slot] is not None:
+            item = self.equipped[slot]
+            # remove the item from equipped
+            self.equipped[slot] = None
+            # update item status to indicate it's unequipped
+            item.equipped = False
+            # set message indicating success
+            message = "Unequipped {}.".format(item.desc['name'])
+        # else - nothing equipped in the slot
+        else:
+            # set message indicating failure
+            message = "Nothing equipped."
+        # return message
+        return message
+
+
 ########## BOSS CHARACTER ##########
 
 

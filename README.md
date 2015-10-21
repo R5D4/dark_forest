@@ -64,7 +64,10 @@ Update - new background story:
   * 'rest' - Rest for 3 hours
   * 'pray' - Pray to Elbereth (takes 1 hour)
   * 'stats' - Print character stats
-  * 'inventory' - Print inventory
+  * 'inventory' - Print inventory and item ID
+  * 'equip' - Print equipped items
+  * 'equip <item ID>' - Equip item specified by ID
+  * 'unequip <slot>' - Unequip item from equipment slot
 
 ### Combat Commands
   * The player currently has three attacks. Type them once you're in combat.
