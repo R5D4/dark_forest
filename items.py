@@ -23,6 +23,13 @@ class Item(object):
         self.equipped = False
         self.desc = {'name': "Unidentified item."} # all items must have name
 
+    def get_info(self):
+        """ Return string containing formatted weapon description."""
+        info = []
+        for s in self.desc.keys():
+            info.append("{}: {}".format(s, self.desc[s]))
+        return '\n'.join(info)
+
 
 class Weapon(Item):
     """ Represents a weapon."""
@@ -31,13 +38,6 @@ class Weapon(Item):
         super(Weapon, self).__init__()
         self.item_type = TYPE_WEAPON
         self.desc.update(desc)
-
-    def get_info(self):
-        """ Return string containing formatted weapon description."""
-        info = []
-        for s in self.desc.keys():
-            info.append("{}: {}".format(s, self.desc[s]))
-        return ' '.join(info)
 
 
 class Armor(Item):

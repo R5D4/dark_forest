@@ -68,6 +68,7 @@ Update - new background story:
   * 'equip' - Print equipped items
   * 'equip <item ID>' - Equip item specified by ID
   * 'unequip <slot>' - Unequip item from equipment slot
+  * 'examine <item ID>' - Examine the item specified by ID
 
 ### Combat Commands
   * The player currently has three attacks. Type them once you're in combat.

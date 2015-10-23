@@ -155,7 +155,8 @@ class Scene(object):
             'stats': ['stats'],
             'inventory': ['i', 'inventory'],
             'equip': ['q', 'equip'],
-            'unequip': ['u', 'unequip']
+            'unequip': ['u', 'unequip'],
+            'examine': ['x', 'examine']
         }
         # make single list of supported actions to check against user action
         SUPPORTED_ACTIONS = \
@@ -197,9 +198,26 @@ class Scene(object):
                 print self.process_equip(args)
             elif action in ENV_ACTIONS['unequip']:
                 print self.process_unequip(args)
+            elif action in ENV_ACTIONS['examine']:
+                print self.examine(args)
                 
         else:
             print "You can't do that."
+
+    def examine(self, args):
+        """ Process the 'examine' command. Return output string."""
+        player = self.characters['player']
+        if not args:
+            message = "Please indicate inventory item ID."
+        else:
+            item = None
+            try:
+                item = player.inventory[int(args)]
+            except:
+                return "No such item."
+            if item is not None:
+                message = item.get_info()
+        return message
 
     def process_unequip(self, args):
         """ Process the 'unequip' command. Return output string."""
@@ -215,7 +233,7 @@ class Scene(object):
         """ Process the 'equip' command. Return output string if applicable."""
         out_str = ''
         player = self.characters['player']
-        if args == '': # no argument, print equipped items
+        if not args: # no argument, print equipped items
             out_str = player.get_equipped()
         else: # trying to equip something
             item = None

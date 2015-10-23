@@ -7,6 +7,20 @@ import char
 import items
 
 
+def examine_test():
+    # Tests the Scene.examine method
+    # Test Scene.process_equip method
+    player = char.Player()
+    scene = map_.Scene({'player': player})
+    item_desc = {'name': 'Testing Sword'}
+    item = items.Weapon(item_desc)
+    player.inventory = [item]
+    args = '0'
+    out = scene.examine(args)
+    print out
+    ok_(out == 'name: Testing Sword')
+
+
 def update_encounter_test():
     # Scene class.
     # Test if encounter chance is calculated as desired.
