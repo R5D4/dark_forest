@@ -205,7 +205,7 @@ class Scene(object):
         """ Process the 'unequip' command. Return output string."""
         player = self.characters['player']
         # if no arguments specified, return error message
-        if not args:
+        if not args or args not in player.equipped:
             message = "Please indicate slot to unequip. E.g. 'unequip R_hand'"
         else:
             message = player.unequip(args)
