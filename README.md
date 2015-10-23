@@ -51,7 +51,8 @@ Update - new background story:
   * Interactive game interface with curses
 
 ## Next Action
-* Make game support items and equipment
+* Simplify combat system
+* Simplify character attributes
 
 ## How to Play
 ### Map Commands
@@ -71,6 +72,7 @@ Update - new background story:
   * 'examine <item ID>' - Examine the item specified by ID
 
 ### Combat Commands
+  * Simplified verion of DnD 3.5e/Pathfinder
   * The player currently has three attacks. Type them once you're in combat.
   * 'shoot' - shoot an arrow from your longbow
   * 'slash' - slash with your elven long-knife

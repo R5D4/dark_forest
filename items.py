@@ -38,6 +38,11 @@ class Weapon(Item):
         super(Weapon, self).__init__()
         self.item_type = TYPE_WEAPON
         self.desc.update(desc)
+        self.generate_attacks()
+
+    def generate_attacks(self):
+        """ Generate Attack objects based on weapon description."""
+
 
 
 class Armor(Item):
