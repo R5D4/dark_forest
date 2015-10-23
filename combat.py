@@ -84,29 +84,21 @@ def begin_combat(characters):
 
 class Attack(object):
     """
-    Base class for an attack.
-
-    New attacks should subclass this class and override the __init__ method.
-    New attack subclasses need to define self.details.
+    Represents an attack.
     """
 
-    def __init__(self):
+    def __init__(self, atk_details, wpn_details):
         """
-        __init__ method in Attack class does nothing.
+        Create an Attack object depending on attack type and weapon
 
-        Subclasses need to define self.details as follows in their __init__.
-        self.details = {
-            'prep_msg': string - msg printed when attack begins
-            'hit_crit_msg': string - msg printed when critical is rolled
-            'hit_success_msg': string - msg printed when successful attack
-            'hit_fail_msg': string - msg when attack fails
-            'hit_attr': character attribute to add to hit chance e.g. 'str'
-            'hit_roll': dice roll format e.g. '1d10'
-            'hit_against': enemy attribute to hit against e.g. 'AC'
-            'dmg_roll': dice roll format e.g. '2d6'
-            'dmg_base': integer - min damage if successful hit
-        }
+        atk_details describes attack type
+        wpn_details describes weapon type
         """
+        self.details = {}
+        self.details.update(atk_details)
+        self.details.update(weapon_details)
+
+
 
     def attack(self, from_char, to_char):
         """ Perform an attack represented by self from from_char to to_char."""

@@ -21,8 +21,10 @@ class Arena(object):
         while response == 'y':
             print "\nRolling player character:"
             print "-" * 20
-            self.characters['player'] = char.Player()
+            player = char.Player()
+            print player.get_stats()
             response = raw_input("Reroll character? (y/n): ")
+            self.characters['player'] = player
 
     def add_boar(self):
         """ Create boss character. Allow user to re-roll."""
@@ -30,8 +32,10 @@ class Arena(object):
         while response == 'y':
             print "\nRolling boss character:"
             print "-" * 20
-            self.characters['boar'] = char.Boar()
+            boar = char.Boar()
+            print boar.get_stats()
             response = raw_input("Reroll character? (y/n): ")
+            self.characters['boar'] = boar
 
     def enter(self):
         """ Enter the arena and start combat."""

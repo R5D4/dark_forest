@@ -10,15 +10,11 @@ This module contains weapon descriptions.
 #   axe
 #   bow
 
-# list of possible attack types
-#   thrust
-#   slash
-#   smash
-#   shoot
+# see data/attack_data.py for list of possible attack types
 
 # huge array of dict objects specifying weapon characteristics
 WEAPONS = [
-    # New attack template
+    # New weapon template
     # {
     #   'name': <Weapon Name>,
     #   'class': <Weapon Class>,
