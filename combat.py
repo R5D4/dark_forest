@@ -9,6 +9,8 @@ from util import roll
 
 # user types this to signal attack
 ATTACK = 'attack'
+# all hits roll 1d20
+HIT_ROLL = '1d20'
 
 
 ########## MODULE FUNCTIONS ##########
@@ -98,8 +100,6 @@ class Attack(object):
         self.details.update(atk_details)
         self.details.update(weapon_details)
 
-
-
     def attack(self, from_char, to_char):
         """ Perform an attack represented by self from from_char to to_char."""
 
@@ -107,13 +107,13 @@ class Attack(object):
                                       to_char.desc['job'])
         # calculate hit
         # Hit formula:
-        #   attacker's hit_attr attribute + hit_roll VS
-        #   defender's hit_against attribute
+        #   1d20 + attribute + hit bonus vs defender's AC
+        #   roll 20 for crit
         print "Calculating hit chance:",
-        hit_attr = from_char.attributes[self.details['hit_attr']]
-        hit_roll, crit_roll = roll(self.details['hit_roll'], True)
-        hit_against = to_char.attributes[self.details['hit_against']]
-        hit = hit_attr + hit_roll
+        attribute = from_char.attributes[self.details['attribute']]
+        hit_roll, crit_roll = roll(HIT_ROLL, True)
+        hit_against = to_char.attributes['AC']
+        hit = attribute + hit_roll
         print "%d against %d" % (hit, hit_against)
         
         # calculate damage

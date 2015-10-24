@@ -22,10 +22,8 @@ class Character(object):
         self.attributes = {
             'str': int,
             'dex': int,
-            'reflex': int,
             'AC': int,
             'max_HP': int,
-            'max_mana': int
         }
         self.attacks = {
             'name1': Attack1(),
@@ -37,23 +35,20 @@ class Character(object):
             'job': string,
             'desc': string
         }
+        self.health = {'HP': int}
     """
 
     def __init__(self):
-        self.health = {
-            'HP': 0,
-            'mana': 0
-        }
         self.roll_attributes()
-        self.health['HP'] = self.attributes['max_HP'] 
-        self.health['mana'] = self.attributes['max_mana'] 
+        self.health = { 'HP': self.attributes['max_HP'] }
         # inventory holds <Item obj>
         self.inventory = []
         # key: <equipment slot>, value: <Item obj>
         self.equipped = {}
+        self.attacks = {}
     
     def roll_attributes(self):
-        """ Roll some dice to add to base attribute values."""
+        """ Roll 2d6 to add to base attribute values."""
         for stat in self.attributes.keys():
             self.attributes[stat] += randint(1, 6) + randint(1, 6)
         
@@ -121,17 +116,10 @@ class Player(Character):
         """ Set base attributes."""
         # base attributes
         self.attributes = {
-            'str': 3,
-            'dex': 8,
-            'reflex': 10,
-            'AC': 7,
-            'max_HP': 10,
-            'max_mana': 5
-        }
-        self.attacks = {
-            'slash': Slash(),
-            'stab': Stab(),
-            'shoot': Shoot()
+            'str': 0,
+            'dex': 0,
+            'AC': 10,
+            'max_HP': 20
         }
         self.desc = {
             'name': 'Hallas',
@@ -141,6 +129,7 @@ the North.'
         } 
 
     def init_items(self):
+        """ Initialize inventory and equipment slots."""
         self.inventory = []
         self.equipped = {
             'head': None,
@@ -152,7 +141,7 @@ the North.'
         }
 
     def roll_items(self):
-        """ Roll random items, weapons and armor."""
+        """ Generate random items, weapons and armor."""
         self.pick_up(items.new_weapon())
 
     def equip(self, item):
@@ -195,11 +184,10 @@ class Boar(Character):
         self.attributes = {
             'str': 7,
             'dex': 2,
-            'reflex': 5,
             'AC': 10,
             'max_HP': 20,
-            'max_mana': 0
         }
+        super(Boar, self).__init__()
         self.attacks = {
             'charge': Charge(),
             'kick': Kick(),  
@@ -211,7 +199,8 @@ class Boar(Character):
             'desc': 'An enormous wild boar with thick black fur and long \
 tusks.'
         } 
-        super(Boar, self).__init__()
+        self.inventory = []
+        self.equipped = {}
 
 ########## PLAYER ATTACKS ##########
 

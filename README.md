@@ -36,7 +36,8 @@ Update - new background story:
 1. Exploration System
   * Certain map areas provide randomized equipment
 1. Character Update
-  * Ability to acquire new equipment and attacks
+  * Implement armor
+  * Character classes
 2. Combat System Update
   * Run from combat
 3. Hunting System 
