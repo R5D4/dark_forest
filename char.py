@@ -9,48 +9,73 @@ Contains the following classes:
 
 from random import randint
 from random import choice
+from util import roll
 import combat
 import items
 
 
 class Character(object):
     """
-    Generic class for all game characters.
+    Generic class for all game characters. Subclass and override equipment
+        rules. 
 
-    New characters should subclass this class and extend the __init__ method.
-    New character classes should define the following properties:
-        self.attributes = {
-            'str': int,
-            'dex': int,
-            'AC': int,
-            'max_HP': int,
-        }
-        self.attacks = {
-            'name1': Attack1(),
-            'name2': Attack2()
-            ...
-        }
-        self.desc = {
-            'name': string,
-            'job': string,
-            'desc': string
-        }
-        self.health = {'HP': int}
+    All characters have the following attributes:
+        base_stats: 
+            character's base stats
+        bonus_stats:: 
+            bonus from equipment or enchantments
+        effective_stats: 
+            base + bonus
+
+    stats (base, bonus, effective):
+        {'str': int, 'dex': int, 'AC': int, 'max_HP': int}
+    health:
+        {'HP': int}
+    desc:
+        {'name': string, 'job': string, 'bio': string}
+    inventory:
+        [Item1, Item2, ...}
+    equipped:
+        {slot: Item, ...}
+    attacks:
+        {attack name: Attack obj}
     """
 
-    def __init__(self):
-        self.roll_attributes()
-        self.health = { 'HP': self.attributes['max_HP'] }
-        # inventory holds <Item obj>
+    def __init__(self, min_stats, desc, equip_slots):
+        """ Create a character with given minimum stats."""
+        # initialize to empty
+        self.base_stats = {}
+        self.bonus_stats = {}
+        self.effective_stats = {}
+        self.health = {}
+        self.desc = {}
         self.inventory = []
-        # key: <equipment slot>, value: <Item obj>
         self.equipped = {}
         self.attacks = {}
+        # fill in with provided info
+        self.init_stats(min_stats)
+        self.health = { 'HP': self.effective_stats['max_HP'] }
     
-    def roll_attributes(self):
-        """ Roll 2d6 to add to base attribute values."""
-        for stat in self.attributes.keys():
-            self.attributes[stat] += randint(1, 6) + randint(1, 6)
+    def init_base_stats(self, min_stats):
+        """ Initialize character stats."""
+        # zero out all stats
+        init = {'str': 0, 'dex': 0, 'AC': 0, 'max_HP': 0}
+        self.base_stats.update(init)
+        self.bonus_stats.update(init)
+        self.effective_stats.update(init)
+        # base stats = min stats + 2d6
+        self.base_stats.update(min_stats)
+        for stat in self.base__stats.keys():
+            self.base_stats[stat] += roll('2d6', False)[0]
+        # update effective stats
+        self.update_stats()
+
+    def update_stats(self):
+        """ Calculate bonus and effective stats."""
+        # calculate bonus from equipment
+        # update effective stats
+        for s in self.base_stats.keys():
+            self.effective_stats[s] = self.base_stats[s] + self.bonus_stats[s]
         
     def get_stats(self):
         """ Return character stats in a formatted string."""
@@ -84,7 +109,6 @@ class Character(object):
 
     def get_equipped(self):
         """ Return equipped items' names."""
-        # NOTE: Test this
         eq = []
         for loc, item in self.equipped.items():
             if item is None:
