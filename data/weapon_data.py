@@ -38,7 +38,7 @@ WEAPONS = [
     'class': 'bastard_sword',
     'attack': 'slash',
     'attribute': 'str',
-    'require': {'str': 4, 'dex': 4}
+    'require': {'str': 4, 'dex': 4},
     'bonus': {'str': 2, 'dex': 2, 'AC': 3},
     'dmg_die': '1d8',
     'description': "A hand-and-a-half sword commonly used by men of Gondor.\

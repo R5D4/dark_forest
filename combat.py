@@ -71,7 +71,7 @@ def begin_combat(characters):
             print "Boar's turn:"
             #print "HP: %d" % boar.health['HP']
             # output bloodied message if HP < 30%
-            if boar.health['HP']/float(boar.attributes['max_HP']) < 0.3:
+            if boar.health['HP']/float(boar.effective_stats['max_HP']) < 0.3:
                 print "The boar is bloodied!"
             boar_attack = boar.attacks[choice(boar.attacks.keys())]
             boar_attack.attack(boar, player)
@@ -110,7 +110,7 @@ class Attack(object):
         #   1d20 + attribute + hit bonus vs defender's AC
         #   roll 20 for crit
         print "Calculating hit chance:",
-        attribute = from_char.attributes[self.details['attribute']]
+        attribute = from_char.effective_stats[self.details['attribute']]
         hit_roll, crit_roll = roll(HIT_ROLL, True)
         hit_against = to_char.attributes['AC']
         hit = attribute + hit_roll

@@ -41,22 +41,32 @@ class Character(object):
         {attack name: Attack obj}
     """
 
-    def __init__(self, min_stats, desc, equip_slots):
-        """ Create a character with given minimum stats."""
+    def __init__(self, min_stats, equip_slots, desc):
+        """ 
+        Create a character with given minimum stats.
+        
+        min_stats: {'str': int, 'dex': int, 'AC': int, 'max_HP': int}
+        equip_slots: ['head', 'torso', 'legs', ...]
+        desc: {'name': string, 'job': string, 'bio': string}
+        """
         # initialize to empty
+        self.desc = {}
         self.base_stats = {}
         self.bonus_stats = {}
         self.effective_stats = {}
         self.health = {}
-        self.desc = {}
         self.inventory = []
         self.equipped = {}
         self.attacks = {}
-        # fill in with provided info
+        # update stats and health
         self.init_stats(min_stats)
         self.health = { 'HP': self.effective_stats['max_HP'] }
+        # update equipment slots
+        self.init_equip_slots(equip_slots)
+        # update description
+        self.desc.update(desc)
     
-    def init_base_stats(self, min_stats):
+    def init_stats(self, min_stats):
         """ Initialize character stats."""
         # zero out all stats
         init = {'str': 0, 'dex': 0, 'AC': 0, 'max_HP': 0}
@@ -65,10 +75,15 @@ class Character(object):
         self.effective_stats.update(init)
         # base stats = min stats + 2d6
         self.base_stats.update(min_stats)
-        for stat in self.base__stats.keys():
+        for stat in self.base_stats.keys():
             self.base_stats[stat] += roll('2d6', False)[0]
         # update effective stats
         self.update_stats()
+
+    def init_equip_slots(self, slots):
+        """ Add equipment slots."""
+        for s in slots:
+            self.equipped[s] = None
 
     def update_stats(self):
         """ Calculate bonus and effective stats."""
@@ -80,20 +95,40 @@ class Character(object):
     def get_stats(self):
         """ Return character stats in a formatted string."""
         stats = []
-        stats.append("DESCRIPTION")
-        for s in self.desc.keys():
-            stats.append("%s: %s" % (s, self.desc[s]))
-        stats.append("ATTRIBUTES")
-        for s in self.attributes.keys():
-            stats.append("%s: %s" % (s, self.attributes[s]))
+        # description
+        stats.append("DESCRIPTION:")
+        for k, v in self.desc.items():
+            stats.append("{}: {}".format(k, v))
+        # base stats
+        stats.append("BASE STATS:")
+        for k, v in self.base_stats.items():
+            stats.append("{}: {}".format(k, v))
+        # bonus stats
+        stats.append("BONUS STATS:")
+        for k, v in self.bonus_stats.items():
+            stats.append("{}: {}".format(k, v))
+        # effective stats
+        stats.append("EFFECTIVE STATS:")
+        for k, v in self.effective_stats.items():
+            stats.append("{}: {}".format(k, v))
+        # health
+        stats.append("HEALTH:")
+        for k, v in self.health.items():
+            stats.append("{}: {}".format(k, v))
+        # attacks
         stats.append("ATTACKS")
-        for s in self.attacks.keys():
-            stats.append(s)
+        for k in self.attacks.keys():
+            stats.append(k)
         return '\n'.join(stats)
 
     def pick_up(self, item):
         """ Add item to inventory. item is an Item object."""
         self.inventory.append(item)
+
+    def drop(self, itemID):
+        """ Drop the item from inventory with itemID."""
+        # NOTE: Implement this
+        pass
 
     def get_inventory(self):
         """ Return inventory desc. Uses index as unique ID for each item."""
@@ -130,39 +165,29 @@ class Player(Character):
     """ Player class."""
 
     def __init__(self):
-        """ Extends Character.__init__"""
-        self.set_base_attr()
-        super(Player, self).__init__()
-        self.init_items()
-        self.roll_items()
+        """ 
+        Extends Character.__init__
 
-    def set_base_attr(self):
-        """ Set base attributes."""
-        # base attributes
-        self.attributes = {
-            'str': 0,
-            'dex': 0,
-            'AC': 10,
-            'max_HP': 20
-        }
-        self.desc = {
+        Create a fully initialized player object.
+        """
+        # set player details
+        min_stats = { 'str': 0, 'dex': 0, 'AC': 10, 'max_HP': 20 }
+        equip_slots = ['head', 'torso', 'L_hand', 'R_hand', 'legs', 'feet'] 
+        desc = {
             'name': 'Hallas',
             'job': 'ranger',
             'desc': '"Tall-Leaf" in the common speech. A ranger from \
 the North.'
         } 
+        # use the Character class __init__ method
+        super(Player, self).__init__(min_stats, equip_slots, desc)
+        # add default item
+        self.init_items()
+        self.roll_items()
 
     def init_items(self):
         """ Initialize inventory and equipment slots."""
         self.inventory = []
-        self.equipped = {
-            'head': None,
-            'torso': None,
-            'L_hand': None,
-            'R_hand': None,
-            'legs': None,
-            'feet': None
-        }
 
     def roll_items(self):
         """ Generate random items, weapons and armor."""
@@ -204,27 +229,22 @@ class Boar(Character):
 
     def __init__(self):
         """ Extends Character.__init__"""
-        # base attributes
-        self.attributes = {
-            'str': 7,
-            'dex': 2,
-            'AC': 10,
-            'max_HP': 20,
-        }
-        super(Boar, self).__init__()
-        self.attacks = {
-            'charge': Charge(),
-            'kick': Kick(),  
-            'bite': Bite()
-        }
-        self.desc = {
+        # set boss details
+        min_stats = { 'str': 7, 'dex': 2, 'AC': 10, 'max_HP': 20 }
+        equip_slots = ['head', 'torso', 'FL_hoof', 'FR_hoof', 
+                       'HL_hoof', 'HR_hoof'] 
+        desc = {
             'name': 'Unknown',
             'job': 'wild boar',
             'desc': 'An enormous wild boar with thick black fur and long \
 tusks.'
         } 
-        self.inventory = []
-        self.equipped = {}
+        super(Boar, self).__init__(min_stats, equip_slots, desc)
+        self.attacks = {
+            'charge': Charge(),
+            'kick': Kick(),  
+            'bite': Bite()
+        }
 
 ########## PLAYER ATTACKS ##########
 
