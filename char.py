@@ -196,10 +196,12 @@ the North.'
     def equip(self, item):
         """ Equip the item. Return True if success. False otherwise."""
         # Decide where to equip the item
-        # for now equip everything in right hand
+        # NOTE: for now equip everything in right hand
         self.equipped['R_hand'] = item
         # update item's equipped status
         item.equipped = True
+        if item.item_type == 'weapon':
+            self.attacks.update({item.desc['atk_type']: item.attack})
         return True
 
     def unequip(self, slot):
