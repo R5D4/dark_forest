@@ -12,13 +12,18 @@ def examine_test():
     # Test Scene.process_equip method
     player = char.Player()
     scene = map_.Scene({'player': player})
-    item_desc = {'name': 'Testing Sword'}
-    item = items.Weapon(item_desc)
-    player.inventory = [item]
+    wpn_desc = {
+               'name': 'Testing Sword',
+               'atk_type': 'slash',
+               'attribute': 'str',
+               'dmg_roll': '1d8',
+               }
+    wpn = items.Weapon(wpn_desc)
+    player.inventory = [wpn]
     args = '0'
     out = scene.examine(args)
     print out
-    ok_(out == 'name: Testing Sword')
+    ok_('name: Testing Sword' in out)
 
 
 def update_encounter_test():
@@ -40,9 +45,14 @@ def process_equip_test():
     # Test Scene.process_equip method
     player = char.Player()
     scene = map_.Scene({'player': player})
-    item_desc = {'name': 'Testing Sword'}
-    item = items.Weapon(item_desc)
-    player.inventory = [item]
+    wpn_desc = {
+               'name': 'Testing Sword',
+               'atk_type': 'slash',
+               'attribute': 'str',
+               'dmg_roll': '1d8',
+               }
+    wpn = items.Weapon(wpn_desc)
+    player.inventory = [wpn]
     args = '0'
     out = scene.process_equip(args)
     print out

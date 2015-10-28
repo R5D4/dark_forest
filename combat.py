@@ -90,18 +90,18 @@ class Attack(object):
     Represents an attack.
     """
 
-    def __init__(self, atk_type, wpn_desc):
+    def __init__(self, wpn_desc):
         """
         Create an Attack object depending on attack type and weapon
 
-        atk_type indicates attack type (e.g. 'slash', 'pierce', etc.)
         wpn_desc is the dict containing weapon data
         """
         # get weapon information
         self.wpn_name = wpn_desc['name']
         self.attribute = wpn_desc['attribute']
-        self.dmg_roll = wpn_desc['dmg_die']
+        self.dmg_roll = wpn_desc['dmg_roll']
         # get combat messages
+        atk_type = wpn_desc['atk_type']
         self.init_messages(atk_type)
 
     def init_messages(self, atk_type):

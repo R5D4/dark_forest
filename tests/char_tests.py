@@ -7,8 +7,14 @@ import items
 
 def unequip_test():
     player = char.Player()
-    desc = {'name': 'Testing Sword'}
-    weapon = items.Weapon(desc)
+    wpn_desc = {
+               'name': 'Testing Sword',
+               'atk_type': 'slash',
+               'attribute': 'str',
+               'dmg_roll': '1d8',
+               'description': "Sword for testing only."
+               }
+    weapon = items.Weapon(wpn_desc)
     player.inventory = []
     player.pick_up(weapon)
     player.equip(weapon)
@@ -19,8 +25,14 @@ def unequip_test():
 def get_inventory_test():
     # check if inventory is printed correctly
     player = char.Player()
-    desc = {'name': 'Testing Sword'}
-    weapon = items.Weapon(desc)
+    wpn_desc = {
+               'name': 'Testing Sword',
+               'atk_type': 'slash',
+               'attribute': 'str',
+               'dmg_roll': '1d8',
+               'description': "Sword for testing only."
+               }
+    weapon = items.Weapon(wpn_desc)
     player.inventory = []
     player.pick_up(weapon)
 

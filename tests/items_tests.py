@@ -14,14 +14,12 @@ def new_weapon_test():
 
 def weapon_test():
     # Tests the creation of a Weapon object
-    desc = {
-        'name': 'Test Sword',
-        'class': '2h_sword',
-        'attacks': ['slash'],
-        'base': {
-                'slash': {'dmg': 1, 'hit': 1}
-                },
-        'description': "Sword for testing only."
-    }
-    weapon = items.Weapon(desc)
-    ok_(weapon.desc['name'] == 'Test Sword')
+    wpn_desc = {
+               'name': 'Testing Sword',
+               'atk_type': 'slash',
+               'attribute': 'str',
+               'dmg_roll': '1d8',
+               'description': "Sword for testing only."
+               }
+    weapon = items.Weapon(wpn_desc)
+    ok_(weapon.desc == wpn_desc)

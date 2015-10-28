@@ -5,12 +5,12 @@ Contains functions to randomly generate an item.
 
 import data.weapon_data as wd
 from random import choice
+import combat
 
-########## CONSTANTS ##########
-
-TYPE_WEAPON = 'weapon'
-TYPE_ARMOR = 'armor'
-TYPE_CONSUME = 'consummable'
+# items types
+# 'weapon'
+# 'armor'
+# 'consummable'
 
 ########## CLASS DEFINITIONS ##########
 
@@ -36,13 +36,14 @@ class Weapon(Item):
 
     def __init__(self, desc):
         super(Weapon, self).__init__()
-        self.item_type = TYPE_WEAPON
+        self.item_type = 'weapon'
         self.desc.update(desc)
-        self.generate_attacks()
+        self.generate_attack(desc)
 
-    def generate_attacks(self):
-        """ Generate Attack objects based on weapon description."""
-
+    def generate_attack(self, desc):
+        """ Generate Attack object based on weapon description."""
+        attack = combat.Attack(desc)
+        self.attack = attack
 
 
 class Armor(Item):

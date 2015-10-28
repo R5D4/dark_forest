@@ -36,7 +36,7 @@ WEAPONS = [
     {
     'name': 'Knight Sword',
     'class': 'bastard_sword',
-    'attack': 'slash',
+    'atk_type': 'slash',
     'attribute': 'str',
     'require': {'str': 4, 'dex': 4},
     'bonus': {'str': 2, 'dex': 2, 'AC': 3},
