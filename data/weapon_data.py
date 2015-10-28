@@ -87,3 +87,19 @@ Tirith."
 #    'description': "An elegant lowbow made by one of the sylvan folk."
 #    },
 ]
+
+BOSS_WEAPONS = [
+    {
+    'name': 'Tusks',
+    # NOTE: Continue this
+    'class': 'bastard_sword',
+    'atk_type': 'slash',
+    'attribute': 'str',
+    'require': {'str': 4, 'dex': 4},
+    'bonus': {'str': 2, 'dex': 2, 'AC': 3},
+    'dmg_roll': '1d8',
+    'description': "A hand-and-a-half sword commonly used by men of Gondor.\
+There are faint markings on the pommel depicting the tiered rings of Minas \
+Tirith."
+    },
+]

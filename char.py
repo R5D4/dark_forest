@@ -182,12 +182,7 @@ the North.'
         # use the Character class __init__ method
         super(Player, self).__init__(min_stats, equip_slots, desc)
         # add default item
-        self.init_items()
         self.roll_items()
-
-    def init_items(self):
-        """ Initialize inventory and equipment slots."""
-        self.inventory = []
 
     def roll_items(self):
         """ Generate random items, weapons and armor."""
@@ -242,29 +237,24 @@ class Boar(Character):
 tusks.'
         } 
         super(Boar, self).__init__(min_stats, equip_slots, desc)
+        # add equipment and attacks
+        self.roll_items()
+        self.default_equip()
         self.attacks = {
             'charge': Charge(),
             'kick': Kick(),  
             'bite': Bite()
         }
 
+    def roll_items(self):
+        """ Put default items in inventory."""
+        pass
+
+    def default_equip(self):
+        """ Equip default items."""
+        pass
+
 ########## PLAYER ATTACKS ##########
-
-
-class Slash(combat.Attack):
-    
-    def __init__(self):
-        self.details = {
-            'prep_msg': "The %s slashes the %s with his elven long-knife!",
-            'hit_crit_msg': "The elven long-knife opens up a gushing wound!",
-            'hit_success_msg': "The elven long-knife cuts through!",
-            'hit_fail_msg': "The elven long-knife bounces off!",
-            'hit_attr': 'str',
-            'hit_roll': '1d20',
-            'hit_against': 'AC',
-            'dmg_roll': '1d8',
-            'dmg_base': 3
-        }
 
 
 class Shoot(combat.Attack):
@@ -305,9 +295,9 @@ class Charge(combat.Attack):
     
     def __init__(self):
         self.details = {
-            'prep_msg': "charges the leading with its tusks!",
-            'hit_crit_msg': "The charge connects! The tusks are buried deep!",
-            'hit_success_msg': "The tusks pierce the defences!",
+            'prep_msg': "The %s charges the %s!",
+            'hit_crit_msg': "The charge hits square on!",
+            'hit_success_msg': "The charge connects!",
             'hit_fail_msg': "The charge misses!",
             'hit_attr': 'dex',
             'hit_roll': '1d10',

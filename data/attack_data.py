@@ -15,7 +15,13 @@ ATTACKS = {
     'slash': {
             'prep_msg': "The %s slashes the %s with the %s!",
             'hit_crit_msg': "The slash opens up a gushing wound!",
-            'hit_success_msg': "The slash cuts through!",
+            'hit_success_msg': "The slash cuts through the defences!",
             'hit_fail_msg': "The slash misses!",
+            },
+    'charge': {
+            'prep_msg': "The %s charges the %s leading with its %s!",
+            'hit_crit_msg': "The charge hits square on!",
+            'hit_success_msg': "The charge connects!",
+            'hit_fail_msg': "The charge misses!",
             }
 }
