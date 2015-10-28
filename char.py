@@ -303,7 +303,7 @@ class Charge(combat.Attack):
     
     def __init__(self):
         self.details = {
-            'prep_msg': "The %s charges the %s, leading with its tusks!",
+            'prep_msg': "charges the leading with its tusks!",
             'hit_crit_msg': "The charge connects! The tusks are buried deep!",
             'hit_success_msg': "The tusks pierce the defences!",
             'hit_fail_msg': "The charge misses!",

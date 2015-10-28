@@ -6,6 +6,7 @@ Contains the function begin_combat and the Attack class.
 
 from random import choice
 from util import roll
+import data.attack_data as atk_data
 
 # user types this to signal attack
 ATTACK = 'attack'
@@ -89,60 +90,77 @@ class Attack(object):
     Represents an attack.
     """
 
-    def __init__(self, atk_details, wpn_details):
+    def __init__(self, atk_type, wpn_desc):
         """
         Create an Attack object depending on attack type and weapon
 
-        atk_details describes attack type
-        wpn_details describes weapon type
+        atk_type indicates attack type (e.g. 'slash', 'pierce', etc.)
+        wpn_desc is the dict containing weapon data
         """
-        self.details = {}
-        self.details.update(atk_details)
-        self.details.update(weapon_details)
+        # get weapon information
+        self.wpn_name = wpn_desc['name']
+        self.attribute = wpn_desc['attribute']
+        self.dmg_roll = wpn_desc['dmg_die']
+        # get combat messages
+        self.init_messages(atk_type)
+
+    def init_messages(self, atk_type):
+        """
+        Initialize attack messages based on attack type.
+        """
+        self.messages = {}
+        # Get combat messages from attack data for the attack type
+        # NOTE: add checks here
+        self.messages.update(atk_data.ATTACKS[atk_type])
+        self.messages
 
     def attack(self, from_char, to_char):
         """ Perform an attack represented by self from from_char to to_char."""
 
-        print self.details['prep_msg'] % (from_char.desc['job'], 
-                                      to_char.desc['job'])
+        print self.messages['prep_msg'] % (from_char.desc['job'],
+                                           to_char.desc['job'],
+                                           self.wpn_name)
+
         # calculate hit
         # Hit formula:
-        #   1d20 + attribute + hit bonus vs defender's AC
+        #   1d20 + attribute vs defender's AC
         #   roll 20 for crit
         print "Calculating hit chance:",
-        attribute = from_char.effective_stats[self.details['attribute']]
+        attribute = from_char.effective_stats[self.attribute]
         hit_roll, crit_roll = roll(HIT_ROLL, True)
-        hit_against = to_char.attributes['AC']
+        hit_against = to_char.effective_stats['AC']
         hit = attribute + hit_roll
         print "%d against %d" % (hit, hit_against)
         
         # calculate damage
         # Dmg formula:
-        #   Critical roll and hit = max damage
-        #   Critical roll and miss = roll for normal damage
-        #   Noncrit roll and miss = 0 damage
-        #   Normal damage = attack's dmg_base + dmg_roll
+        #   roll 20 and > enemy's AC = max dmg
+        #   roll 20 and < enemy's AC = regular dmg
+        #   roll 1 = 0 dmg
+        #   noncrit roll and < enemy's AC = 0 dmg
+        #
+        #   dmg = dmg roll + attacker's weapon attribute (dex or str)
+
+        # critical hit roll
         if hit_roll == crit_roll:
             # crit and successful hit, max damage
             if hit > hit_against:
-                print "Critical Hit! Max Damage!"
-                print self.details['hit_crit_msg']
-                dmg = self.details['dmg_base'] + \
-                      roll(self.details['dmg_roll'], False)[1] 
+                dmg = attribute + roll(self.dmg_roll, True)[1] 
+                print "Critical! Max Damage!"
+                print self.messages['hit_crit_msg']
                 to_char.take_damage(dmg)
+            # crit but not enough to hit, regular damage
             else:
-                # crit but not enough to hit, regular damage
-                print "Critical Hit!"
-                print self.details['hit_success_msg']
-                dmg = self.details['dmg_base'] + \
-                      roll(self.details['dmg_roll'], True)[0] 
+                dmg = attribute + roll(self.dmg_roll, True)[0] 
+                print "Critical!"
+                print self.messages['hit_success_msg']
                 to_char.take_damage(dmg)
+        # noncritical hit roll, but beats enemy's AC
         elif hit > hit_against:
-            print self.details['hit_success_msg']
+            print self.messages['hit_success_msg']
             print "Calculating damage:",
-            dmg = self.details['dmg_base'] + \
-                  roll(self.details['dmg_roll'], True)[0] 
+            dmg = attribute + roll(self.dmg_roll, True)[0] 
             to_char.take_damage(dmg)
         else:
-            print self.details['hit_fail_msg']
+            print self.messages['hit_fail_msg']
 

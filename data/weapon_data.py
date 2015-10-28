@@ -40,7 +40,7 @@ WEAPONS = [
     'attribute': 'str',
     'require': {'str': 4, 'dex': 4},
     'bonus': {'str': 2, 'dex': 2, 'AC': 3},
-    'dmg_die': '1d8',
+    'dmg_roll': '1d8',
     'description': "A hand-and-a-half sword commonly used by men of Gondor.\
 There are faint markings on the pommel depicting the tiered rings of Minas \
 Tirith."

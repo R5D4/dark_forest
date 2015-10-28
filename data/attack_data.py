@@ -13,9 +13,9 @@ ATTACKS = {
     #   'hit_fail_msg': string - msg when attack fails
     # }
     'slash': {
-            'prep_msg': "You slash with your %s!",
-            'hit_crit_msg': "The attack opens up a gushing wound!",
+            'prep_msg': "The %s slashes the %s with the %s!",
+            'hit_crit_msg': "The slash opens up a gushing wound!",
             'hit_success_msg': "The slash cuts through!",
-            'hit_fail_msg': "Your weapon bounces off!",
+            'hit_fail_msg': "The slash misses!",
             }
 }
