@@ -14,9 +14,13 @@ def examine_test():
     scene = map_.Scene({'player': player})
     wpn_desc = {
                'name': 'Testing Sword',
+               'class': '1h_sword',
                'atk_type': 'slash',
                'attribute': 'str',
+               'require': {'str': 0, 'dex': 0},
+               'bonus': {'str': 0, 'dex': 0},
                'dmg_roll': '1d8',
+               'description': "For testing only!"
                }
     wpn = items.Weapon(wpn_desc)
     player.inventory = [wpn]
@@ -47,9 +51,13 @@ def process_equip_test():
     scene = map_.Scene({'player': player})
     wpn_desc = {
                'name': 'Testing Sword',
+               'class': '1h_sword',
                'atk_type': 'slash',
                'attribute': 'str',
+               'require': {'str': 0, 'dex': 0},
+               'bonus': {'str': 0, 'dex': 0},
                'dmg_roll': '1d8',
+               'description': "For testing only!"
                }
     wpn = items.Weapon(wpn_desc)
     player.inventory = [wpn]

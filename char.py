@@ -73,12 +73,10 @@ class Character(object):
         self.base_stats.update(init)
         self.bonus_stats.update(init)
         self.effective_stats.update(init)
-        # base stats = min stats + 2d6
+        # base stats = min stats + 2d6.
         self.base_stats.update(min_stats)
         for stat in self.base_stats.keys():
             self.base_stats[stat] += roll('2d6', False)[0]
-        # update effective stats
-        self.update_stats()
 
     def init_equip_slots(self, slots):
         """ Add equipment slots."""
@@ -87,7 +85,14 @@ class Character(object):
 
     def update_stats(self):
         """ Calculate bonus and effective stats."""
+        # clear bonus stats
+        init = {'str': 0, 'dex': 0, 'AC': 0, 'max_HP': 0}
+        self.bonus_stats.update(init)
         # calculate bonus from equipment
+        for item in self.equipped.values():
+            if item: # not None
+                for attr, bonus in item.desc['bonus'].items():
+                    self.bonus_stats[attr] += bonus
         # update effective stats
         for s in self.base_stats.keys():
             self.effective_stats[s] = self.base_stats[s] + self.bonus_stats[s]
@@ -203,7 +208,10 @@ the North.'
         item.equipped = True
         if item.item_type == 'weapon':
             self.attacks.update({item.desc['atk_type']: item.attack})
-        return True
+        message = "Equipped {}.".format(item.desc['name'])
+        # update stats
+        self.update_stats()
+        return message
 
     def unequip(self, slot):
         """ Unequip item in given slot. Return message of what happened."""
@@ -220,6 +228,8 @@ the North.'
         else:
             # set message indicating failure
             message = "Nothing equipped."
+        # update stats
+        self.update_stats()
         # return message
         return message
 
@@ -265,7 +275,9 @@ tusks.'
         item.equipped = True
         if item.item_type == 'weapon':
             self.attacks.update({item.desc['atk_type']: item.attack})
-        return True
+        # update stats
+        self.update_stats()
+        return "Equipped {}.".format(item.desc['name'])
 
 ########## PLAYER ATTACKS ##########
 

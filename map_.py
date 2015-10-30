@@ -242,11 +242,7 @@ class Scene(object):
                 item = player.inventory[int(args)]
             except: # catch everything
                 return "No such item."
-            success = player.equip(item)
-            if success:
-                out_str = "Equipped {}.".format(item.desc['name'])
-            else:
-                out_str = "Could not equip {}.".format(item.desc['name'])
+            out_str = player.equip(item)
         return out_str
 
     def describe(self): 

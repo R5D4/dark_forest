@@ -5,14 +5,21 @@ import char
 import items
 
 
+def update_stats_test():
+    player = char.Player()
+    pass
+
 def unequip_test():
     player = char.Player()
     wpn_desc = {
                'name': 'Testing Sword',
+               'class': '1h_sword',
                'atk_type': 'slash',
                'attribute': 'str',
+               'require': {'str': 0, 'dex': 0},
+               'bonus': {'str': 0, 'dex': 0},
                'dmg_roll': '1d8',
-               'description': "Sword for testing only."
+               'description': "For testing only!"
                }
     weapon = items.Weapon(wpn_desc)
     player.inventory = []
@@ -27,10 +34,13 @@ def get_inventory_test():
     player = char.Player()
     wpn_desc = {
                'name': 'Testing Sword',
+               'class': '1h_sword',
                'atk_type': 'slash',
                'attribute': 'str',
+               'require': {'str': 0, 'dex': 0},
+               'bonus': {'str': 0, 'dex': 0},
                'dmg_roll': '1d8',
-               'description': "Sword for testing only."
+               'description': "For testing only!"
                }
     weapon = items.Weapon(wpn_desc)
     player.inventory = []
@@ -47,9 +57,19 @@ def get_inventory_test():
 def get_equipped_test():
     # Test if equipped items are output correctly
     player = char.Player()
-    item = items.Item()
-    player.equip(item)
+    wpn_desc = {
+               'name': 'Testing Sword',
+               'class': '1h_sword',
+               'atk_type': 'slash',
+               'attribute': 'str',
+               'require': {'str': 0, 'dex': 0},
+               'bonus': {'str': 0, 'dex': 0},
+               'dmg_roll': '1d8',
+               'description': "For testing only!"
+               }
+    weapon = items.Weapon(wpn_desc)
+    player.equip(weapon)
     print player.get_equipped()
-    ok_("R_hand: Unidentified item." in player.get_equipped())
+    ok_("R_hand: Testing Sword" in player.get_equipped())
 
 
