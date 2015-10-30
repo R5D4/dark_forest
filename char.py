@@ -77,6 +77,8 @@ class Character(object):
         self.base_stats.update(min_stats)
         for stat in self.base_stats.keys():
             self.base_stats[stat] += roll('2d6', False)[0]
+        # update effective stats
+        self.update_stats()
 
     def init_equip_slots(self, slots):
         """ Add equipment slots."""
