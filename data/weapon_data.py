@@ -1,12 +1,6 @@
 """ 
 This module contains weapon descriptions.
 """
-
-# attack types
-#'slash'
-#'pierce'
-#'blunt'
-
 # weapon classes
 #'2h_sword'
 #'bastard_sword'
@@ -91,15 +85,12 @@ Tirith."
 BOSS_WEAPONS = [
     {
     'name': 'Tusks',
-    # NOTE: Continue this
-    'class': 'bastard_sword',
-    'atk_type': 'slash',
+    'class': 'bone',
+    'atk_type': 'pierce',
     'attribute': 'str',
-    'require': {'str': 4, 'dex': 4},
-    'bonus': {'str': 2, 'dex': 2, 'AC': 3},
+    'require': {'str': 0, 'dex': 0},
+    'bonus': {'str': 3, 'dex': 0, 'AC': 0},
     'dmg_roll': '1d8',
-    'description': "A hand-and-a-half sword commonly used by men of Gondor.\
-There are faint markings on the pommel depicting the tiered rings of Minas \
-Tirith."
+    'description': "A pair of sharp tusks made of animal bone."
     },
 ]

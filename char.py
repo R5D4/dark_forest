@@ -171,7 +171,7 @@ class Player(Character):
         Create a fully initialized player object.
         """
         # set player details
-        min_stats = { 'str': 0, 'dex': 0, 'AC': 10, 'max_HP': 20 }
+        min_stats = { 'str': 0, 'dex': 0, 'AC': 10, 'max_HP': 100 }
         equip_slots = ['head', 'torso', 'L_hand', 'R_hand', 'legs', 'feet'] 
         desc = {
             'name': 'Hallas',
@@ -181,12 +181,18 @@ the North.'
         } 
         # use the Character class __init__ method
         super(Player, self).__init__(min_stats, equip_slots, desc)
-        # add default item
+        # add and equip default item
         self.roll_items()
+        self.equip_default()
 
     def roll_items(self):
         """ Generate random items, weapons and armor."""
         self.pick_up(items.new_weapon())
+
+    def equip_default(self):
+        """ Equip all default items."""
+        for item in self.inventory:
+            self.equip(item)
 
     def equip(self, item):
         """ Equip the item. Return True if success. False otherwise."""
@@ -227,7 +233,7 @@ class Boar(Character):
     def __init__(self):
         """ Extends Character.__init__"""
         # set boss details
-        min_stats = { 'str': 7, 'dex': 2, 'AC': 10, 'max_HP': 20 }
+        min_stats = { 'str': 7, 'dex': 2, 'AC': 10, 'max_HP': 150 }
         equip_slots = ['head', 'torso', 'FL_hoof', 'FR_hoof', 
                        'HL_hoof', 'HR_hoof'] 
         desc = {
@@ -239,20 +245,27 @@ tusks.'
         super(Boar, self).__init__(min_stats, equip_slots, desc)
         # add equipment and attacks
         self.roll_items()
-        self.default_equip()
-        self.attacks = {
-            'charge': Charge(),
-            'kick': Kick(),  
-            'bite': Bite()
-        }
+        self.equip_default()
 
     def roll_items(self):
         """ Put default items in inventory."""
-        pass
+        self.pick_up(items.boss_weapon())
 
-    def default_equip(self):
+    def equip_default(self):
         """ Equip default items."""
-        pass
+        for item in self.inventory:
+            self.equip(item)
+
+    def equip(self, item):
+        """ Equip the item. Return True if success. False otherwise."""
+        # Decide where to equip the item
+        # NOTE: for now equip everything on the head
+        self.equipped['head'] = item
+        # update item's equipped status
+        item.equipped = True
+        if item.item_type == 'weapon':
+            self.attacks.update({item.desc['atk_type']: item.attack})
+        return True
 
 ########## PLAYER ATTACKS ##########
 

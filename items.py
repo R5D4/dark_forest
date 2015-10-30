@@ -59,7 +59,7 @@ class Consummable(Item):
 
 def new_weapon():
     """ 
-    Return a Weapon object created from a weapon description.
+    Return a player Weapon object created from a weapon description.
     
     Weapon descriptions are in the data.weapon_data module.
     """
@@ -67,3 +67,12 @@ def new_weapon():
     w_desc = choice(wd.WEAPONS)
     return Weapon(w_desc)
 
+
+def boss_weapon():
+    """
+    Return a boss Weapon object created from a weapon description.
+
+    Weapon descriptions are in data.weapon_data
+    """
+    w_desc = choice(wd.BOSS_WEAPONS)
+    return Weapon(w_desc)

@@ -151,7 +151,7 @@ class Attack(object):
                 to_char.take_damage(dmg)
             # crit but not enough to hit, regular damage
             else:
-                dmg = attribute + roll(self.dmg_roll, True)[0] 
+                dmg = attribute + roll(self.dmg_roll, False)[0] 
                 print "Critical!"
                 print self.messages['hit_success_msg']
                 to_char.take_damage(dmg)

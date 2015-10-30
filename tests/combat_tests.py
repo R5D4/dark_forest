@@ -20,7 +20,9 @@ def attack_create_test():
     messages = {
                'prep_msg': "The %s slashes the %s with the %s!",
                'hit_crit_msg': "The slash opens up a gushing wound!",
-               'hit_success_msg': "The slash cuts through!",
+               'hit_success_msg': "The slash cuts through the defences!",
                'hit_fail_msg': "The slash misses!",
                }
+    print attack.messages
+    print messages
     ok_(attack.messages == messages)

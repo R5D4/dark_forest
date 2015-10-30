@@ -6,6 +6,12 @@ from nose.tools import *
 import items
 
 
+def boss_weapon_test():
+    # Tests if new weapons are created properly.
+    weapon = items.boss_weapon()
+    ok_(weapon is not None)
+
+
 def new_weapon_test():
     # Tests if new weapons are created properly.
     weapon = items.new_weapon()
