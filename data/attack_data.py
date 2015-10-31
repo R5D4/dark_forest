@@ -41,5 +41,17 @@ ATTACKS = {
             'hit_crit_msg': "The charge hits square on!",
             'hit_success_msg': "The charge connects!",
             'hit_fail_msg': "The charge misses!",
+            },
+    'kick': {
+            'prep_msg': "The %s kicks the %s with its %s!",
+            'hit_crit_msg': "The kick lands square on!",
+            'hit_success_msg': "The kick connects!",
+            'hit_fail_msg': "The kick misses!",
+            },
+    'bite': {
+            'prep_msg': "The %s bites the %s with its %s!",
+            'hit_crit_msg': "An artery is opened by the bite!",
+            'hit_success_msg': "The teeth sink in!",
+            'hit_fail_msg': "The bite does not penetrate!",
             }
 }

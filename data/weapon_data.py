@@ -82,7 +82,7 @@ WEAPONS = [
 BOSS_WEAPONS = [
     {
     'name': 'Tusks',
-    'class': 'bone',
+    'class': 'head',
     'atk_type': 'pierce',
     'attribute': 'str',
     'require': {'str': 0, 'dex': 0},
@@ -90,4 +90,24 @@ BOSS_WEAPONS = [
     'dmg_roll': '1d8',
     'description': "A pair of sharp tusks made of animal bone."
     },
+    {
+    'name': 'Hooves',
+    'class': 'feet',
+    'atk_type': 'blunt',
+    'attribute': 'str',
+    'require': {'str': 0, 'dex': 0},
+    'bonus': {'str': 2, 'dex': 2, 'AC': 0},
+    'dmg_roll': '1d8',
+    'description': "Some strong hooves."
+    },
+    {
+    'name': 'Teeth',
+    'class': 'head',
+    'atk_type': 'pierce',
+    'attribute': 'str',
+    'require': {'str': 0, 'dex': 0},
+    'bonus': {'str': 1, 'dex': 0, 'AC': 0},
+    'dmg_roll': '1d6',
+    'description': "Sharp teeth."
+    }
 ]
