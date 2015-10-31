@@ -90,11 +90,19 @@ class Character(object):
         # clear bonus stats
         init = {'str': 0, 'dex': 0, 'AC': 0, 'max_HP': 0}
         self.bonus_stats.update(init)
-        # calculate bonus from equipment
+        # clear attacks
+        self.attacks = {}
+
+        # update stats for each equipped item
         for item in self.equipped.values():
             if item: # not None
+                # calculate bonus from equipment
                 for attr, bonus in item.desc['bonus'].items():
                     self.bonus_stats[attr] += bonus
+                # update attacks
+                if item.item_type == 'weapon':
+                    self.attacks.update({item.desc['atk_type']: item.attack})
+
         # update effective stats
         for s in self.base_stats.keys():
             self.effective_stats[s] = self.base_stats[s] + self.bonus_stats[s]
@@ -208,8 +216,6 @@ the North.'
         self.equipped['R_hand'] = item
         # update item's equipped status
         item.equipped = True
-        if item.item_type == 'weapon':
-            self.attacks.update({item.desc['atk_type']: item.attack})
         message = "Equipped {}.".format(item.desc['name'])
         # update stats
         self.update_stats()
