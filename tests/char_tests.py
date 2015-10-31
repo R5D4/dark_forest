@@ -21,20 +21,41 @@ def equip_test():
                'dmg_roll': '1d8',
                'description': "For testing only!"
                }
-    weapon = items.Weapon(wpn_desc)
-    player.pick_up(weapon)
+    testing_sword = items.Weapon(wpn_desc)
+    player.pick_up(testing_sword)
     # below requirements
     player.base_stats['str'] = 0
     player.update_stats()
-    msg = player.equip(weapon)
+    msg = player.equip(testing_sword)
     print msg
-    ok_(msg == "Unable to equip Testing Sword, need {'dex': 4, 'str': 4}.")
+    ok_("Unable to equip Testing Sword" in msg)
     # meets requirements
     player.base_stats['str'] = 4
     player.update_stats()
-    msg = player.equip(weapon)
+    msg = player.equip(testing_sword)
     print msg
     ok_(msg == "Equipped Testing Sword.")
+    # already equipped
+    msg = player.equip(testing_sword)
+    print msg
+    ok_(msg == "The item is already equipped.")
+    # equip 2h weapon
+    wpn_desc = {
+               'name': 'Testing Bow',
+               'class': 'bow',
+               'atk_type': 'pierce',
+               'attribute': 'dex',
+               'require': {'str': 0, 'dex': 5},
+               'bonus': {'str': 0, 'dex': 2},
+               'dmg_roll': '1d8',
+               'description': "For testing only!"
+               }
+    testing_bow = items.Weapon(wpn_desc)
+    player.base_stats['dex'] = 5
+    player.update_stats()
+    msg = player.equip(testing_bow)
+    print msg
+    ok_(msg == "Equipped Testing Bow.")
 
 
 def update_stats_test():

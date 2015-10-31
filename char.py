@@ -211,15 +211,23 @@ the North.'
 
     def equip(self, item):
         """ Equip the item. Return True if success. False otherwise."""
+        # Check if item already equipped
+        if item.equipped:
+            return "The item is already equipped."
         # Check stat requirements
-        # loop through all requirements for the item
         for attr, req in item.desc['require'].items():
             if self.effective_stats[attr] < req:
                 return "Unable to equip {}, need {}.".format(item.desc['name'],
                                                          item.desc['require'])
-        # check if the corresponding attribute of the character is high enough
-        # Check slot requirements
-        # NOTE: for now equip everything in right hand
+        # Figure out which slots to use
+        #if item.desc['class'] in ['2h_sword', 'bow']:
+        #    self.unequip('R_hand')
+        #    self.unequip('L_hand')
+        #    self.equipped['R_hand'] = item
+        #    self.equipped['L_hand'] = item
+        #else:
+        # NOTE: Add 2h support
+        self.unequip('R_hand')
         self.equipped['R_hand'] = item
         item.equipped = True
         message = "Equipped {}.".format(item.desc['name'])
@@ -229,7 +237,7 @@ the North.'
     def unequip(self, slot):
         """ Unequip item in given slot. Return message of what happened."""
         # if there is something equipped in the slot
-        if self.equipped[slot] is not None:
+        if self.equipped[slot]: # not None
             item = self.equipped[slot]
             # remove the item from equipped
             self.equipped[slot] = None
