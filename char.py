@@ -211,13 +211,18 @@ the North.'
 
     def equip(self, item):
         """ Equip the item. Return True if success. False otherwise."""
-        # Decide where to equip the item
+        # Check stat requirements
+        # loop through all requirements for the item
+        for attr, req in item.desc['require'].items():
+            if self.effective_stats[attr] < req:
+                return "Unable to equip {}, need {}.".format(item.desc['name'],
+                                                         item.desc['require'])
+        # check if the corresponding attribute of the character is high enough
+        # Check slot requirements
         # NOTE: for now equip everything in right hand
         self.equipped['R_hand'] = item
-        # update item's equipped status
         item.equipped = True
         message = "Equipped {}.".format(item.desc['name'])
-        # update stats
         self.update_stats()
         return message
 

@@ -5,9 +5,42 @@ import char
 import items
 
 
+def equip_test():
+    # Test if equipment restrictions are honoured
+    player = char.Player()
+    player.unequip('R_hand')
+    player.inventory = []
+    # Test stat requirements
+    wpn_desc = {
+               'name': 'Testing Sword',
+               'class': '1h_sword',
+               'atk_type': 'slash',
+               'attribute': 'str',
+               'require': {'str': 4, 'dex': 4},
+               'bonus': {'str': 0, 'dex': 0},
+               'dmg_roll': '1d8',
+               'description': "For testing only!"
+               }
+    weapon = items.Weapon(wpn_desc)
+    player.pick_up(weapon)
+    # below requirements
+    player.base_stats['str'] = 0
+    player.update_stats()
+    msg = player.equip(weapon)
+    print msg
+    ok_(msg == "Unable to equip Testing Sword, need {'dex': 4, 'str': 4}.")
+    # meets requirements
+    player.base_stats['str'] = 4
+    player.update_stats()
+    msg = player.equip(weapon)
+    print msg
+    ok_(msg == "Equipped Testing Sword.")
+
+
 def update_stats_test():
     player = char.Player()
     pass
+
 
 def unequip_test():
     player = char.Player()
