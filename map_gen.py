@@ -230,7 +230,6 @@ def add_landmarks(a_map):
 
 def add_landmark(scene, l_type):
     """ Add the appropriate type of landmark to a scene."""
-    # handle case if somehow landmark type doesn't exist in LANDMARKS
     if l_type in LANDMARKS.keys():
         lm = choice(LANDMARKS[l_type])
         scene.features[l_type] = lm

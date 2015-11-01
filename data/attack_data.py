@@ -13,7 +13,7 @@ ATTACKS = {
     #   string - attack name:  
     #   {
     #   'prep_msg': string - msg printed when attack begins
-    #       e.g. 'You attack with %s'. %s will be replaced with weapon
+    #       include three '%s' for the attacking party, enemy, and weapon name
     #   'hit_crit_msg': string - msg printed when critical is rolled
     #   'hit_success_msg': string - msg printed when successful attack
     #   'hit_fail_msg': string - msg when attack fails
