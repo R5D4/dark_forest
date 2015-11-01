@@ -201,8 +201,8 @@ the North.'
         self.equip_default()
 
     def roll_items(self):
-        """ Generate random items, weapons and armor."""
-        self.pick_up(items.new_weapon())
+        """ Generate default equipment."""
+        self.pick_up(items.get_weapon('Hunting Knife'))
 
     def equip_default(self):
         """ Equip all default items."""

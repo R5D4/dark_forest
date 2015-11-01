@@ -6,6 +6,12 @@ from nose.tools import *
 import items
 
 
+def get_weapon_test():
+    # Tests if weapon can be created by indicating weapon name
+    weapon = items.get_weapon('Hunting Knife')
+    ok_(weapon.desc['name'] == 'Hunting Knife')
+
+    
 def boss_weapon_test():
     # Tests if new weapons are created properly.
     weapon = items.boss_weapon()

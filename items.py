@@ -57,6 +57,16 @@ class Consummable(Item):
 ########## ITEM GENERATORS ##########
 
 
+def get_weapon(name):
+    """
+    Return a Weapon object by name.
+    """
+    for w_desc in wd.WEAPONS:
+        if w_desc['name'] == name:
+            break
+    return Weapon(w_desc)
+
+
 def new_weapon():
     """ 
     Return a player Weapon object created from a weapon description.

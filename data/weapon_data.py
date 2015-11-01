@@ -27,18 +27,18 @@ WEAPONS = [
     #   'AC_bonus': (<ability name>, <AC_bonus>)
     #   'description': <Flavor text description>
     # }
-#    {
-#    'name': 'Knight Sword',
-#    'class': 'bastard_sword',
-#    'atk_type': 'slash',
-#    'attribute': 'str',
-#    'require': {'str': 4, 'dex': 4},
-#    'bonus': {'str': 2, 'dex': 2, 'AC': 3},
-#    'dmg_roll': '1d8',
-#    'description': "A hand-and-a-half sword commonly used by men of Gondor.\
-#There are faint markings on the pommel depicting the tiered rings of Minas \
-#Tirith."
-#    },
+    {
+    'name': 'Knight Sword',
+    'class': 'bastard_sword',
+    'atk_type': 'slash',
+    'attribute': 'str',
+    'require': {'str': 4, 'dex': 4},
+    'bonus': {'str': 2, 'dex': 2, 'AC': 3},
+    'dmg_roll': '1d8',
+    'description': "A hand-and-a-half sword commonly used by men of Gondor.\
+There are faint markings on the pommel depicting the tiered rings of Minas \
+Tirith."
+    },
     {
     'name': 'Elven Longbow',
     'class': 'bow',
@@ -48,6 +48,16 @@ WEAPONS = [
     'bonus': {'str': 0, 'dex': 5, 'AC': 2},
     'dmg_roll': '1d8',
     'description': "An elegant lowbow made by one of the sylvan folk."
+    },
+    {
+    'name': 'Hunting Knife',
+    'class': 'knife',
+    'atk_type': 'pierce',
+    'attribute': 'dex',
+    'require': {'str': 0, 'dex': 0},
+    'bonus': {'str': 1, 'dex': 3, 'AC': 5},
+    'dmg_roll': '1d6',
+    'description': "A standard hunting knife. Simple but effective."
     },
 #    {
 #    'name': 'Estoc',
