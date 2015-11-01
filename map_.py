@@ -14,6 +14,24 @@ import draw_map
 import game_clock
 
 
+ENV_ACTIONS = {
+    'look': ['l', 'look'],
+    'map': ['m', 'map'],
+    'time': ['t', 'time'],
+    'wait': ['wait'],
+    'rest': ['r', 'rest'],
+    'pray': ['p', 'pray'],
+    'stats': ['stats'],
+    'inventory': ['i', 'inventory'],
+    'equip': ['q', 'equip'],
+    'unequip': ['u', 'unequip'],
+    'examine': ['x', 'examine'],
+    'help': ['h', 'help']
+}
+# make single list of supported actions to check against user action
+SUPPORTED_ACTIONS = \
+    [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
+
 ENCOUNTER_BASE = 1 # 1% base encounter chance
 # time-based bonus for encounter chance (%)
 ENCOUNTER_TIME = { 
@@ -145,23 +163,6 @@ class Scene(object):
 
     def process_action(self, r_action):
         """ Process user action that doesn't change scenes."""
-        ENV_ACTIONS = {
-            'look': ['l', 'look'],
-            'map': ['m', 'map'],
-            'time': ['t', 'time'],
-            'wait': ['wait'],
-            'rest': ['r', 'rest'],
-            'pray': ['p', 'pray'],
-            'stats': ['stats'],
-            'inventory': ['i', 'inventory'],
-            'equip': ['q', 'equip'],
-            'unequip': ['u', 'unequip'],
-            'examine': ['x', 'examine']
-        }
-        # make single list of supported actions to check against user action
-        SUPPORTED_ACTIONS = \
-            [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
-
         # The ' '.join and split() ensures only one space between each word.
         # Then we add another space to make sure we can always unpack 
         # into two vars.
@@ -200,9 +201,18 @@ class Scene(object):
                 print self.process_unequip(args)
             elif action in ENV_ACTIONS['examine']:
                 print self.examine(args)
+            elif action in ENV_ACTIONS['help']:
+                print self.process_help()
                 
         else:
             print "You can't do that."
+
+    def process_help(self):
+        """ Process the 'help' command. Return output string."""
+        message = []
+        for cmd, keywords in ENV_ACTIONS.items():
+            message.append("{}: {}".format(cmd, keywords))
+        return '\n'.join(message)
 
     def examine(self, args):
         """ Process the 'examine' command. Return output string."""

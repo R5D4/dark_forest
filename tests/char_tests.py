@@ -24,13 +24,13 @@ def equip_test():
     testing_sword = items.Weapon(wpn_desc)
     player.pick_up(testing_sword)
     # below requirements
-    player.base_stats['str'] = 0
+    player.base_stats.update({'dex': 0, 'str': 0})
     player.update_stats()
     msg = player.equip(testing_sword)
     print msg
     ok_("Unable to equip Testing Sword" in msg)
     # meets requirements
-    player.base_stats['str'] = 4
+    player.base_stats.update({'dex': 4, 'str': 4})
     player.update_stats()
     msg = player.equip(testing_sword)
     print msg

@@ -7,9 +7,16 @@ import char
 import items
 
 
+def process_help_test():
+    # Test the process_help method
+    player = char.Player()
+    scene = map_.Scene({'player': player})
+    msg = scene.process_help()
+    ok_("look: ['l', 'look']" in msg)
+
+
 def examine_test():
     # Tests the Scene.examine method
-    # Test Scene.process_equip method
     player = char.Player()
     scene = map_.Scene({'player': player})
     wpn_desc = {
