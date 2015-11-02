@@ -39,7 +39,7 @@ class Arena(object):
 
     def enter(self):
         """ Enter the arena and start combat."""
-        result = combat.begin_combat(self.characters)
+        result = combat.begin_combat(self.characters, None, False)
         if result == 'death':
             print "u ded"
         elif result == 'win':

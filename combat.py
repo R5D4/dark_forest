@@ -10,6 +10,12 @@ import data.attack_data as atk_data
 
 # user types this to signal attack
 ATTACK = 'attack'
+ENV_ACTIONS = {
+              'run': ['r', 'run']
+              }
+# make single list of supported actions to check against user action
+SUPPORTED_ACTIONS = \
+    [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
 # all hits roll 1d20
 HIT_ROLL = '1d20'
 
@@ -22,13 +28,12 @@ def new_attack(weapon):
     pass
 
 
-def begin_combat(characters):
+def begin_combat(characters, scene, can_run):
     """
     Start combat.
 
     Start combat between the 'player' and 'boar' characters.
     Return 'death' if player dies or 'win' if boar dies.
-    There is currently no way to exit combat in any other way once entered.
     """
     # characters is a dict with an entry for key 'player' and 'boar'
     player = characters['player']
@@ -64,6 +69,12 @@ def begin_combat(characters):
             if action in player.attacks.keys():
                 player_attack = player.attacks[action]
                 player_attack.attack(player, boar)
+            elif action in SUPPORTED_ACTIONS:
+                if action in ENV_ACTIONS['run'] and can_run:
+                    print "Run away! Run away!"
+                    return run_away(scene)               
+                elif action in ENV_ACTIONS['run'] and not can_run:
+                    print "Can't run away!"
             else:
                 print "You can't do that."
             turn = 'boar'
@@ -82,6 +93,13 @@ def begin_combat(characters):
             return 'death' 
         elif boar.health['HP'] <= 0:
             return 'win' 
+
+
+def run_away(scene):
+    """ Run away from combat. Return name of a random adjacent location."""
+    scene.advance_clock('travel')
+    name = choice(scene.exits.values())
+    return name
 
 ########## ATTACK CLASS ##########
 

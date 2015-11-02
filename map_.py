@@ -157,7 +157,7 @@ class Scene(object):
                 self.advance_clock('travel')
                 return self.exits.get(action) 
             elif combat.ATTACK in action and self.flags['encounter']:
-                return combat.begin_combat(self.characters)
+                return combat.begin_combat(self.characters, self, True)
             else: 
                 self.process_action(action)
 
