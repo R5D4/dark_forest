@@ -149,6 +149,10 @@ class Scene(object):
 
         # 2. Calculate encounter chance and print encounter message
         self.update_encounter()
+        # if the boss attacks, go into combat directly 
+        if self.get_boss_attack():
+            print "The boar notices you and charges!"
+            return combat.begin_combat(self.characters, self, True)
 
         # 3. Enter user-input loop
         while True:
@@ -160,13 +164,17 @@ class Scene(object):
                 return combat.begin_combat(self.characters, self, True)
             else: 
                 self.process_action(action)
+                # check after every user action if boss attacks
+                # if the boss attacks, go into combat directly 
+                if self.get_boss_attack():
+                    print "The boar notices you and charges!"
+                    return combat.begin_combat(self.characters, self, True)
 
     def process_action(self, r_action):
         """ Process user action that doesn't change scenes."""
         # The ' '.join and split() ensures only one space between each word.
         # Then we add another space to make sure we can always unpack 
         # into two vars.
-        # NOTE: Test this
         action, args = (' '.join(r_action.split())+' ').split(' ', 1)
         args = args.strip()
         player = self.characters['player']
@@ -296,6 +304,12 @@ class Scene(object):
         Advance the clock by duration of action
         """
         self.scene_map.clock.advance_time(action)
+
+    def get_boss_attack(self):
+        """ Return True if boss will initiate combat. False otherwise."""
+        # NOTE: Currently 50% chance boss will attack if encountered. 
+        #       upgrade this algorithm..
+        return self.flags['encounter'] and randint(1, 100) <= 50 
 
 
 ##########  SPECIAL SCENES  ##########
