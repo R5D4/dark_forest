@@ -8,6 +8,57 @@ import map_
 import map_gen
 
 
+def prepare_canvas_test():
+    # Test if links are drawn properly
+
+    ### Simple test ###
+    a_map = map_.Map('story')
+    # create scenes with location data
+    s1 = map_gen.new_scene(a_map, None, (1, 1))
+    s2 = map_gen.new_scene(a_map, None, (2, 1))
+    s3 = map_gen.new_scene(a_map, None, (1, 2))
+    s4 = map_gen.new_scene(a_map, None, (2, 2))
+    # set scene names
+    s1.name = 'scene1'
+    s2.name = 'scene2'
+    s3.name = 'scene3'
+    s4.name = 'scene4'
+    # update exits
+    s1.exits.update({'se': 'scene4'})
+    s4.exits.update({'nw': 'scene1'})
+    s2.exits.update({'sw': 'scene3'})
+    s3.exits.update({'ne': 'scene2'})
+    # add scenes to map
+    a_map.add_scene(s1)
+    a_map.add_scene(s2)
+    a_map.add_scene(s3)
+    a_map.add_scene(s4)
+    # prepare canvas
+    canvas = draw_map.prepare_canvas(a_map, (1, 1))
+    #draw_map.print_canvas(canvas)
+    # tests
+    ok_(canvas[1][1] == 'X')
+
+    ### Complete automated tests on procedurally generated maps ###
+    for x in range(1, 101):
+        a_map = map_gen.new_map()
+        # prepare canvas
+        canvas = draw_map.prepare_canvas(a_map, None)
+        draw_map.print_canvas(canvas)
+        # for each scene
+        for sc in a_map.scenes.values():
+            # for each exit
+            for ex in sc.exits.keys():
+                # calculate canvas position of the link
+                canvas_x, canvas_y = draw_map.get_canvas_link_location(
+                                                                sc.location,
+                                                                ex)
+                # check if link is the correct symbol
+                print "{}: {}".format(sc.location, sc.exits)
+                ok_(canvas[canvas_x][canvas_y] == draw_map.SYMBOL_LINK[ex] or \
+                    canvas[canvas_x][canvas_y] == 'X')
+
+
 def draw_map_test():
     ## Case 1
     a_map = map_.Map('story')
@@ -38,6 +89,7 @@ def draw_map_test():
     a_map.add_scene(s4)
 
     canvas = draw_map.prepare_canvas(a_map, (2, 1))
+    draw_map.print_canvas(canvas)
 
     ok_(canvas[2][0] == 'P') 
     ok_(canvas[2][2] == '#') 

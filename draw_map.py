@@ -52,7 +52,7 @@ def prepare_canvas(a_map, player_loc):
 
 
 def get_canvas_scene_location(location):
-    """ Return corresponding location on the canvas."""
+    """ Return corresponding location on the canvas given map location."""
     x, y = location
     # step 1: subtract 1 from x, y since canvas array starts from [0][0]
     x1 = x - 1
@@ -64,7 +64,7 @@ def get_canvas_scene_location(location):
 
 
 def get_canvas_link_location(location, direction):
-    """ Return link location on canvas given scene's location."""
+    """ Return link location on canvas given scene's map location and dir."""
     # assumption: min location = (1, 1)
     # location + direction does not go off the map
 

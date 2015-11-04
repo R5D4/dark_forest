@@ -1,5 +1,17 @@
 """
 Procedurally generate map scenes.
+
+Map location arranged as follows:
+                x
+        1   2   3   4   ...
+    1
+    2
+y   3
+    4
+    .
+    .
+    .
+Location tuple is (x, y)
 """
 
 from random import randint
