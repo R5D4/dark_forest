@@ -5,6 +5,26 @@ import char
 import items
 
 
+def take_damage_test():
+    # Test if damage and healing is resolved correctly
+    player = char.Player()
+    # set HP
+    player.desc['max_HP'] = 100
+    # take damage
+    player.health['HP'] = 100
+    player.take_damage(100)
+    ok_(player.health['HP'] == 0)
+    player.take_damage(100)
+    ok_(player.health['HP'] == -100)
+    # take healing
+    # NOTE: working on this
+    player.health['HP'] = 50
+    player.take_damage(-50)
+    ok_(player.health['HP'] == 100)
+    player.take_damage(100)
+    ok_(player.health['HP'] == -100)
+
+
 def equip_test():
     # Test if equipment restrictions are honoured
     player = char.Player()

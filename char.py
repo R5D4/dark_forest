@@ -169,9 +169,18 @@ class Character(object):
         return '\n'.join(eq)
             
     def take_damage(self, dmg):
-        """ Take damage. Updates the 'HP' attribute."""
-        self.health['HP'] -= dmg
-        print "The %s took %d damage!" % (self.desc['job'], dmg)
+        """ 
+        Updates the 'HP' attribute and return output string.
+        
+        Healing: dmg < 0.
+        """
+        new_hp = self.health['HP'] - dmg
+        # prevent hp from going over max hp, it can still go lower than 0
+        if new_hp > self.desc['max_HP']:
+            new_hp = self.desc['max_HP']
+        self.health['HP'] = new_hp
+        
+        return "The %s took %d damage!" % (self.desc['job'], dmg)
 
 ########## PLAYER CHARACTER ##########
 
