@@ -40,12 +40,15 @@ def prepare_canvas(a_map, player_loc):
             # determine canvas location to put the link symbol
             x, y = get_canvas_link_location(s1.location, dir1)
             # choose link symbol
+            # if nothing drawn, draw the link
+            if canvas[x][y] == ' ':
+                link_symbol = SYMBOL_LINK[dir1]
             # if the paths cross, draw an 'x' for crossroad
-            if dir1 in ['ne', 'sw'] and canvas[x][y] == '\\' \
+            elif dir1 in ['ne', 'sw'] and canvas[x][y] == '\\' \
                 or dir1 in ['nw', 'se'] and canvas[x][y] == '/':
                 link_symbol = SYMBOL_LINK['cross']
-            else:
-                link_symbol = SYMBOL_LINK[dir1]
+            else: # link symbol stays the same
+                link_symbol = canvas[x][y]
             # add the link symbol to determined canvas location
             canvas[x][y] = link_symbol
     return canvas

@@ -35,11 +35,11 @@ def prepare_canvas_test():
     a_map.add_scene(s4)
     # prepare canvas
     canvas = draw_map.prepare_canvas(a_map, (1, 1))
-    #draw_map.print_canvas(canvas)
+    draw_map.print_canvas(canvas)
     # tests
     ok_(canvas[1][1] == 'X')
 
-    ### Complete automated tests on procedurally generated maps ###
+    ### Automated tests on procedurally generated maps ###
     for x in range(1, 101):
         a_map = map_gen.new_map()
         # prepare canvas
