@@ -43,5 +43,5 @@ class Arena(object):
         if result == 'death':
             print "u ded"
         elif result == 'win':
-            print "u a winnar"
+            print "u a winrar"
 

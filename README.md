@@ -17,16 +17,17 @@ Update - new background story:
 1. Map
   * All scenes and map topography are procedurally generated!
   * 24-hour game clock with gradual day/night cycle
+  * Boss encounter chance depends on your natural surroundings and time
 2. Characters
   * 1 Player character and 1 Boss character
-  * Predefined character attacks
+  * Equip different weapons to use different attacks
   * Randomly generated character attributes
 3. Combat
   * D&D-inspired, in that virtual dice are rolled
-  * Roll for initiative
+  * Boss has a chance of initiating combat if encountered
+  * Can run from combat
   * One action per character per turn, alternating turns
   * Boss will randomly use one of its predefined attacks
-  * Combat continues until one opponent expires (then the game is over)
   * Hit chance and damage based on character and attack attributes
   * Critical hits
   * Enemy bloodied when HP < 30% 
@@ -36,10 +37,10 @@ Update - new background story:
 1. Exploration System
   * Certain map areas provide randomized equipment
 1. Character Update
-  * Implement armor
   * Character classes
-2. Combat System Update
-  * Run from combat
+2. Items
+  * 2H weapons
+  * Armor and consummables
 3. Hunting System 
   * Ability for boss or player to "hunt" if other party runs from combat
   * Limited to certain number of scene transitions
@@ -52,8 +53,7 @@ Update - new background story:
   * Interactive game interface with curses
 
 ## Next Action
-* Simplify combat system
-* Simplify character attributes
+* Design healing system
 
 ## How to Play
 ### Map Commands
