@@ -6,6 +6,37 @@ Simple text-based dungeon crawler with a D&D-inspired combat system. For learnin
 python game.py
 ```
 
+## How to Play
+### Map Commands
+  * 'look' - look around (hint: you get a better view from high up)
+  * 'n', 'e', 's', 'w', etc. - to move out to another area in that direction
+  * 'map' - draw the map
+  * 'attack' - to attack the enemy once you see it
+  * 'time' - tell the time of day
+  * 'wait' - Wait for 1 hour
+  * 'rest' - Rest for 3 hours
+  * 'pray' - Pray to Elbereth (takes 1 hour - does nothing currently)
+  * 'stats' - Print character stats
+  * 'inventory' - Print inventory and item ID
+  * 'equip' - Print equipped items
+  * 'equip <item ID>' - Equip item specified by ID
+  * 'unequip <slot>' - Unequip item from equipment slot
+  * 'examine <item ID>' - Examine the item specified by ID
+  * 'help' - Show all available commands
+
+### Combat Commands
+  * Simplified verion of DnD 3.5e/Pathfinder
+  * Attack options depends on the equipped weapon
+  * Default weapon (Hunting Knife) provides the 'pierce' attack
+  * Type 'pierce' once in combat to use it
+
+## Gameplay tips
+* The boss is more likely to be found where there are signs of its activity
+* There's a chance that the boss will attack you when encountered
+* 'run' from combat and 'rest' if you are low on HP
+* certain commands requires time to pass, the boss might sneak up on you
+* Game commands have shortened forms, use the 'help' command in-game to find out
+
 ## Unofficial Story
 Middle-Earth inspired.
 Update - new background story:
@@ -53,28 +84,5 @@ Update - new background story:
   * Interactive game interface with curses
 
 ## Next Action
-* Design healing system
+* Implement weapon drop areas
 
-## How to Play
-### Map Commands
-  * 'look' - look around (hint: you get a better view from high up)
-  * 'n', 'e', 's', 'w', etc. - to move out to another area in that direction
-  * 'map' - draw the map
-  * 'attack' - to attack the enemy once you see it
-  * 'time' - tell the time of day
-  * 'wait' - Wait for 1 hour
-  * 'rest' - Rest for 3 hours
-  * 'pray' - Pray to Elbereth (takes 1 hour)
-  * 'stats' - Print character stats
-  * 'inventory' - Print inventory and item ID
-  * 'equip' - Print equipped items
-  * 'equip <item ID>' - Equip item specified by ID
-  * 'unequip <slot>' - Unequip item from equipment slot
-  * 'examine <item ID>' - Examine the item specified by ID
-
-### Combat Commands
-  * Simplified verion of DnD 3.5e/Pathfinder
-  * The player currently has three attacks. Type them once you're in combat.
-  * 'shoot' - shoot an arrow from your longbow
-  * 'slash' - slash with your elven long-knife
-  * 'stab' - stab with your hunting knife
