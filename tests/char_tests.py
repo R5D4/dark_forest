@@ -10,19 +10,18 @@ def take_damage_test():
     player = char.Player()
     # set HP
     player.desc['max_HP'] = 100
-    # take damage
+    # test damage
     player.health['HP'] = 100
     player.take_damage(100)
     ok_(player.health['HP'] == 0)
     player.take_damage(100)
     ok_(player.health['HP'] == -100)
-    # take healing
-    # NOTE: working on this
+    # test healing
     player.health['HP'] = 50
     player.take_damage(-50)
     ok_(player.health['HP'] == 100)
-    player.take_damage(100)
-    ok_(player.health['HP'] == -100)
+    player.take_damage(-50)
+    ok_(player.health['HP'] == 100)
 
 
 def equip_test():

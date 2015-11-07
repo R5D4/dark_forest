@@ -176,8 +176,8 @@ class Character(object):
         """
         new_hp = self.health['HP'] - dmg
         # prevent hp from going over max hp, it can still go lower than 0
-        if new_hp > self.desc['max_HP']:
-            new_hp = self.desc['max_HP']
+        if new_hp > self.effective_stats['max_HP']:
+            new_hp = self.effective_stats['max_HP']
         self.health['HP'] = new_hp
         
         return "The %s took %d damage!" % (self.desc['job'], dmg)
