@@ -5,22 +5,36 @@ import char
 import items
 
 
+def rest_test():
+    # Test if resting recovers the appropriate amount of HP
+    player = char.Player()
+    player.effective_stats['max_HP'] = 100
+    # rest should recover 12 HP (rounded down from 12.5)
+    player.health['HP'] = 0
+    print player.rest()
+    ok_(player.health['HP'] == 12)
+    # rest should recover 10 HP (max_HP limit)
+    player.health['HP'] = 90
+    print player.rest()
+    ok_(player.health['HP'] == 100)
+
+
 def take_damage_test():
     # Test if damage and healing is resolved correctly
     player = char.Player()
     # set HP
-    player.desc['max_HP'] = 100
+    player.effective_stats['max_HP'] = 100
     # test damage
     player.health['HP'] = 100
-    player.take_damage(100)
+    player.update_hp(-100)
     ok_(player.health['HP'] == 0)
-    player.take_damage(100)
+    player.update_hp(-100)
     ok_(player.health['HP'] == -100)
     # test healing
     player.health['HP'] = 50
-    player.take_damage(-50)
+    player.update_hp(50)
     ok_(player.health['HP'] == 100)
-    player.take_damage(-50)
+    player.update_hp(50)
     ok_(player.health['HP'] == 100)
 
 

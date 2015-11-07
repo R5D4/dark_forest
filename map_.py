@@ -194,6 +194,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['rest']:
                 print "You rest for 3 hours."
                 self.advance_clock('rest')
+                print player.rest() # heal HP
                 self.update_encounter()
             elif action in ENV_ACTIONS['pray']:
                 print "You offer a prayer to Elbereth (1 hour)."

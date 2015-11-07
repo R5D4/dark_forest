@@ -166,19 +166,19 @@ class Attack(object):
                 dmg = attribute + roll(self.dmg_roll, True)[1] 
                 print "Critical! Max Damage!"
                 print self.messages['hit_crit_msg']
-                print to_char.take_damage(dmg)
+                print to_char.update_hp(-dmg)
             # crit but not enough to hit, regular damage
             else:
                 dmg = attribute + roll(self.dmg_roll, False)[0] 
                 print "Critical!"
                 print self.messages['hit_success_msg']
-                print to_char.take_damage(dmg)
+                print to_char.update_hp(-dmg)
         # noncritical hit roll, but beats enemy's AC
         elif hit > hit_against:
             print self.messages['hit_success_msg']
             print "Calculating damage:",
             dmg = attribute + roll(self.dmg_roll, True)[0] 
-            print to_char.take_damage(dmg)
+            print to_char.update_hp(-dmg)
         else:
             print self.messages['hit_fail_msg']
 

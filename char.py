@@ -7,6 +7,7 @@ Contains the following classes:
     Boar
 """
 
+from math import floor
 from random import randint
 from random import choice
 from util import roll
@@ -168,19 +169,36 @@ class Character(object):
             eq.append('{}: {}'.format(loc, desc))
         return '\n'.join(eq)
             
-    def take_damage(self, dmg):
+    def update_hp(self, d):
         """ 
         Updates the 'HP' attribute and return output string.
         
-        Healing: dmg < 0.
+        d < 0: damage
+        d > 0: heal
+        d = 0: nothing happened
         """
-        new_hp = self.health['HP'] - dmg
+        new_hp = self.health['HP'] + d
         # prevent hp from going over max hp, it can still go lower than 0
         if new_hp > self.effective_stats['max_HP']:
             new_hp = self.effective_stats['max_HP']
+        # changed = actual HP change
+        changed = new_hp - self.health['HP']
         self.health['HP'] = new_hp
-        
-        return "The %s took %d damage!" % (self.desc['job'], dmg)
+        # create output string depending on HP change
+        if changed < 0: # damaged
+            msg = "The {} took {} damage!".format(self.desc['job'], -changed)
+        elif changed > 0: # healed
+            msg = "The {} healed {} HP.".format(self.desc['job'], changed)
+        else: # no HP change
+            msg = "Nothing happened."
+        return msg
+
+    def rest(self):
+        """ Rest and recover some HP."""
+        # recover 1/8 of max HP
+        hp = int(floor((0.125 * self.effective_stats['max_HP'])))
+        return self.update_hp(hp)
+
 
 ########## PLAYER CHARACTER ##########
 
