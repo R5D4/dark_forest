@@ -30,7 +30,7 @@ python game.py
   * Default weapon (Hunting Knife) provides the 'pierce' attack
   * Type 'pierce' once in combat to use it
 
-## Gameplay tips
+### Gameplay tips
 * The boss is more likely to be found where there are signs of its activity
 * There's a chance that the boss will attack you when encountered
 * 'run' from combat and 'rest' if you are low on HP
