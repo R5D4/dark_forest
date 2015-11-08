@@ -248,7 +248,6 @@ def add_landmark(scene, l_type):
     else:
         # NOTE: is joke, remove later
         print "How did this even happen?"
-    
 
 
 def add_description(a_map):

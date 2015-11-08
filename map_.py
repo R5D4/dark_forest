@@ -14,6 +14,8 @@ import draw_map
 import game_clock
 
 
+##########  CONSTANTS ##########
+
 ENV_ACTIONS = {
     'look': ['l', 'look'],
     'map': ['m', 'map'],
@@ -52,6 +54,8 @@ ENCOUNTER_ENV = {
                 'bed': 5, 
                 'track': 5
                 }
+
+##########  MAP CLASS  ##########
 
 
 class Map(object):
@@ -118,6 +122,8 @@ class Map(object):
     def draw_map(self, current_loc):
         """ Draw the map in ASCII graphics."""
         draw_map.print_canvas(draw_map.prepare_canvas(self, current_loc))
+
+##########  SCENE CLASS  ##########
 
 
 class Scene(object):
@@ -312,7 +318,6 @@ class Scene(object):
         #       upgrade this algorithm..
         return self.flags['encounter'] and randint(1, 100) <= 50 
 
-
 ##########  SPECIAL SCENES  ##########
 
 
@@ -388,4 +393,17 @@ class Story(Scene):
         """ Print description and return first map area scene."""
         self.describe()
         return 'entrance'
+
+########## FEATURE CLASS ##########
+
+
+class Feature(object):
+    """ Base class for a scene feature."""
+
+    def __init__(self):
+        pass
+
+    def get_desc(self):
+        """ Return feature description."""
+        return "No feature description. Override this method."
 
