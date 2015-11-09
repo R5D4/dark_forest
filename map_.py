@@ -407,3 +407,66 @@ class Feature(object):
         """ Return feature description."""
         return "No feature description. Override this method."
 
+    def get_encounter_rate(self):
+        """Return this feature's contribution to encounter rate."""
+        return 0
+
+########## FEATURE SUBCLASSES ##########
+# NOTE: Implement all of these
+
+
+class ItemStash(Feature):
+    """ An item stash."""
+
+    def __init__(self, items):
+        """ items is list of Item objects."""
+        self.hidden_items = items
+        
+    def get_desc(self):
+        """ Return feature description. Overrides Feature.get_desc"""
+        return "Discarded weapons are strewn all over the ground."
+
+    def search(self):
+        """ Execute a search and return uncovered items."""
+        uncovered = []
+        return uncovered
+
+
+class Strata(Feature):
+    """ A forest stratum."""
+
+    def __init__(self, stratum, flora):
+        """
+        stratum is string e.g. 'canopy'
+        flora is list of strings describing plants in the stratum
+        """
+        self.stratum = stratum
+        self.flora = flora
+
+    def get_desc(self):
+        """ Return feature description. Overrides Feature.get_desc"""
+        return ""
+
+
+class Landmark(Feature):
+    """ A landmark indicating boss activity."""
+
+    def __init__(self, landmark_type, landmark_desc):
+        """
+        landmark_type is string rep. type of landmark e.g. wallow
+        landmark_desc is string rep description of landmark
+        """
+        self.l_type = landmark_type
+        self.l_desc = landmark_desc
+
+    def get_desc(self):
+        """ Return feature description. Overrides Feature.get_desc"""
+        return ""
+
+    def get_encounter_rate(self):
+        """
+        Return feature's encounter rate. 
+
+        Overrides Feature.get_encounter_rate
+        """
+        return 0
