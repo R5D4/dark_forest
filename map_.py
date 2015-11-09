@@ -432,7 +432,7 @@ class ItemStash(Feature):
         return uncovered
 
 
-class Strata(Feature):
+class Stratum(Feature):
     """ A forest stratum."""
 
     def __init__(self, stratum, flora):
