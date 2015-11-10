@@ -5,6 +5,7 @@ Tests functions in map_gen.py
 from nose.tools import *
 from random import randint
 from random import choice
+import inspect
 import map_gen
 import map_
 
@@ -14,8 +15,9 @@ def add_landmark_test():
     for l_type in map_gen.LANDMARKS.keys():
         sc = map_.Scene(None)
         map_gen.add_landmark(sc, l_type)
-        ok_(l_type in sc.features)
-        ok_(sc.features[l_type] in map_gen.LANDMARKS[l_type])
+        map_gen.add_description(sc)
+        # check if the specified Landmark object is in features
+        ok_(l_type in sc.description)
 
 
 def add_landmarks_test():
@@ -27,24 +29,25 @@ def add_landmarks_test():
     # Test that no scene has more than one landmark
     for sc in a_map.scenes.values():
         count = 0
-        for key in sc.features.keys():
-            if key in map_gen.LANDMARKS:
+        for f in sc.features:
+            if isinstance(f, map_.Landmark):
                 count +=1
-        print "count: {}. features: {}".format(count, sc.features.items())
+        print "count: {}. features: {}".format(count, sc.features)
         ok_(count <= 1)
     
 
-def add_features_test():
-    # test if all types of environmental features are added
+def add_flora_test():
+    # Test if flora is added for each stratum
     a_map = map_.Map('story')
     for i in xrange(0, 100): # 100 trials
         scene = map_gen.new_scene(a_map, 'random', (1, 1))
-        map_gen.add_features(scene)
+        map_gen.add_flora(scene)
+        map_gen.add_description(scene)
         print scene.features
-        ok_(scene.features['canopy'] in map_gen.CANOPY)
-        ok_(scene.features['understory'] in map_gen.UNDERSTORY)
-        ok_(scene.features['shrubs'] in map_gen.SHRUBS)
-        ok_(scene.features['floor'] in map_gen.FLOOR)
+        ok_('canopy' in scene.description)
+        ok_('understory' in scene.description)
+        ok_('shrubs' in scene.description)
+        ok_('floor' in scene.description)
 
 
 def init_landmark_limits_test():

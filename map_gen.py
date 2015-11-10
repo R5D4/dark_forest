@@ -91,7 +91,7 @@ def new_map():
     generate_scenes(a_map)
     add_landmarks(a_map)
     add_links(a_map)
-    add_description(a_map)
+    add_descriptions(a_map)
 
     # add special scenes
     a_map.add_special_scene('story', map_.Story(a_map.characters))
@@ -213,7 +213,7 @@ def make_name(scene_type):
         
 
 def add_flora(scene):
-    """ Add flora for each vertical stratum."""
+    """ Add flora for each vertical stratum in a scene."""
     new_stratum = map_.Stratum('canopy', random.choice(CANOPY))
     scene.features.append(new_stratum)
     new_stratum = map_.Stratum('understory', random.choice(UNDERSTORY))
@@ -253,17 +253,22 @@ def add_landmark(scene, l_type):
         print "Invalid landmark type during landmark generation."
 
 
-def add_description(a_map):
+def add_descriptions(a_map):
     """ Construct a description for each scene in a_map."""
     for scene in a_map.scenes.values():
-        # Update description of features
-        descriptions = []
-        for f in scene.features:
-            descriptions.append(f.get_desc()) 
-        # Update description of exits
-        descriptions.append("The path leads towards {}".format(
-                                                           scene.exits.keys()))
-        scene.description = ' '.join(descriptions)
+        add_description(scene)
+
+
+def add_description(scene):
+    """ Add description to a scene."""
+    # Update description of features
+    descriptions = []
+    for f in scene.features:
+        descriptions.append(f.get_desc()) 
+    # Update description of exits
+    descriptions.append("The path leads towards {}".format(
+                                                       scene.exits.keys()))
+    scene.description = ' '.join(descriptions)
 
 
 def empty_adjacent(ref_loc, occupied_locs):
