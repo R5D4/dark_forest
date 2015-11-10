@@ -45,6 +45,7 @@ ENCOUNTER_TIME = {
                  'midnight': 3,
                  'night2': 3 
                  }
+
 # environment-based bonus for encounter chance (%)
 ENCOUNTER_ENV = {
                 'wallow': 10,
@@ -143,7 +144,7 @@ class Scene(object):
             'encounter': False,
             'can_leave': True 
         }
-        self.features = {}
+        self.features = [] # Feature objects
         self.description = "No description available."
 
     def enter(self):
@@ -291,10 +292,10 @@ class Scene(object):
         # Calculate encounter chance
         base = self.flags['encounter_chance']
         time_mod = ENCOUNTER_TIME.get(self.scene_map.clock.time_period(), 0)
-        # environmental bonus
+        # environmental(feature) encounter bonus
         environ_mod = 0
-        for f in self.features.keys():
-            environ_mod += ENCOUNTER_ENV.get(f, 0)
+        for f in self.features:
+            environ_mod += f.get_encounter_rate()
         # signs of activity bonus
         clue_mod = 0 
         chance = base + time_mod + environ_mod + clue_mod
@@ -445,7 +446,7 @@ class Stratum(Feature):
 
     def get_desc(self):
         """ Return feature description. Overrides Feature.get_desc"""
-        return ""
+        return "The {} is {}.".format(self.stratum, self.flora)
 
 
 class Landmark(Feature):
@@ -461,7 +462,7 @@ class Landmark(Feature):
 
     def get_desc(self):
         """ Return feature description. Overrides Feature.get_desc"""
-        return ""
+        return "The {} is {}.".format(self.l_type, self.l_desc)
 
     def get_encounter_rate(self):
         """
@@ -469,4 +470,4 @@ class Landmark(Feature):
 
         Overrides Feature.get_encounter_rate
         """
-        return 0
+        return ENCOUNTER_ENV[self.l_type]
