@@ -28,6 +28,7 @@ ENV_ACTIONS = {
     'equip': ['q', 'equip'],
     'unequip': ['u', 'unequip'],
     'examine': ['x', 'examine'],
+    'search': ['search'],
     'help': ['h', 'help']
 }
 # make single list of supported actions to check against user action
@@ -145,6 +146,7 @@ class Scene(object):
             'can_leave': True 
         }
         self.features = [] # Feature objects
+        self.items = [] # uncovered items player can pick up
         self.description = "No description available."
 
     def enter(self):
@@ -217,11 +219,24 @@ class Scene(object):
                 print self.process_unequip(args)
             elif action in ENV_ACTIONS['examine']:
                 print self.examine(args)
+            elif action in ENV_ACTIONS['search']:
+                print self.search()
             elif action in ENV_ACTIONS['help']:
                 print self.process_help()
                 
         else:
             print "You can't do that."
+
+    def search(self):
+        """ Search the scene and uncover items. Return output string."""
+        # NOTE: implement this
+        # find if there is an item stash in this scene
+        # if not, return "Nothing interesting here."
+        # if there is an item stash (ItemStash object as a feature)
+        # call the ItemStash.search() method
+        # add all items in the return list to scene.items
+        # output a nice message telling the player the uncovered items
+        return "You've uncovered the following items..."
 
     def process_help(self):
         """ Process the 'help' command. Return output string."""
@@ -277,6 +292,7 @@ class Scene(object):
         """
         print '-' * 40
         print self.description
+        # print out the list of uncovered items in the scene
     
     def print_encounter_msg(self):
         """ Print a message indicating if the boss is in the area."""
@@ -428,7 +444,10 @@ class ItemStash(Feature):
         return "Discarded weapons are strewn all over the ground."
 
     def search(self):
-        """ Execute a search and return uncovered items."""
+        """ Execute a search and return list of uncovered items."""
+        # get a random "find chance" (1-100)
+        # all items with rarity below the find chance are uncovered
+        # remove these items from the hidden list into a new list and return it
         uncovered = []
         return uncovered
 
