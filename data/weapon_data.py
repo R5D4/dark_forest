@@ -17,6 +17,7 @@ WEAPONS = [
     # {
     #   'name': <Weapon Name>
     #   'class': <Weapon Class>
+    #   'rarity': <0-99 increasing rarity>
     #   'attack': <weapon's attack type>
     #   'attribute': <the player attribute the weapon depends on>
     #   'min_str': <min str rating to use>
@@ -30,6 +31,7 @@ WEAPONS = [
     {
     'name': 'Knight Sword',
     'class': 'bastard_sword',
+    'rarity': 60,
     'atk_type': 'slash',
     'attribute': 'str',
     'require': {'str': 4, 'dex': 4},
@@ -42,6 +44,7 @@ Tirith."
     {
     'name': 'Elven Longbow',
     'class': 'bow',
+    'rarity': 50,
     'atk_type': 'pierce',
     'attribute': 'dex',
     'require': {'str': 2, 'dex': 5},
@@ -52,6 +55,7 @@ Tirith."
     {
     'name': 'Hunting Knife',
     'class': 'knife',
+    'rarity': 0,
     'atk_type': 'pierce',
     'attribute': 'dex',
     'require': {'str': 0, 'dex': 0},
@@ -89,10 +93,12 @@ Tirith."
 #    },
 ]
 
+# Currently not available to the user
 BOSS_WEAPONS = [
     {
     'name': 'Tusks',
     'class': 'head',
+    'rarity': 0,
     'atk_type': 'pierce',
     'attribute': 'str',
     'require': {'str': 0, 'dex': 0},
@@ -103,6 +109,7 @@ BOSS_WEAPONS = [
     {
     'name': 'Hooves',
     'class': 'feet',
+    'rarity': 0,
     'atk_type': 'blunt',
     'attribute': 'str',
     'require': {'str': 0, 'dex': 0},
@@ -113,6 +120,7 @@ BOSS_WEAPONS = [
     {
     'name': 'Teeth',
     'class': 'head',
+    'rarity': 0,
     'atk_type': 'pierce',
     'attribute': 'str',
     'require': {'str': 0, 'dex': 0},
