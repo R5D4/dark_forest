@@ -429,7 +429,6 @@ class Feature(object):
         return 0
 
 ########## FEATURE SUBCLASSES ##########
-# NOTE: Implement all of these
 
 
 class ItemStash(Feature):
@@ -444,12 +443,14 @@ class ItemStash(Feature):
         return "Discarded weapons are strewn all over the ground."
 
     def search(self):
-        """ Execute a search and return list of uncovered items."""
-        # get a random "find chance" (1-100)
-        # all items with rarity below the find chance are uncovered
-        # remove these items from the hidden list into a new list and return it
-        uncovered = []
-        return uncovered
+        """ Execute a search and return list of discovered items."""
+        chance = randint(0, 99)
+        # all items with rarity below the find chance are discovered 
+        d = [ i for i in self.hidden_items if discover(i, chance) ]
+        # remove uncovered items from hidden items
+        self.hidden_items = \
+            [ i for i in self.hidden_items if not discover(i, chance) ]
+        return d
 
 
 class Stratum(Feature):
@@ -490,3 +491,14 @@ class Landmark(Feature):
         Overrides Feature.get_encounter_rate
         """
         return ENCOUNTER_ENV[self.l_type]
+
+########## HELPER FUNCTIONS ##########
+
+
+def discover(item, chance):
+    """ Return True if a search with the specified chance would
+    discover the item. Otherwise return False."""
+    return item.desc['rarity'] <= chance
+
+
+
