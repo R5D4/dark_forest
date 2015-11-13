@@ -7,6 +7,16 @@ import char
 import items
 
 
+def scene_search_test():
+    # Test if Scene.search works
+    # create scene
+    # create items
+    # add items to item stash
+    # add item stash to scene
+    # search scene and check results
+    pass
+
+
 def search_test():
     # Test if ItemStash.search works
     hidden = []
