@@ -203,7 +203,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['rest']:
                 print "You rest for 3 hours."
                 self.advance_clock('rest')
-                print player.rest() # heal HP
+                print player.rest()
                 self.update_encounter()
             elif action in ENV_ACTIONS['pray']:
                 print "You offer a prayer to Elbereth (1 hour)."
@@ -220,6 +220,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['examine']:
                 print self.examine(args)
             elif action in ENV_ACTIONS['search']:
+                self.advance_clock('search')
                 print self.search()
             elif action in ENV_ACTIONS['help']:
                 print self.process_help()
@@ -229,14 +230,23 @@ class Scene(object):
 
     def search(self):
         """ Search the scene and uncover items. Return output string."""
-        # NOTE: implement this
-        # find if there is an item stash in this scene
-        # if not, return "Nothing interesting here."
-        # if there is an item stash (ItemStash object as a feature)
-        # call the ItemStash.search() method
-        # add all items in the return list to scene.items
-        # output a nice message telling the player the uncovered items
-        return "You've uncovered the following items..."
+        uncovered = [] # list of all uncovered items from all item stashes
+        # search all item stashes in this scene
+        for f in self.features:
+            if isinstance(f, ItemStash):
+                uncovered.extend(f.search())
+        # add uncovered items to scene.items
+        self.items.extend(uncovered)
+        # return a nice message
+        msg = ["You spend some time searching."]
+        if uncovered: # not empty
+            msg.append("Uncovered the following items:")
+            for item in uncovered:
+                msg.append(item.desc['name'])
+        else:
+            msg.append("You found nothing.")
+        return '\n'.join(msg)
+        
 
     def process_help(self):
         """ Process the 'help' command. Return output string."""
@@ -443,13 +453,13 @@ class ItemStash(Feature):
         return "Discarded weapons are strewn all over the ground."
 
     def search(self):
-        """ Execute a search and return list of discovered items."""
+        """ Execute a search and return list of uncovered items."""
         chance = randint(0, 99)
-        # all items with rarity below the find chance are discovered 
-        d = [ i for i in self.hidden_items if discover(i, chance) ]
+        # all items with rarity below the find chance are uncovered
+        d = [ i for i in self.hidden_items if uncover(i, chance) ]
         # remove uncovered items from hidden items
         self.hidden_items = \
-            [ i for i in self.hidden_items if not discover(i, chance) ]
+            [ i for i in self.hidden_items if not uncover(i, chance) ]
         return d
 
 
@@ -495,9 +505,9 @@ class Landmark(Feature):
 ########## HELPER FUNCTIONS ##########
 
 
-def discover(item, chance):
+def uncover(item, chance):
     """ Return True if a search with the specified chance would
-    discover the item. Otherwise return False."""
+    uncover the item. Otherwise return False."""
     return item.desc['rarity'] <= chance
 
 

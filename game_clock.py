@@ -7,7 +7,8 @@ ACTION_DURATION = {
                   'travel': 1,
                   'wait': 1,
                   'rest': 3,
-                  'pray': 1
+                  'pray': 1,
+                  'search': 1
                   }
 TIME_PERIOD = [ 'midnight', # 0
                 'night2', 'night2', 'night2', 'night2', 'night2', # 1-5
