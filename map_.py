@@ -509,6 +509,3 @@ def uncover(item, chance):
     """ Return True if a search with the specified chance would
     uncover the item. Otherwise return False."""
     return item.desc['rarity'] <= chance
-
-
-

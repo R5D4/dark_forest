@@ -9,6 +9,7 @@ import items
 
 def scene_search_test():
     # Test if Scene.search works
+
     # create scene
     # create items
     # add items to item stash

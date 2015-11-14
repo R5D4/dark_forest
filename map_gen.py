@@ -18,6 +18,7 @@ from random import randint
 from random import choice
 import random
 import map_
+import items
 
 ########## GLOBAL THINGIES ##########
 
@@ -90,7 +91,8 @@ def new_map():
 
     generate_scenes(a_map)
     add_landmarks(a_map)
-    add_links(a_map)
+    add_item_stashes(a_map)
+    add_links(a_map) # add additional links
     add_descriptions(a_map)
 
     # add special scenes
@@ -147,43 +149,6 @@ def generate_scenes(a_map):
             candidate_scenes.remove(sc)
 
 
-def init_landmark_limits(n):
-    """ 
-    Return limits for each landmark type.
-    
-    n: number of scenes
-    """
-    limits = {}
-    # number of wallows on map
-    base = 1 # lower limit
-    rand_goal = randint(0, int(0.1 * n)) # random bounded goal
-    goal = max(base, rand_goal)
-    limits['wallow'] = goal # (so far, goal)
-    # number of rootings on map
-    base = 2 # lower limit
-    rand_goal = randint(0, int(0.2 * n)) # random bounded goal
-    goal = max(base, rand_goal)
-    limits['rooting'] = goal
-    # number of damaged trees on map
-    base = 0 # lower limit
-    rand_goal = randint(0, int(0.05 * n)) # random bounded goal
-    goal = max(base, rand_goal)
-    limits['damaged_tree'] = goal
-    # number of chewed open dead wood on map
-    goal = randint(1, int(0.05 * n)) # random bounded goal
-    limits['dead_wood'] = goal
-    # number of hog bed on map
-    goal = randint(1, 2) # random bounded goal
-    limits['bed'] = goal
-    # number of track on map
-    base = 5 # lower limit
-    rand_goal = randint(0, int(0.2 * n)) # random bounded goal
-    goal = max(base, rand_goal)
-    limits['track'] = goal
-
-    return limits
-
-
 def new_scene(a_map, scene_type, location):
     """ 
     Create a new scene in a_map at location.
@@ -226,7 +191,7 @@ def add_flora(scene):
 
 def add_landmarks(a_map):
     """ Add landmarks to the map."""
-    limits = init_landmark_limits(len(a_map.scenes))
+    limits = get_landmark_limits(len(a_map.scenes))
     candidates = a_map.scenes.values()
     # for each type of landmark
     for l_type, goal in limits.items():
@@ -244,6 +209,43 @@ def add_landmarks(a_map):
             count += 1
 
 
+def get_landmark_limits(n):
+    """ 
+    Return limits for each landmark type.
+    
+    n: number of scenes
+    """
+    limits = {}
+    # number of wallows on map
+    base = 1 # lower limit
+    rand_goal = randint(0, int(0.1 * n)) # random bounded goal
+    goal = max(base, rand_goal)
+    limits['wallow'] = goal # (so far, goal)
+    # number of rootings on map
+    base = 2 # lower limit
+    rand_goal = randint(0, int(0.2 * n)) # random bounded goal
+    goal = max(base, rand_goal)
+    limits['rooting'] = goal
+    # number of damaged trees on map
+    base = 0 # lower limit
+    rand_goal = randint(0, int(0.05 * n)) # random bounded goal
+    goal = max(base, rand_goal)
+    limits['damaged_tree'] = goal
+    # number of chewed open dead wood on map
+    goal = randint(1, int(0.05 * n)) # random bounded goal
+    limits['dead_wood'] = goal
+    # number of hog bed on map
+    goal = randint(1, 2) # random bounded goal
+    limits['bed'] = goal
+    # number of track on map
+    base = 5 # lower limit
+    rand_goal = randint(0, int(0.2 * n)) # random bounded goal
+    goal = max(base, rand_goal)
+    limits['track'] = goal
+
+    return limits
+
+
 def add_landmark(scene, l_type):
     """ Add the appropriate type of landmark to a scene."""
     if l_type in LANDMARKS.keys():
@@ -251,6 +253,47 @@ def add_landmark(scene, l_type):
         scene.features.append(lm)
     else:
         print "Invalid landmark type during landmark generation."
+
+
+def add_item_stashes(a_map):
+    """ Add item stashes to the map. One per scene."""
+    goal = get_item_stash_goal(len(a_map.scenes))
+    candidates = a_map.scenes.values()
+    count = 0
+    # loop until we've reached our goal or no more scenes
+    while count < goal and candidates:
+        # pick random scene from map
+        sc = choice(candidates)
+        # add the item stash to the scene
+        add_item_stash(sc)
+        # remove scene from list (one item stash/scene)
+        candidates.remove(sc)
+        # increment count
+        count += 1
+
+
+def get_item_stash_goal(n):
+    """ 
+    Return number of desired items stashes in map
+    
+    n: number of scenes
+    """
+    base = 1 # minimum 1 item stash on map
+    # rand_goal = randint(0, int(0.1 * n)) # random bounded goal
+    rand_goal = n # for testing, one item stash in every scene
+    limit = max(base, rand_goal)
+    return limit
+
+
+def add_item_stash(scene):
+    """ Add an item stash to a scene."""
+    # create 1-2 weapons
+    w = []
+    for i in range(randint(1, 2)):
+        w.append(items.new_weapon())
+    # create item stash and add to scene
+    stash = map_.ItemStash(w)
+    scene.features.append(stash)
 
 
 def add_descriptions(a_map):

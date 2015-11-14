@@ -10,6 +10,53 @@ import map_gen
 import map_
 
 
+def add_item_stash_test():
+    # Test if item stash is added to a scene correctly
+    a_map = map_.Map('story')
+
+    for i in xrange(50):
+        # create scene
+        sc = map_gen.new_scene(a_map, 'random', (0,0))
+        # create item stash
+        map_gen.add_item_stash(sc)
+        # find item stash
+        stash = None
+        for f in sc.features:
+            if isinstance(sc, map_.ItemStash):
+                stash = f
+        n = len(f.hidden_items)
+        # test number of items in item stash
+        ok_(n >= 1 and n <= 2)
+
+
+def add_item_stashes_test():
+    # Test if the correct number of item stashes are added
+    a_map = map_.Map('story')
+    map_gen.generate_scenes(a_map)
+    map_gen.add_item_stashes(a_map)
+    
+    # Test that no scene has more than one landmark
+    nmap = 0 # total number of stashes in a map
+    for sc in a_map.scenes.values():
+        nsc = 0 # number of stashes in one scene
+        for f in sc.features:
+            if isinstance(f, map_.ItemStash):
+                nsc +=1
+        ok_(nsc <= 1)
+        if nsc:
+            nmap += 1
+    # Test if the correct number of item stashes are added
+    n = len(a_map.scenes.values())
+    ok_(nmap >= 1 and nmap <= 0.1*n)
+
+
+def get_item_stash_goal_test():
+    # Test for correct goal of number of item stashes
+    n = 100
+    goal = map_gen.get_item_stash_goal(n)
+    ok_(goal >= 1 and goal <= 10)
+
+
 def add_landmark_test():
     # Test if a landmark is properly added to a scene
     for l_type in map_gen.LANDMARKS.keys():
@@ -18,6 +65,20 @@ def add_landmark_test():
         map_gen.add_description(sc)
         # check if the specified Landmark object is in features
         ok_(l_type in sc.description)
+
+
+def get_landmark_limits_test():
+    # test if generated values are within limits
+    n = 100
+    for i in xrange(0, 100): # 100 trials
+        limits = map_gen.get_landmark_limits(n)
+        print limits
+        ok_(limits['wallow'] >= 1 and limits['wallow'] <= 10)
+        ok_(limits['rooting'] >= 2 and limits['rooting'] <= 20)
+        ok_(limits['damaged_tree'] >= 0 and limits['damaged_tree'] <= 5)
+        ok_(limits['dead_wood'] >= 1 and limits['dead_wood'] <= 5)
+        ok_(limits['bed'] >= 1 and limits['bed'] <= 2)
+        ok_(limits['track'] >= 5 and limits['track'] <= 20)
 
 
 def add_landmarks_test():
@@ -48,20 +109,6 @@ def add_flora_test():
         ok_('understory' in scene.description)
         ok_('shrubs' in scene.description)
         ok_('floor' in scene.description)
-
-
-def init_landmark_limits_test():
-    # test if generated values are within limits
-    n = 100
-    for i in xrange(0, 100): # 100 trials
-        limits = map_gen.init_landmark_limits(n)
-        print limits
-        ok_(limits['wallow'] >= 1 and limits['wallow'] <= 10)
-        ok_(limits['rooting'] >= 2 and limits['rooting'] <= 20)
-        ok_(limits['damaged_tree'] >= 0 and limits['damaged_tree'] <= 5)
-        ok_(limits['dead_wood'] >= 1 and limits['dead_wood'] <= 5)
-        ok_(limits['bed'] >= 1 and limits['bed'] <= 2)
-        ok_(limits['track'] >= 5 and limits['track'] <= 20)
 
 
 def add_links_test():
