@@ -192,6 +192,7 @@ class Scene(object):
             if action in ENV_ACTIONS['look']:
                 self.describe()
                 self.print_encounter_msg()
+                self.print_items()
             elif action in ENV_ACTIONS['map']:
                 self.scene_map.draw_map(self.location)
             elif action in ENV_ACTIONS['time']:
@@ -308,6 +309,16 @@ class Scene(object):
         """ Print a message indicating if the boss is in the area."""
         if self.flags['encounter']:
             print "You see the boar! You don't think it notices you."
+
+    def print_items(self):
+        """ Print list of accessible items in the scene if any."""
+        if self.items:
+            msg = ["You see the following items:"]
+            for item in self.items:
+                msg.append("{} {}".format(self.items.index(item),
+                                          item.desc['name']))
+            print '\n'.join(msg)
+
 
     def update_encounter(self):
         """
