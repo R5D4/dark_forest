@@ -279,8 +279,8 @@ def get_item_stash_goal(n):
     n: number of scenes
     """
     base = 1 # minimum 1 item stash on map
-    # rand_goal = randint(0, int(0.1 * n)) # random bounded goal
-    rand_goal = n # for testing, one item stash in every scene
+    rand_goal = randint(0, int(0.1 * n)) # random bounded goal
+    # rand_goal = n # for testing, one item stash in every scene
     limit = max(base, rand_goal)
     return limit
 
