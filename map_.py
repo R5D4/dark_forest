@@ -167,18 +167,21 @@ class Scene(object):
         # 3. Enter user-input loop
         while True:
             action = raw_input("> ")
+            # exit scene
             if action in self.exits.keys() and self.flags['can_leave']:
                 self.advance_clock('travel')
                 return self.exits.get(action) 
+            # enter combat
             elif combat.ATTACK in action and self.flags['encounter']:
                 return combat.begin_combat(self.characters, self, True)
+            # map commands
             else: 
                 self.process_action(action)
                 # check after every user action if boss attacks
                 # if the boss attacks, go into combat directly 
-                if self.get_boss_attack():
-                    print "The boar notices you and charges!"
-                    return combat.begin_combat(self.characters, self, True)
+                #if self.get_boss_attack():
+                #    print "The boar notices you and charges!"
+                #    return combat.begin_combat(self.characters, self, True)
 
     def process_action(self, r_action):
         """ Process user action that doesn't change scenes."""
@@ -189,6 +192,7 @@ class Scene(object):
         args = args.strip()
         player = self.characters['player']
         
+        # NOTE: time loop goes in here? 
         if action in SUPPORTED_ACTIONS:
             if action in ENV_ACTIONS['look']:
                 self.describe()
