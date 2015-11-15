@@ -29,6 +29,7 @@ ENV_ACTIONS = {
     'unequip': ['u', 'unequip'],
     'examine': ['x', 'examine'],
     'search': ['search'],
+    'take': ['take'],
     'help': ['h', 'help']
 }
 # make single list of supported actions to check against user action
@@ -223,11 +224,32 @@ class Scene(object):
             elif action in ENV_ACTIONS['search']:
                 self.advance_clock('search')
                 print self.search()
+            elif action in ENV_ACTIONS['take']:
+                print self.take(args)
             elif action in ENV_ACTIONS['help']:
                 print self.process_help()
                 
         else:
             print "You can't do that."
+
+    def take(self, args):
+        """ Take an item from the scene. Return output string."""
+        player = self.characters['player']
+        if not args:
+            message = "Please indicate item ID."
+        else:
+            item = None
+            try:
+                item = self.items[int(args)]
+            except:
+                return "No such item."
+            if item is not None:
+                # add item to inventory
+                player.pick_up(item)
+                # remove item from scene
+                self.items.remove(item)
+                message = "Took {}.".format(item.desc['name'])
+        return message
 
     def search(self):
         """ Search the scene and uncover items. Return output string."""
@@ -247,7 +269,6 @@ class Scene(object):
         else:
             msg.append("You found nothing.")
         return '\n'.join(msg)
-        
 
     def process_help(self):
         """ Process the 'help' command. Return output string."""
@@ -257,7 +278,7 @@ class Scene(object):
         return '\n'.join(message)
 
     def examine(self, args):
-        """ Process the 'examine' command. Return output string."""
+        """ Examine an item in player inventory. Return output string."""
         player = self.characters['player']
         if not args:
             message = "Please indicate inventory item ID."
