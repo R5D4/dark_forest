@@ -7,19 +7,57 @@ import char
 import items
 
 
+def take_test():
+    # Test Scene.take
+
+    ## Setup
+    # create scene
+    a_map = map_.Map('story')
+    a_map.add_player()
+    sc = map_gen.new_scene(a_map, 'random', (0,0))
+    # empty player inventory
+    player = sc.characters['player']
+    player.inventory = []
+    # create item
+    w = items.get_weapon("Hunting Knife")
+    # add items to scene
+    sc.items.append(w)
+
+    ## Testing the take method
+    # no item ID
+    msg = sc.take("")
+    ok_(msg == "Please indicate item ID.")
+    # invalid item ID
+    msg = sc.take('9')
+    ok_(msg == "No such item.")
+    # invalid item ID 
+    msg = sc.take('nop')
+    ok_(msg == "No such item.")
+    # valid scenario
+    msg = sc.take('0')
+    ok_(msg == "Took Hunting Knife.")
+    
+
 def scene_search_test():
-    # Test if Scene.search works
+    # Test Scene.search (the search command)
 
     # create scene
+    a_map = map_.Map('story')
+    sc = map_gen.new_scene(a_map, 'random', (0,0))
     # create items
+    wps = [items.get_weapon("Hunting Knife")]
     # add items to item stash
+    stash = map_.ItemStash(wps)
     # add item stash to scene
+    sc.features.append(stash)
     # search scene and check results
-    pass
+    msg = sc.search()
+    ok_("Hunting Knife" in msg)
 
 
 def search_test():
-    # Test if ItemStash.search works
+    # Test ItemStash.search
+
     hidden = []
     # generate weapon 1
     w1 = items.new_weapon()
