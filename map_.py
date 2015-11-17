@@ -176,12 +176,15 @@ class Scene(object):
                 return combat.begin_combat(self.characters, self, True)
             # map commands
             else: 
+                # if cmd takes no time, process command
+                # else (cmd takes at least 1 tick):
+                    # loop until command finished or boss encountered
+                        # do command for one clock tick
+                        # advance clock by one tick
+                        # update encounter
+                            # if encountered boss, exit loop
+                            # else, continue
                 self.process_action(action)
-                # check after every user action if boss attacks
-                # if the boss attacks, go into combat directly 
-                #if self.get_boss_attack():
-                #    print "The boar notices you and charges!"
-                #    return combat.begin_combat(self.characters, self, True)
 
     def process_action(self, r_action):
         """ Process user action that doesn't change scenes."""
@@ -192,7 +195,6 @@ class Scene(object):
         args = args.strip()
         player = self.characters['player']
         
-        # NOTE: time loop goes in here? 
         if action in SUPPORTED_ACTIONS:
             if action in ENV_ACTIONS['look']:
                 self.describe()

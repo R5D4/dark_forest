@@ -2,6 +2,7 @@
 This module provides time functions.
 """
 
+TICK = 1 # one tick = 1 hour
 START_TIME = 17 # Default start time (5pm)
 ACTION_DURATION = {
                   'travel': 1,
@@ -33,7 +34,12 @@ class GameClock(object):
     def __init__(self):
         self.time = START_TIME
 
+    def tick(self):
+        """ Advance time by one clock tick."""
+        self.time = (self.time + TICK) % 24
+
     def advance_time(self, action):
+        # NOTE: will be obsoleted with new user input loop
         """ Advance time by the duration of the action."""
         self.time = (self.time + ACTION_DURATION[action]) % 24
 
