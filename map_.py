@@ -222,9 +222,9 @@ class Scene(object):
             elif action in ENV_ACTIONS['inventory']:
                 print player.get_inventory()
             elif action in ENV_ACTIONS['equip']:
-                print self.process_equip(args)
+                print self.equip(args)
             elif action in ENV_ACTIONS['unequip']:
-                print self.process_unequip(args)
+                print self.unequip(args)
             elif action in ENV_ACTIONS['examine']:
                 print self.examine(args)
             elif action in ENV_ACTIONS['search']:
@@ -233,8 +233,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['take']:
                 print self.take(args)
             elif action in ENV_ACTIONS['help']:
-                print self.process_help()
-                
+                print self.print_help()
         else:
             print "You can't do that."
 
@@ -276,7 +275,7 @@ class Scene(object):
             msg.append("You found nothing.")
         return '\n'.join(msg)
 
-    def process_help(self):
+    def print_help(self):
         """ Process the 'help' command. Return output string."""
         message = []
         for cmd, keywords in ENV_ACTIONS.items():
@@ -298,7 +297,7 @@ class Scene(object):
                 message = item.get_info()
         return message
 
-    def process_unequip(self, args):
+    def unequip(self, args):
         """ Process the 'unequip' command. Return output string."""
         player = self.characters['player']
         # if no arguments specified, return error message
@@ -308,7 +307,7 @@ class Scene(object):
             message = player.unequip(args)
         return message
 
-    def process_equip(self, args):
+    def equip(self, args):
         """ Process the 'equip' command. Return output string if applicable."""
         out_str = ''
         player = self.characters['player']

@@ -96,11 +96,11 @@ def search_test():
     ok_(stash.hidden_items == [w3])
 
 
-def process_help_test():
-    # Test the process_help method
+def print_help_test():
+    # Test the print_help method
     player = char.Player()
     scene = map_.Scene({'player': player})
-    msg = scene.process_help()
+    msg = scene.print_help()
     ok_("look: ['l', 'look']" in msg)
 
 
@@ -142,8 +142,8 @@ def update_encounter_test():
     ok_(sc.update_encounter() == 14)
 
 
-def process_equip_test():
-    # Test Scene.process_equip method
+def equip_test():
+    # Test Scene.equip method
     player = char.Player()
     scene = map_.Scene({'player': player})
     wpn_desc = {
@@ -159,6 +159,6 @@ def process_equip_test():
     wpn = items.Weapon(wpn_desc)
     player.inventory = [wpn]
     args = '0'
-    out = scene.process_equip(args)
+    out = scene.equip(args)
     print out
     ok_(out == 'Equipped Testing Sword.')
