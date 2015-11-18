@@ -370,6 +370,13 @@ class Scene(object):
         # for diagnostic
         return chance
 
+    def tick(self):
+        """ Advance the clock by one tick."""
+        self.scene_map.clock.tick()
+        # NOTE: we can put all sorts of checks in this method that
+        # happens with every clock tick
+        # e.g. heal the boss, update encounter chance
+
     def advance_clock(self, action):
         """ 
         Advance the clock by duration of action
