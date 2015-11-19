@@ -205,16 +205,16 @@ class Scene(object):
             elif action in ENV_ACTIONS['time']:
                 print "Time is {}:00".format(self.scene_map.clock.time)
             elif action in ENV_ACTIONS['wait']:
-                print "You wait for 1 hour."
+                print "You wait."
                 self.advance_clock('wait')
                 self.update_encounter()
             elif action in ENV_ACTIONS['rest']:
-                print "You rest for 3 hours."
+                print "You rest."
                 self.advance_clock('rest')
                 print player.rest()
                 self.update_encounter()
             elif action in ENV_ACTIONS['pray']:
-                print "You offer a prayer to Elbereth (1 hour)."
+                print "You offer a prayer to Elbereth."
                 self.advance_clock('pray')
                 self.update_encounter()
             elif action in ENV_ACTIONS['stats']:
