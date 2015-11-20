@@ -11,21 +11,16 @@ def init_test():
     ok_(clock.time == 17)
 
 
-def advance_time_test():
+def tick_test():
     clock = game_clock.GameClock()
     clock.time = 0 # reset time to something easier to work with
-    clock.advance_time('travel')
+    clock.tick()
     ok_(clock.time == 1)
-    clock.time = 0 
-    clock.advance_time('wait')
-    ok_(clock.time == 1)
-    clock.time = 0 
-    clock.advance_time('rest')
-    ok_(clock.time == 3)
-    clock.time = 0 
-    clock.advance_time('pray')
-    ok_(clock.time == 1)
-
+    clock.tick()
+    ok_(clock.time == 2)
+    clock.time = 23
+    clock.tick()
+    ok_(clock.time == 0)
 
 def time_period_test():
     clock = game_clock.GameClock()

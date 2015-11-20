@@ -32,6 +32,16 @@ ENV_ACTIONS = {
     'take': ['take'],
     'help': ['h', 'help']
 }
+
+# action durations in hours
+ACTION_DURATION = {
+                    # travel always take one clock tick
+                    'wait': 1,
+                    'rest': 3,
+                    'pray': 1,
+                    'search': 1
+                  }
+
 # make single list of supported actions to check against user action
 SUPPORTED_ACTIONS = \
     [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
@@ -158,7 +168,8 @@ class Scene(object):
         self.describe()
 
         # 2. Calculate encounter chance and print encounter message
-        self.update_encounter()
+        e_chance = self.update_encounter()
+        print "Encounter chance is {}".format(e_chance)
         # if the boss attacks, go into combat directly 
         if self.get_boss_attack():
             print "The boar notices you and charges!"
@@ -169,22 +180,17 @@ class Scene(object):
             action = raw_input("> ")
             # exit scene
             if action in self.exits.keys() and self.flags['can_leave']:
-                self.advance_clock('travel')
+                self.clock_tick()
                 return self.exits.get(action) 
             # enter combat
             elif combat.ATTACK in action and self.flags['encounter']:
                 return combat.begin_combat(self.characters, self, True)
             # map commands
             else: 
-                # if cmd takes no time, process command
-                # else (cmd takes at least 1 tick):
-                    # loop until command finished or boss encountered
-                        # do command for one clock tick
-                        # advance clock by one tick
-                        # update encounter
-                            # if encountered boss, exit loop
-                            # else, continue
                 self.process_action(action)
+                if self.get_boss_attack():
+                    print "The boar notices you and charges!"
+                    return combat.begin_combat(self.characters, self, True)
 
     def process_action(self, r_action):
         """ Process user action that doesn't change scenes."""
@@ -206,17 +212,12 @@ class Scene(object):
                 print "Time is {}:00".format(self.scene_map.clock.time)
             elif action in ENV_ACTIONS['wait']:
                 print "You wait."
-                self.advance_clock('wait')
-                self.update_encounter()
+                print self.clock_tick()
             elif action in ENV_ACTIONS['rest']:
-                print "You rest."
-                self.advance_clock('rest')
-                print player.rest()
-                self.update_encounter()
+                print self.cmd_rest()
             elif action in ENV_ACTIONS['pray']:
                 print "You offer a prayer to Elbereth."
-                self.advance_clock('pray')
-                self.update_encounter()
+                print self.clock_tick()
             elif action in ENV_ACTIONS['stats']:
                 print player.get_stats()
             elif action in ENV_ACTIONS['inventory']:
@@ -228,8 +229,8 @@ class Scene(object):
             elif action in ENV_ACTIONS['examine']:
                 print self.examine(args)
             elif action in ENV_ACTIONS['search']:
-                self.advance_clock('search')
                 print self.search()
+                print self.clock_tick()
             elif action in ENV_ACTIONS['take']:
                 print self.take(args)
             elif action in ENV_ACTIONS['help']:
@@ -237,6 +238,22 @@ class Scene(object):
         else:
             print "You can't do that."
 
+    ##### Command Methods ##### 
+
+    def cmd_rest(self):
+        """ Execute 'rest' command. Return output string."""
+        msg = ["You take a rest."]
+        n = ACTION_DURATION['rest']
+        player = self.characters['player']
+        # loop until command finished or boss encountered
+        for i in xrange(n):
+            if self.flags['encounter']:
+                msg.append("You are woken up by a noise!")
+                break
+            msg.append(player.rest())
+            msg.append(self.clock_tick())
+        return '\n'.join(msg)
+        
     def take(self, args):
         """ Take an item from the scene. Return output string."""
         player = self.characters['player']
@@ -322,6 +339,8 @@ class Scene(object):
                 return "No such item."
             out_str = player.equip(item)
         return out_str
+    
+    ##### Helper Methods #####
 
     def describe(self): 
         """
@@ -329,12 +348,6 @@ class Scene(object):
         """
         print '-' * 40
         print self.description
-        # print out the list of uncovered items in the scene
-    
-    def print_encounter_msg(self):
-        """ Print a message indicating if the boss is in the area."""
-        if self.flags['encounter']:
-            print "You see the boar! You don't think it notices you."
 
     def print_items(self):
         """ Print list of accessible items in the scene if any."""
@@ -345,6 +358,10 @@ class Scene(object):
                                           item.desc['name']))
             print '\n'.join(msg)
 
+    def print_encounter_msg(self):
+        """ Print a message indicating if the boss is in the area."""
+        if self.flags['encounter']:
+            print "You see the boar! You don't think it notices you."
 
     def update_encounter(self):
         """
@@ -362,7 +379,6 @@ class Scene(object):
         # signs of activity bonus
         clue_mod = 0 
         chance = base + time_mod + environ_mod + clue_mod
-        print "Encounter chance: {}".format(chance)
         # Determine if boss is encountered
         self.flags['encounter'] = randint(1,100) <= chance
         # Print encounter message
@@ -370,18 +386,14 @@ class Scene(object):
         # for diagnostic
         return chance
 
-    def tick(self):
-        """ Advance the clock by one tick."""
-        self.scene_map.clock.tick()
-        # NOTE: we can put all sorts of checks in this method that
-        # happens with every clock tick
-        # e.g. heal the boss, update encounter chance
-
-    def advance_clock(self, action):
-        """ 
-        Advance the clock by duration of action
+    def clock_tick(self):
         """
-        self.scene_map.clock.advance_time(action)
+        Advance the clock by one tick. Return encounter chance message."
+
+        Update time-based flags. Recalculates encounter chance.
+        """
+        self.scene_map.clock.tick()
+        return "Encounter chance is {}".format(self.update_encounter())
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""

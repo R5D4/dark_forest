@@ -193,13 +193,6 @@ class Character(object):
             msg = "Nothing happened."
         return msg
 
-    def rest(self):
-        """ Rest and recover some HP."""
-        # recover 1/8 of max HP
-        hp = int(floor((0.125 * self.effective_stats['max_HP'])))
-        return self.update_hp(hp)
-
-
 ########## PLAYER CHARACTER ##########
 
 
@@ -281,6 +274,17 @@ the North.'
         # return message
         return message
 
+    def rest(self):
+        """ Rest for one clock tick. Recover some HP."""
+        # recover 1/8 of max HP per tick
+        hp = int(floor((0.125 * self.effective_stats['max_HP'])))
+        return self.update_hp(hp)
+
+    def sleep(self):
+        """ Sleep for one clock tick. Recover some HP."""
+        # recover 1/10 of max HP per tick
+        hp = int(floor((0.1 * self.effective_stats['max_HP'])))
+        return self.update_hp(hp)
 
 ########## BOSS CHARACTER ##########
 

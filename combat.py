@@ -97,7 +97,7 @@ def begin_combat(characters, scene, can_run):
 
 def run_away(scene):
     """ Run away from combat. Return name of a random adjacent location."""
-    scene.advance_clock('travel')
+    scene.clock_tick()
     name = choice(scene.exits.values())
     return name
 

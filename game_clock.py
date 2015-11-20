@@ -4,23 +4,6 @@ This module provides time functions.
 
 TICK = 1 # one tick = 1 hour
 START_TIME = 17 # Default start time (5pm)
-ACTION_DURATION = {
-                    'look': 0,
-                    'map': 0,
-                    'time': 0,
-                    'wait': 1,
-                    'rest': 3,
-                    'pray': 1,
-                    'stats': 0,
-                    'inventory': 0,
-                    'equip': 0,
-                    'unequip': 0,
-                    'examine': 0,
-                    'search': 1,
-                    'take': 0,
-                    'help': 0,
-                    'travel': 1
-                  }
 TIME_PERIOD = [ 'midnight', # 0
                 'night2', 'night2', 'night2', 'night2', 'night2', # 1-5
                 'sunrise', # 6
@@ -47,11 +30,6 @@ class GameClock(object):
     def tick(self):
         """ Advance time by one clock tick."""
         self.time = (self.time + TICK) % 24
-
-    def advance_time(self, action):
-        # NOTE: will be obsoleted with new user input loop
-        """ Advance time by the duration of the action."""
-        self.time = (self.time + ACTION_DURATION[action]) % 24
 
     def time_period(self):
         """ Return time period keyword."""
