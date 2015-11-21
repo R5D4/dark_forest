@@ -35,7 +35,7 @@ class Character(object):
     desc:
         {'name': string, 'job': string, 'bio': string}
     inventory:
-        [Item1, Item2, ...}
+        [Item1, Item2, ...]
     equipped:
         {slot: Item, ...}
     attacks:
@@ -148,15 +148,16 @@ class Character(object):
 
     def get_inventory(self):
         """ Return inventory desc. Uses index as unique ID for each item."""
-        inv = []
-        #print self.inventory
+        if not self.inventory: # empty
+            return "Inventory is empty."
+        msg = []
         for index, item in enumerate(self.inventory):
             if item.equipped:
                 eq = '[E]'
             else:
                 eq = ''
-            inv.append( "{}: {}{}".format(index, item.desc['name'], eq) )
-        return '\n'.join(inv)
+            msg.append( "{}: {}{}".format(index, item.desc['name'], eq) )
+        return '\n'.join(msg)
 
     def get_equipped(self):
         """ Return equipped items' names."""

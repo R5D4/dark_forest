@@ -133,6 +133,12 @@ def unequip_test():
 def get_inventory_test():
     # check if inventory is printed correctly
     player = char.Player()
+    player.inventory = []
+
+    # empty inventory
+    ok_(player.get_inventory() == "Inventory is empty.")
+
+    # add a weapon to inventory
     wpn_desc = {
                'name': 'Testing Sword',
                'class': '1h_sword',
@@ -144,7 +150,6 @@ def get_inventory_test():
                'description': "For testing only!"
                }
     weapon = items.Weapon(wpn_desc)
-    player.inventory = []
     player.pick_up(weapon)
 
     # unequipped
