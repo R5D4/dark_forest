@@ -65,18 +65,23 @@ def begin_combat(characters, scene, can_run):
         if turn == 'player':
             print "Player's turn:"
             print "HP: %d" % player.health['HP']
-            action = raw_input("> ")
-            if action in player.attacks.keys():
-                player_attack = player.attacks[action]
-                player_attack.attack(player, boar)
-            elif action in SUPPORTED_ACTIONS:
-                if action in ENV_ACTIONS['run'] and can_run:
-                    print "Run away! Run away!"
-                    return run_away(scene)               
-                elif action in ENV_ACTIONS['run'] and not can_run:
-                    print "Can't run away!"
-            else:
-                print "You can't do that."
+            # loop until valid combat command is entered
+            valid = False
+            while not valid:
+                action = raw_input("> ")
+                if action in player.attacks.keys():
+                    player_attack = player.attacks[action]
+                    player_attack.attack(player, boar)
+                    valid = True
+                elif action in SUPPORTED_ACTIONS:
+                    if action in ENV_ACTIONS['run'] and can_run:
+                        print "Run away! Run away!"
+                        return run_away(scene)               
+                    elif action in ENV_ACTIONS['run'] and not can_run:
+                        print "Can't run away!"
+                    valid = True
+                else:
+                    print "You can't do that."
             turn = 'boar'
             raw_input("Press any key to continue.")
         elif turn == 'boar':
