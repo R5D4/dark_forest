@@ -5,16 +5,30 @@ import char
 import items
 
 
+def sleep_test():
+    # Test if sleep recovers the appropriate amount of HP
+    player = char.Player()
+    player.effective_stats['max_HP'] = 100
+    # rest should recover 8 HP
+    player.health['HP'] = 0
+    print player.sleep()
+    ok_(player.health['HP'] == 8)
+    # sleep should recover 1 HP (max_HP limit)
+    player.health['HP'] = 99
+    print player.sleep()
+    ok_(player.health['HP'] == 100)
+
+
 def rest_test():
     # Test if resting recovers the appropriate amount of HP
     player = char.Player()
     player.effective_stats['max_HP'] = 100
-    # rest should recover 12 HP (rounded down from 12.5)
+    # rest should recover 5 HP
     player.health['HP'] = 0
     print player.rest()
-    ok_(player.health['HP'] == 12)
-    # rest should recover 10 HP (max_HP limit)
-    player.health['HP'] = 90
+    ok_(player.health['HP'] == 5)
+    # rest should recover 1 HP (max_HP limit)
+    player.health['HP'] = 99
     print player.rest()
     ok_(player.health['HP'] == 100)
 

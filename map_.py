@@ -22,6 +22,7 @@ ENV_ACTIONS = {
     'time': ['t', 'time'],
     'wait': ['wait'],
     'rest': ['r', 'rest'],
+    'sleep': ['sleep'],
     'pray': ['p', 'pray'],
     'stats': ['stats'],
     'inventory': ['i', 'inventory'],
@@ -38,6 +39,7 @@ ACTION_DURATION = {
                     # travel always take one clock tick
                     'wait': 1,
                     'rest': 3,
+                    'sleep': 8,
                     'pray': 1,
                     'search': 1
                   }
@@ -216,6 +218,8 @@ class Scene(object):
                 print self.clock_tick()
             elif action in ENV_ACTIONS['rest']:
                 print self.cmd_rest()
+            elif action in ENV_ACTIONS['sleep']:
+                print self.cmd_sleep()
             elif action in ENV_ACTIONS['pray']:
                 print "You offer a prayer to Elbereth."
                 print self.clock_tick()
@@ -243,15 +247,29 @@ class Scene(object):
 
     def cmd_rest(self):
         """ Execute 'rest' command. Return output string."""
-        msg = ["You take a rest."]
         n = ACTION_DURATION['rest']
         player = self.characters['player']
+        msg = ["You take a rest ({} hrs).".format(n)]
         # loop until command finished or boss encountered
         for i in xrange(n):
             if self.flags['encounter']:
                 msg.append("You are woken up by a noise!")
                 break
             msg.append(player.rest())
+            msg.append(self.clock_tick())
+        return '\n'.join(msg)
+
+    def cmd_sleep(self):
+        """ Execute 'sleep' command. Return output string."""
+        n = ACTION_DURATION['sleep']
+        player = self.characters['player']
+        msg = ["You set up camp for a well-deserved rest ({} hrs).".format(n)]
+        # loop until command finished or boss encountered
+        for i in xrange(n):
+            if self.flags['encounter']:
+                msg.append("You are woken up by a noise!")
+                break
+            msg.append(player.sleep())
             msg.append(self.clock_tick())
         return '\n'.join(msg)
         
@@ -294,7 +312,7 @@ class Scene(object):
         return '\n'.join(msg)
 
     def print_help(self):
-        """ Process the 'help' command. Return output string."""
+        """ Return output string containing all commands and shortcuts."""
         message = []
         for cmd, keywords in ENV_ACTIONS.items():
             message.append("{}: {}".format(cmd, keywords))

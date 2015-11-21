@@ -276,14 +276,14 @@ the North.'
 
     def rest(self):
         """ Rest for one clock tick. Recover some HP."""
-        # recover 1/8 of max HP per tick
-        hp = int(floor((0.125 * self.effective_stats['max_HP'])))
+        # recover 5% of max HP per tick
+        hp = int(floor((0.05 * self.effective_stats['max_HP'])))
         return self.update_hp(hp)
 
     def sleep(self):
         """ Sleep for one clock tick. Recover some HP."""
-        # recover 1/10 of max HP per tick
-        hp = int(floor((0.1 * self.effective_stats['max_HP'])))
+        # recover 8% of max HP per tick
+        hp = int(floor((0.08 * self.effective_stats['max_HP'])))
         return self.update_hp(hp)
 
 ########## BOSS CHARACTER ##########

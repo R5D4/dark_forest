@@ -50,7 +50,7 @@ Tirith."
     'require': {'str': 2, 'dex': 5},
     'bonus': {'str': 0, 'dex': 5, 'AC': 2},
     'dmg_roll': '1d8',
-    'description': "An elegant lowbow made by one of the sylvan folk."
+    'description': "An elegant longbow made by one of the sylvan folk."
     },
     {
     'name': 'Hunting Knife',
