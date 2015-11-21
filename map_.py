@@ -170,6 +170,7 @@ class Scene(object):
         # 2. Calculate encounter chance and print encounter message
         e_chance = self.update_encounter()
         print "Encounter chance is {}".format(e_chance)
+        self.print_encounter_msg()
         # if the boss attacks, go into combat directly 
         if self.get_boss_attack():
             print "The boar notices you and charges!"
@@ -188,6 +189,7 @@ class Scene(object):
             # map commands
             else: 
                 self.process_action(action)
+                self.print_encounter_msg() # print encounter msg after action
                 if self.get_boss_attack():
                     print "The boar notices you and charges!"
                     return combat.begin_combat(self.characters, self, True)
@@ -204,7 +206,6 @@ class Scene(object):
         if action in SUPPORTED_ACTIONS:
             if action in ENV_ACTIONS['look']:
                 self.describe()
-                self.print_encounter_msg()
                 self.print_items()
             elif action in ENV_ACTIONS['map']:
                 self.scene_map.draw_map(self.location)
@@ -379,10 +380,8 @@ class Scene(object):
         # signs of activity bonus
         clue_mod = 0 
         chance = base + time_mod + environ_mod + clue_mod
-        # Determine if boss is encountered
+        # set the encounter flag to True if boss in encountered
         self.flags['encounter'] = randint(1,100) <= chance
-        # Print encounter message
-        self.print_encounter_msg()
         # for diagnostic
         return chance
 
