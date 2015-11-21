@@ -17,7 +17,7 @@ WEAPONS = [
     # {
     #   'name': <Weapon Name>
     #   'class': <Weapon Class>
-    #   'rarity': <0-99 increasing rarity>
+    #   'rarity': <0-99 higher is rarer>
     #   'attack': <weapon's attack type>
     #   'attribute': <the player attribute the weapon depends on>
     #   'min_str': <min str rating to use>
@@ -35,7 +35,7 @@ WEAPONS = [
     'atk_type': 'slash',
     'attribute': 'str',
     'require': {'str': 4, 'dex': 4},
-    'bonus': {'str': 2, 'dex': 2, 'AC': 3},
+    'bonus': {'str': 3, 'dex': 3, 'AC': 3},
     'dmg_roll': '1d8',
     'description': "A hand-and-a-half sword commonly used by men of Gondor.\
 There are faint markings on the pommel depicting the tiered rings of Minas \
