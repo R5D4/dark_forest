@@ -7,8 +7,38 @@ import char
 import items
 
 
-def take_test():
-    # Test Scene.take
+def cmd_drop_test():
+    # Test Scene.cmd_drop
+
+    ## Setup
+    # create scene
+    a_map = map_.Map('story')
+    a_map.add_player()
+    sc = map_gen.new_scene(a_map, 'random', (0,0))
+    # create item
+    w = items.get_weapon("Hunting Knife")
+    # initialize player inventory
+    player = sc.characters['player']
+    player.inventory = [w]
+
+    ## Testing the 'drop' command
+    # no item ID
+    msg = sc.cmd_drop(None)
+    ok_(msg == "Please indicate item ID.")
+    # invalid item ID
+    msg = sc.cmd_drop('9')
+    ok_(msg == "No such item.")
+    # invalid item ID 
+    msg = sc.cmd_drop('nop')
+    ok_(msg == "No such item.")
+    # valid scenario
+    msg = sc.cmd_drop('0')
+    ok_(msg == "Dropped Hunting Knife.")
+    ok_(w not in player.inventory)
+
+
+def cmd_take_test():
+    # Test Scene.cmd_take
 
     ## Setup
     # create scene
@@ -23,19 +53,20 @@ def take_test():
     # add items to scene
     sc.items.append(w)
 
-    ## Testing the take method
+    ## Testing the 'take' command
     # no item ID
-    msg = sc.take("")
+    msg = sc.cmd_take(None)
     ok_(msg == "Please indicate item ID.")
     # invalid item ID
-    msg = sc.take('9')
+    msg = sc.cmd_take('9')
     ok_(msg == "No such item.")
     # invalid item ID 
-    msg = sc.take('nop')
+    msg = sc.cmd_take('nop')
     ok_(msg == "No such item.")
     # valid scenario
-    msg = sc.take('0')
+    msg = sc.cmd_take('0')
     ok_(msg == "Took Hunting Knife.")
+    ok_(w not in sc.items)
     
 
 def scene_search_test():

@@ -26,11 +26,12 @@ ENV_ACTIONS = {
     'pray': ['p', 'pray'],
     'stats': ['stats'],
     'inventory': ['i', 'inventory'],
+    'search': ['search'],
+    'take': ['take'],
+    'drop': ['d', 'drop'],
     'equip': ['q', 'equip'],
     'unequip': ['u', 'unequip'],
     'examine': ['x', 'examine'],
-    'search': ['search'],
-    'take': ['take'],
     'help': ['h', 'help']
 }
 
@@ -237,7 +238,9 @@ class Scene(object):
                 print self.search()
                 print self.clock_tick()
             elif action in ENV_ACTIONS['take']:
-                print self.take(args)
+                print self.cmd_take(args)
+            elif action in ENV_ACTIONS['drop']:
+                print self.cmd_drop(args)
             elif action in ENV_ACTIONS['help']:
                 print self.print_help()
         else:
@@ -273,8 +276,12 @@ class Scene(object):
             msg.append(self.clock_tick())
         return '\n'.join(msg)
         
-    def take(self, args):
-        """ Take an item from the scene. Return output string."""
+    def cmd_take(self, args):
+        """
+        Take an item from the scene. Return output string.
+
+        args - itemID as string
+        """
         player = self.characters['player']
         if not args:
             message = "Please indicate item ID."
@@ -290,6 +297,29 @@ class Scene(object):
                 # remove item from scene
                 self.items.remove(item)
                 message = "Took {}.".format(item.desc['name'])
+        return message
+
+    def cmd_drop(self, args):
+        """
+        Drop an item from inventory into the scene. Return output.
+        
+        args - itemID as string
+        """
+        player = self.characters['player']
+        if not args:
+            message = "Please indicate item ID."
+        else:
+            item = None
+            try:
+                item = player.inventory[int(args)]
+            except:
+                return "No such item."
+            if item is not None:
+                # add item to scene
+                self.items.append(item)
+                # remove item from inventory
+                player.inventory.remove(item)
+                message = "Dropped {}.".format(item.desc['name'])
         return message
 
     def search(self):
