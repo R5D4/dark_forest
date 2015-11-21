@@ -234,9 +234,9 @@ the North.'
         # Check if item already equipped
         if item.equipped:
             return "The item is already equipped."
-        # Check stat requirements
+        # Check stat requirements (base stats)
         for attr, req in item.desc['require'].items():
-            if self.effective_stats[attr] < req:
+            if self.base_stats[attr] < req:
                 return "Unable to equip {}, need {}.".format(item.desc['name'],
                                                          item.desc['require'])
         # Figure out which slots to use
