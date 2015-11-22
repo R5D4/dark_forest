@@ -16,6 +16,7 @@ import game_clock
 
 ##########  CONSTANTS ##########
 
+# available actions in a scene
 ENV_ACTIONS = {
     'look': ['l', 'look'],
     'map': ['m', 'map'],
@@ -49,7 +50,7 @@ ACTION_DURATION = {
 SUPPORTED_ACTIONS = \
     [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
 
-ENCOUNTER_BASE = 1 # 1% base encounter chance
+ENCOUNTER_BASE = 1 # 1% base encounter chance for all scenes
 # time-based bonus for encounter chance (%)
 ENCOUNTER_TIME = { 
                  'sunrise': 2,
@@ -527,7 +528,7 @@ class Story(Scene):
         self.describe()
         return 'entrance'
 
-########## FEATURE CLASS ##########
+########## SCENE FEATURE CLASS ##########
 
 
 class Feature(object):
@@ -544,7 +545,7 @@ class Feature(object):
         """Return this feature's contribution to encounter rate."""
         return 0
 
-########## FEATURE SUBCLASSES ##########
+########## SCENE FEATURE SUBCLASSES ##########
 
 
 class ItemStash(Feature):

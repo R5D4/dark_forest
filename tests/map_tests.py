@@ -7,6 +7,33 @@ import char
 import items
 
 
+def cmd_unequip_test():
+    # Test 'unequip' command
+    pass
+
+
+def cmd_equip_test():
+    # Test 'equip' command
+    player = char.Player()
+    scene = map_.Scene({'player': player})
+    wpn_desc = {
+               'name': 'Testing Sword',
+               'class': '1h_sword',
+               'atk_type': 'slash',
+               'attribute': 'str',
+               'require': {'str': 0, 'dex': 0},
+               'bonus': {'str': 0, 'dex': 0},
+               'dmg_roll': '1d8',
+               'description': "For testing only!"
+               }
+    wpn = items.Weapon(wpn_desc)
+    player.inventory = [wpn]
+    args = '0'
+    out = scene.cmd_equip(args)
+    print out
+    ok_(out == 'Equipped Testing Sword.')
+
+
 def cmd_drop_test():
     # Test 'drop' command
 
@@ -173,28 +200,3 @@ def update_encounter_test():
     # chance = 10 + 3 + 1 = 14
     ok_(sc.update_encounter() == 14)
 
-
-def cmd_equip_test():
-    # Test 'equip' command
-    player = char.Player()
-    scene = map_.Scene({'player': player})
-    wpn_desc = {
-               'name': 'Testing Sword',
-               'class': '1h_sword',
-               'atk_type': 'slash',
-               'attribute': 'str',
-               'require': {'str': 0, 'dex': 0},
-               'bonus': {'str': 0, 'dex': 0},
-               'dmg_roll': '1d8',
-               'description': "For testing only!"
-               }
-    wpn = items.Weapon(wpn_desc)
-    player.inventory = [wpn]
-    args = '0'
-    out = scene.cmd_equip(args)
-    print out
-    ok_(out == 'Equipped Testing Sword.')
-
-def cmd_unequip_test():
-    # Test 'unequip' command
-    pass
