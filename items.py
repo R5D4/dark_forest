@@ -36,8 +36,11 @@ class Weapon(Item):
 
     def __init__(self, desc):
         super(Weapon, self).__init__()
+        # initialize attributes
         self.item_type = 'weapon'
         self.desc.update(desc)
+        self.attack = None
+        # generate the associated Attack object
         self.generate_attack(desc)
 
     def generate_attack(self, desc):

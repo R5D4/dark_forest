@@ -8,7 +8,7 @@ import items
 
 
 def cmd_drop_test():
-    # Test Scene.cmd_drop
+    # Test 'drop' command
 
     ## Setup
     # create scene
@@ -38,7 +38,7 @@ def cmd_drop_test():
 
 
 def cmd_take_test():
-    # Test Scene.cmd_take
+    # Test 'take' command
 
     ## Setup
     # create scene
@@ -69,8 +69,8 @@ def cmd_take_test():
     ok_(w not in sc.items)
     
 
-def scene_search_test():
-    # Test Scene.search (the search command)
+def cmd_search_test():
+    # Test 'search' command
 
     # create scene
     a_map = map_.Map('story')
@@ -82,12 +82,12 @@ def scene_search_test():
     # add item stash to scene
     sc.features.append(stash)
     # search scene and check results
-    msg = sc.search()
+    msg = sc.cmd_search()
     ok_("Hunting Knife" in msg)
 
 
-def search_test():
-    # Test ItemStash.search
+def itemstash_search_test():
+    # Test ItemStash.search method
 
     hidden = []
     # generate weapon 1
@@ -127,15 +127,16 @@ def search_test():
     ok_(stash.hidden_items == [w3])
 
 
-def print_help_test():
+def cmd_help_test():
     # Test the print_help method
     player = char.Player()
     scene = map_.Scene({'player': player})
-    msg = scene.print_help()
-    ok_("look: ['l', 'look']" in msg)
+    msg = scene.cmd_help()
+    for k in map_.ENV_ACTIONS.keys():
+        ok_(k in msg)
 
 
-def examine_test():
+def cmd_examine_test():
     # Tests the Scene.examine method
     player = char.Player()
     scene = map_.Scene({'player': player})
@@ -152,7 +153,7 @@ def examine_test():
     wpn = items.Weapon(wpn_desc)
     player.inventory = [wpn]
     args = '0'
-    out = scene.examine(args)
+    out = scene.cmd_examine(args)
     print out
     ok_('name: Testing Sword' in out)
 
@@ -173,8 +174,8 @@ def update_encounter_test():
     ok_(sc.update_encounter() == 14)
 
 
-def equip_test():
-    # Test Scene.equip method
+def cmd_equip_test():
+    # Test 'equip' command
     player = char.Player()
     scene = map_.Scene({'player': player})
     wpn_desc = {
@@ -190,6 +191,10 @@ def equip_test():
     wpn = items.Weapon(wpn_desc)
     player.inventory = [wpn]
     args = '0'
-    out = scene.equip(args)
+    out = scene.cmd_equip(args)
     print out
     ok_(out == 'Equipped Testing Sword.')
+
+def cmd_unequip_test():
+    # Test 'unequip' command
+    pass

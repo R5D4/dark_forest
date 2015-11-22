@@ -174,7 +174,7 @@ class Scene(object):
         e_chance = self.update_encounter()
         print "Encounter chance is {}".format(e_chance)
         self.print_encounter_msg()
-        # if the boss attacks, go into combat directly 
+        # if the boss attacks, go into combat
         if self.get_boss_attack():
             print "The boar notices you and charges!"
             return combat.begin_combat(self.characters, self, True)
@@ -193,6 +193,7 @@ class Scene(object):
             else: 
                 self.process_action(action)
                 self.print_encounter_msg() # print encounter msg after action
+                # if the boss attacks, go into combat
                 if self.get_boss_attack():
                     print "The boar notices you and charges!"
                     return combat.begin_combat(self.characters, self, True)
@@ -215,6 +216,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['time']:
                 print "Time is {}:00".format(self.scene_map.clock.time)
             elif action in ENV_ACTIONS['wait']:
+                # advance clock by one tick
                 print "You wait."
                 print self.clock_tick()
             elif action in ENV_ACTIONS['rest']:
@@ -222,6 +224,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['sleep']:
                 print self.cmd_sleep()
             elif action in ENV_ACTIONS['pray']:
+                # currently only advances the clock by one tick
                 print "You offer a prayer to Elbereth."
                 print self.clock_tick()
             elif action in ENV_ACTIONS['stats']:
@@ -229,20 +232,20 @@ class Scene(object):
             elif action in ENV_ACTIONS['inventory']:
                 print player.get_inventory()
             elif action in ENV_ACTIONS['equip']:
-                print self.equip(args)
+                print self.cmd_equip(args)
             elif action in ENV_ACTIONS['unequip']:
-                print self.unequip(args)
+                print self.cmd_unequip(args)
             elif action in ENV_ACTIONS['examine']:
-                print self.examine(args)
+                print self.cmd_examine(args)
             elif action in ENV_ACTIONS['search']:
-                print self.search()
+                print self.cmd_search()
                 print self.clock_tick()
             elif action in ENV_ACTIONS['take']:
                 print self.cmd_take(args)
             elif action in ENV_ACTIONS['drop']:
                 print self.cmd_drop(args)
             elif action in ENV_ACTIONS['help']:
-                print self.print_help()
+                print self.cmd_help()
         else:
             print "You can't do that."
 
@@ -322,7 +325,7 @@ class Scene(object):
                 message = "Dropped {}.".format(item.desc['name'])
         return message
 
-    def search(self):
+    def cmd_search(self):
         """ Search the scene and uncover items. Return output string."""
         uncovered = [] # list of all uncovered items from all item stashes
         # search all item stashes in this scene
@@ -341,14 +344,14 @@ class Scene(object):
             msg.append("You found nothing.")
         return '\n'.join(msg)
 
-    def print_help(self):
+    def cmd_help(self):
         """ Return output string containing all commands and shortcuts."""
         message = []
         for cmd, keywords in ENV_ACTIONS.items():
             message.append("{}: {}".format(cmd, keywords))
         return '\n'.join(message)
 
-    def examine(self, args):
+    def cmd_examine(self, args):
         """ Examine an item in player inventory. Return output string."""
         player = self.characters['player']
         if not args:
@@ -363,7 +366,7 @@ class Scene(object):
                 message = item.get_info()
         return message
 
-    def unequip(self, args):
+    def cmd_unequip(self, args):
         """ Process the 'unequip' command. Return output string."""
         player = self.characters['player']
         # if no arguments specified, return error message
@@ -373,7 +376,7 @@ class Scene(object):
             message = player.unequip(args)
         return message
 
-    def equip(self, args):
+    def cmd_equip(self, args):
         """ Process the 'equip' command. Return output string if applicable."""
         out_str = ''
         player = self.characters['player']
