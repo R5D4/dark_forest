@@ -51,6 +51,15 @@ class Weapon(Item):
 
 class Armor(Item):
     """ Represents a piece of armor."""
+
+    def __init__(self, desc):
+        super(Armor, self).__init__()
+        # initialize attributes
+        self.item_type = 'weapon'
+        self.desc.update(desc)
+        self.attack = None
+        # generate the associated Attack object
+        self.generate_attack(desc)
     
 
 class Consummable(Item):

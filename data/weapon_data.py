@@ -8,6 +8,7 @@ This module contains weapon descriptions.
 #'knife'
 #'axe'
 #'bow'
+#'shield'
 
 # see data/attack_data.py for list of possible attack types
 
@@ -48,7 +49,7 @@ Tirith."
     'atk_type': 'pierce',
     'attribute': 'dex',
     'require': {'str': 2, 'dex': 5},
-    'bonus': {'str': 0, 'dex': 5, 'AC': 2},
+    'bonus': {'str': 0, 'dex': 5, 'AC': 1},
     'dmg_roll': '1d8',
     'description': "An elegant longbow made by one of the sylvan folk."
     },
@@ -59,9 +60,21 @@ Tirith."
     'atk_type': 'pierce',
     'attribute': 'dex',
     'require': {'str': 0, 'dex': 0},
-    'bonus': {'str': 1, 'dex': 3, 'AC': 5},
+    'bonus': {'str': 1, 'dex': 4, 'AC': 2},
     'dmg_roll': '1d6',
     'description': "A standard hunting knife. Simple but effective."
+    },
+    {
+    'name': 'Knight Shield',
+    'class': 'shield',
+    'rarity': 80,
+    'atk_type': 'blunt',
+    'attribute': 'str',
+    'require': {'str': 6, 'dex': 0},
+    'bonus': {'str': 0, 'dex': -4, 'AC': 10},
+    'dmg_roll': '1d4',
+    'description': "A large sturdy shield almost as tall as you. The White \
+Tree of Minath Tirith is painted on top of a black background."
     },
 #    {
 #    'name': 'Estoc',
