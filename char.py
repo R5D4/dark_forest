@@ -231,7 +231,7 @@ the North.'
             self.equip(item)
 
     def equip(self, item):
-        """ Equip the item. Return True if success. False otherwise."""
+        """ Equip the item. Return status message."""
         # Check if item already equipped
         if item.equipped:
             return "The item is already equipped."
