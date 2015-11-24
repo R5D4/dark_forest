@@ -37,7 +37,9 @@ class Character(object):
     inventory:
         [Item1, Item2, ...]
     equipped:
-        {slot: Item, ...}
+        [Item1, Item2, ...]
+    equipped_names:
+        {slot: Item Name, ...}
     attacks:
         {attack name: Attack obj}
     """
@@ -57,7 +59,8 @@ class Character(object):
         self.effective_stats = {}
         self.health = {}
         self.inventory = []
-        self.equipped = {}
+        self.equipped = [] 
+        self.equipped_names = {} # just the names of equipped items
         self.attacks = {}
         # update stats and health
         self.init_stats(min_stats)
@@ -84,7 +87,7 @@ class Character(object):
     def init_equip_slots(self, slots):
         """ Add equipment slots."""
         for s in slots:
-            self.equipped[s] = None
+            self.equipped_names[s] = None
 
     def update_stats(self):
         """ Calculate bonus and effective stats."""
@@ -95,14 +98,13 @@ class Character(object):
         self.attacks = {}
 
         # update stats for each equipped item
-        for item in self.equipped.values():
-            if item: # not None
-                # calculate bonus from equipment
-                for attr, bonus in item.desc['bonus'].items():
-                    self.bonus_stats[attr] += bonus
-                # update attacks
-                if item.item_type == 'weapon':
-                    self.attacks.update({item.desc['atk_type']: item.attack})
+        for item in self.equipped:
+            # calculate bonus from equipment
+            for attr, bonus in item.desc['bonus'].items():
+                self.bonus_stats[attr] += bonus
+            # update attacks
+            if item.item_type == 'weapon':
+                self.attacks.update({item.desc['atk_type']: item.attack})
 
         # update effective stats
         for s in self.base_stats.keys():
@@ -162,12 +164,8 @@ class Character(object):
     def get_equipped(self):
         """ Return equipped items' names."""
         eq = []
-        for loc, item in self.equipped.items():
-            if item is None:
-                desc = 'Empty'
-            else:
-                desc = item.desc['name']
-            eq.append('{}: {}'.format(loc, desc))
+        for slot, name in self.equipped_names.items():
+            eq.append('{}: {}'.format(slot, name))
         return '\n'.join(eq)
             
     def update_hp(self, d):
@@ -240,30 +238,42 @@ the North.'
             if self.base_stats[attr] < req:
                 return "Unable to equip {}, need {}.".format(item.desc['name'],
                                                          item.desc['require'])
-        # Figure out which slots to use
-        #if item.desc['class'] in ['2h_sword', 'bow']:
-        #    self.unequip('R_hand')
-        #    self.unequip('L_hand')
-        #    self.equipped['R_hand'] = item
-        #    self.equipped['L_hand'] = item
-        #else:
-        # NOTE: Add 2h support
-        self.unequip('R_hand')
-        self.equipped['R_hand'] = item
+        # unequip each slot the item needs
+        for slot in item.desc['slot']:
+            if self.equipped_names[slot]: # not None
+                self.unequip(slot)
+        # equip the item and add its name in the appropriate slots
+        self.equipped.append(item)
         item.equipped = True
-        message = "Equipped {}.".format(item.desc['name'])
+        for slot in item.desc['slot']:
+            self.equipped_names[slot] = item.desc['name']
+        # update character stats to reflect new equipment
         self.update_stats()
+        # return message indicating success
+        message = "Equipped {}.".format(item.desc['name'])
         return message
+
+    def get_slot_item(self, slot):
+        """ Return Item object equipped in the given slot. Default None."""
+        found = None
+        name = self.equipped_names[slot] # look for item with this name
+        for item in self.equipped:
+            if item.desc['name'] == name:
+                found = item
+                break
+        return found
 
     def unequip(self, slot):
         """ Unequip item in given slot. Return message of what happened."""
-        # if there is something equipped in the slot
-        if self.equipped[slot]: # not None
-            item = self.equipped[slot]
+        item = self.get_slot_item(slot) # get item in slot
+        if item: # not None
             # remove the item from equipped
-            self.equipped[slot] = None
+            self.equipped.remove(item)
             # update item status to indicate it's unequipped
             item.equipped = False
+            # set all slots that the item uses to None
+            for slot in item.desc['slot']:
+                item.equipped_names[slot] = None
             # set message indicating success
             message = "Unequipped {}.".format(item.desc['name'])
         # else - nothing equipped in the slot
@@ -320,7 +330,7 @@ tusks.'
             self.equip(item)
 
     def equip(self, item):
-        """ Equip the item. Return True if success. False otherwise."""
+        """ Equip the item. Return output message."""
         # Decide where to equip the item
         # NOTE: for now equip everything on the head
         self.equipped['head'] = item
