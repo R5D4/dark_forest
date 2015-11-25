@@ -52,8 +52,8 @@ def take_damage_test():
     ok_(player.health['HP'] == 100)
 
 
-def equip_test():
-    # Test if equipment restrictions are honoured
+def player_equip_test():
+    # Test if equipment restrictions are honoured for the player
     player = char.Player()
     player.unequip('R_hand')
     player.inventory = []

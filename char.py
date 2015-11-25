@@ -230,7 +230,7 @@ the North.'
 
     def equip(self, item):
         """ Equip the item. Return status message."""
-        # Check if item already equipped
+        # Check if item is already equipped
         if item.equipped:
             return "The item is already equipped."
         # Check stat requirements (base stats)
@@ -273,7 +273,7 @@ the North.'
             item.equipped = False
             # set all slots that the item uses to None
             for slot in item.desc['slot']:
-                item.equipped_names[slot] = None
+                self.equipped_names[slot] = None
             # set message indicating success
             message = "Unequipped {}.".format(item.desc['name'])
         # else - nothing equipped in the slot
