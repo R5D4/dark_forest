@@ -333,11 +333,10 @@ tusks.'
         """ Equip the item. Return output message."""
         # Decide where to equip the item
         # NOTE: for now equip everything on the head
-        self.equipped['head'] = item
+        self.equipped.append(item)
+        self.equipped_names['head'] = item.desc['name']
         # update item's equipped status
         item.equipped = True
-        if item.item_type == 'weapon':
-            self.attacks.update({item.desc['atk_type']: item.attack})
         # update stats
         self.update_stats()
         return "Equipped {}.".format(item.desc['name'])
