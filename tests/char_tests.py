@@ -3,46 +3,7 @@
 from nose.tools import *
 import char
 import items
-
-# 1H, equip in R_hand
-TESTING_SWORD = {
-           'name': 'Testing Sword',
-           'class': '1h_sword',
-           'rarity': 0,
-           'slot': ['R_hand'],
-           'atk_type': 'slash',
-           'attribute': 'str',
-           'require': {'str': 4, 'dex': 4},
-           'bonus': {'str': 2, 'dex': 0},
-           'dmg_roll': '1d8',
-           'description': "For testing only!"
-           }
-# 1H, equip in L_hand
-TESTING_SHIELD = {
-           'name': 'Testing Shield',
-           'class': 'shield',
-           'rarity': 0,
-           'slot': ['L_hand'],
-           'atk_type': 'blunt',
-           'attribute': 'str',
-           'require': {'str': 4, 'dex': 0},
-           'bonus': {'str': 0, 'dex': -4, 'AC': 10},
-           'dmg_roll': '1d4',
-           'description': "For testing only!"
-           }
-# 2H, equip in both R_hand and L_hand
-TESTING_BOW = {
-           'name': 'Testing Bow',
-           'class': 'bow',
-           'rarity': 0,
-           'slot': ['R_hand', 'L_hand'],
-           'atk_type': 'pierce',
-           'attribute': 'dex',
-           'require': {'str': 0, 'dex': 5},
-           'bonus': {'str': 0, 'dex': 2},
-           'dmg_roll': '1d8',
-           'description': "For testing only!"
-           }
+from tests.test_data import *
 
 
 def sleep_test():
@@ -162,23 +123,15 @@ def update_stats_test():
     pass
 
 
-def unequip_test():
+def player_unequip_test():
+    # Test unequipping items for the player
+    # NOTE: need more test cases
     player = char.Player()
-    wpn_desc = {
-               'name': 'Testing Sword',
-               'class': '1h_sword',
-               'atk_type': 'slash',
-               'attribute': 'str',
-               'require': {'str': 0, 'dex': 0},
-               'bonus': {'str': 0, 'dex': 0},
-               'dmg_roll': '1d8',
-               'description': "For testing only!"
-               }
-    weapon = items.Weapon(wpn_desc)
+    weapon = items.Weapon(TESTING_KNIFE)
     player.inventory = []
     player.pick_up(weapon)
     player.equip(weapon)
-    ok_(player.unequip('R_hand') == "Unequipped Testing Sword.")
+    ok_(player.unequip('R_hand') == "Unequipped Testing Knife.")
     ok_(player.unequip('R_hand') == "Nothing equipped.")
 
 
@@ -191,43 +144,23 @@ def get_inventory_test():
     ok_(player.get_inventory() == "Inventory is empty.")
 
     # add a weapon to inventory
-    wpn_desc = {
-               'name': 'Testing Sword',
-               'class': '1h_sword',
-               'atk_type': 'slash',
-               'attribute': 'str',
-               'require': {'str': 0, 'dex': 0},
-               'bonus': {'str': 0, 'dex': 0},
-               'dmg_roll': '1d8',
-               'description': "For testing only!"
-               }
-    weapon = items.Weapon(wpn_desc)
+    weapon = items.Weapon(TESTING_KNIFE)
     player.pick_up(weapon)
 
     # unequipped
-    ok_(player.get_inventory() == "0: Testing Sword")
+    ok_(player.get_inventory() == "0: Testing Knife")
 
     # equipped
     player.equip(weapon)
-    ok_(player.get_inventory() == "0: Testing Sword[E]")
+    ok_(player.get_inventory() == "0: Testing Knife[E]")
 
 
 def get_equipped_test():
     # Test if equipped items are output correctly
     player = char.Player()
-    wpn_desc = {
-               'name': 'Testing Sword',
-               'class': '1h_sword',
-               'atk_type': 'slash',
-               'attribute': 'str',
-               'require': {'str': 0, 'dex': 0},
-               'bonus': {'str': 0, 'dex': 0},
-               'dmg_roll': '1d8',
-               'description': "For testing only!"
-               }
-    weapon = items.Weapon(wpn_desc)
+    weapon = items.Weapon(TESTING_KNIFE)
     player.equip(weapon)
     print player.get_equipped()
-    ok_("R_hand: Testing Sword" in player.get_equipped())
+    ok_("R_hand: Testing Knife" in player.get_equipped())
 
 

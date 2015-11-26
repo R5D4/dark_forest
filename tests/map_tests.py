@@ -5,6 +5,7 @@ import map_
 import map_gen
 import char
 import items
+from tests.test_data import *
 
 
 def cmd_unequip_test():
@@ -16,22 +17,24 @@ def cmd_equip_test():
     # Test 'equip' command
     player = char.Player()
     scene = map_.Scene({'player': player})
-    wpn_desc = {
-               'name': 'Testing Sword',
-               'class': '1h_sword',
-               'atk_type': 'slash',
-               'attribute': 'str',
-               'require': {'str': 0, 'dex': 0},
-               'bonus': {'str': 0, 'dex': 0},
-               'dmg_roll': '1d8',
-               'description': "For testing only!"
-               }
-    wpn = items.Weapon(wpn_desc)
+    wpn = items.Weapon(TESTING_SWORD)
     player.inventory = [wpn]
-    args = '0'
-    out = scene.cmd_equip(args)
-    print out
-    ok_(out == 'Equipped Testing Sword.')
+
+    # no argument
+    args = None
+    msg = scene.cmd_equip(args)
+    print msg
+    ok_('R_hand' in msg)
+    # argument is out of bound
+    args = '10'
+    msg = scene.cmd_equip(args)
+    print msg
+    ok_(msg == "No such item.")
+    # argument isn't an integer
+    args = 'hello'
+    msg = scene.cmd_equip(args)
+    print msg
+    ok_(msg == "No such item.")
 
 
 def cmd_drop_test():
