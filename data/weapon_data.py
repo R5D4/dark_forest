@@ -19,15 +19,13 @@ WEAPONS = [
     #   'name': <Weapon Name>
     #   'class': <Weapon Class>
     #   'rarity': <0-99 higher is rarer>
-    #   'attack': <weapon's attack type>
+    #   'slot': <list of slot id strings>
+    #   'atk_type': <weapon's attack type>
     #   'attribute': <the player attribute the weapon depends on>
-    #   'min_str': <min str rating to use>
-    #   'min_dex': <min dex rating to use>
-    #   'hit_bonus': <weapon's hit bonus>
+    #   'require': <minimum base stats required to equip>
+    #   'bonus': <weapon's stat bonuses>
     #   'dmg_roll': <weapon's dmg die>
-    #   'dmg_bonus': <weapon's dmg bonus>
-    #   'AC_bonus': (<ability name>, <AC_bonus>)
-    #   'description': <Flavor text description>
+    #   'description': <Flavour text description>
     # }
     {
     'name': 'Knight Sword',
