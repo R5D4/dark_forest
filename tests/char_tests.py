@@ -76,31 +76,40 @@ def player_equip_test():
     msg = player.equip(testing_sword)
     print msg
     ok_(msg == "Equipped Testing Sword.")
+    ok_(testing_sword.equipped)
     ok_(testing_sword in player.equipped)
     ok_(player.equipped_names['R_hand'] == "Testing Sword")
     # already equipped
     msg = player.equip(testing_sword)
     print msg
     ok_(msg == "The item is already equipped.")
+    ok_(testing_sword.equipped)
     ok_(testing_sword in player.equipped)
     ok_(player.equipped_names['R_hand'] == "Testing Sword")
 
-    ## Equip a weapon in the empty hand
+    ## Equip two weapons
     testing_shield = items.Weapon(TESTING_SHIELD)
     player.base_stats['str'] = 10 
     player.pick_up(testing_shield)
     msg = player.equip(testing_shield)
     print msg
     ok_(msg == "Equipped Testing Shield.")
+    ok_(testing_sword.equipped)
+    ok_(testing_shield.equipped)
+    ok_(testing_sword in player.equipped)
     ok_(testing_shield in player.equipped)
+    ok_(player.equipped_names['R_hand'] == "Testing Sword")
     ok_(player.equipped_names['L_hand'] == "Testing Shield")
 
-    ## Equip 2H weapon while equipping one weapon in each hand
+    ## Equip 2H weapon while both hands have weapons
     testing_bow = items.Weapon(TESTING_BOW)
     player.base_stats['dex'] = 10 
     msg = player.equip(testing_bow)
     print msg
     ok_(msg == "Equipped Testing Bow.")
+    ok_(testing_bow.equipped)
+    ok_(not testing_sword.equipped)
+    ok_(not testing_shield.equipped)
     ok_(testing_bow in player.equipped)
     ok_(testing_sword not in player.equipped)
     ok_(testing_shield not in player.equipped)
@@ -111,10 +120,67 @@ def player_equip_test():
     msg = player.equip(testing_sword)
     print msg
     ok_(msg == "Equipped Testing Sword.")
+    ok_(testing_sword.equipped)
+    ok_(not testing_bow.equipped)
     ok_(testing_sword in player.equipped)
     ok_(testing_bow not in player.equipped)
     ok_(player.equipped_names['R_hand'] == "Testing Sword")
     ok_(player.equipped_names['L_hand'] == None)
+
+
+def player_unequip_test():
+    # Test unequipping items for the player
+
+    # initialize player equipment and inventory
+    player = char.Player()
+    player.unequip('R_hand')
+    player.inventory = []
+    sword  = items.Weapon(TESTING_SWORD)
+    shield  = items.Weapon(TESTING_SHIELD)
+    bow  = items.Weapon(TESTING_BOW)
+    player.pick_up(sword)
+    player.pick_up(shield)
+    player.pick_up(bow)
+
+    # set player base stats to be able to equip everything
+    player.base_stats.update({'dex': 100, 'str': 100, 'AC': 100})
+
+    # unequip empty slot
+    ok_(player.unequip('R_hand') == "Nothing equipped.")
+
+    # unequip only weapon
+    player.equip(sword)
+    ok_(player.unequip('R_hand') == "Unequipped Testing Sword.")
+    ok_(sword not in player.equipped)
+    ok_(not sword.equipped)
+    ok_(player.equipped_names['R_hand'] is None)
+
+    # unequip one of two weapons
+    player.equip(sword)
+    player.equip(shield)
+    ok_(player.unequip('R_hand') == "Unequipped Testing Sword.")
+    ok_(sword not in player.equipped)
+    ok_(not sword.equipped)
+    ok_(player.equipped_names['R_hand'] is None)
+    ok_(shield in player.equipped)
+    ok_(shield.equipped)
+    ok_(player.equipped_names['L_hand'] == "Testing Shield")
+
+    ## unequip a 2H weapon
+    # unequip using R_hand
+    player.equip(bow)
+    ok_(player.unequip('R_hand') == "Unequipped Testing Bow.")
+    ok_(bow not in player.equipped)
+    ok_(not bow.equipped)
+    ok_(player.equipped_names['R_hand'] is None)
+    ok_(player.equipped_names['L_hand'] is None)
+    # unequip using L_hand
+    player.equip(bow)
+    ok_(player.unequip('L_hand') == "Unequipped Testing Bow.")
+    ok_(bow not in player.equipped)
+    ok_(not bow.equipped)
+    ok_(player.equipped_names['R_hand'] is None)
+    ok_(player.equipped_names['L_hand'] is None)
 
 
 def update_stats_test():
@@ -151,18 +217,6 @@ def update_stats_test():
     player.equip(w4)
     ok_(player.bonus_stats['dex'] == 10)
     ok_(player.effective_stats['dex'] == 110)
-
-
-def player_unequip_test():
-    # Test unequipping items for the player
-    # NOTE: need more test cases
-    player = char.Player()
-    weapon = items.Weapon(TESTING_KNIFE)
-    player.inventory = []
-    player.pick_up(weapon)
-    player.equip(weapon)
-    ok_(player.unequip('R_hand') == "Unequipped Testing Knife.")
-    ok_(player.unequip('R_hand') == "Nothing equipped.")
 
 
 def get_inventory_test():
