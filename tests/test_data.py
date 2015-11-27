@@ -9,7 +9,7 @@ TESTING_KNIFE = {
            'atk_type': 'pierce',
            'attribute': 'dex',
            'require': {'str': 0, 'dex': 0},
-           'bonus': {'str': 2, 'dex': 0, 'AC': 3},
+           'bonus': {'str': 0, 'dex': 10, 'AC': 0},
            'dmg_roll': '1d6',
            'description': "For testing only!"
            }
@@ -21,8 +21,8 @@ TESTING_SWORD = {
            'slot': ['R_hand'],
            'atk_type': 'slash',
            'attribute': 'str',
-           'require': {'str': 4, 'dex': 4},
-           'bonus': {'str': 2, 'dex': 0, 'AC': 2},
+           'require': {'str': 5, 'dex': 5},
+           'bonus': {'str': 10, 'dex': 0, 'AC': 0},
            'dmg_roll': '1d8',
            'description': "For testing only!"
            }
@@ -34,8 +34,8 @@ TESTING_SHIELD = {
            'slot': ['L_hand'],
            'atk_type': 'blunt',
            'attribute': 'str',
-           'require': {'str': 4, 'dex': 0},
-           'bonus': {'str': 0, 'dex': -4, 'AC': 10},
+           'require': {'str': 10, 'dex': 0},
+           'bonus': {'str': 0, 'dex': -10, 'AC': 20},
            'dmg_roll': '1d4',
            'description': "For testing only!"
            }
@@ -47,8 +47,8 @@ TESTING_BOW = {
            'slot': ['R_hand', 'L_hand'],
            'atk_type': 'pierce',
            'attribute': 'dex',
-           'require': {'str': 0, 'dex': 5},
-           'bonus': {'str': 0, 'dex': 2, 'AC': 2},
+           'require': {'str': 0, 'dex': 10},
+           'bonus': {'str': 0, 'dex': 10, 'AC': 0},
            'dmg_roll': '1d8',
            'description': "For testing only!"
            }

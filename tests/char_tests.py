@@ -72,7 +72,7 @@ def player_equip_test():
     ok_(testing_sword not in player.equipped)
     ok_(player.equipped_names['R_hand'] is None)
     # meets requirements
-    player.base_stats.update({'dex': 4, 'str': 4})
+    player.base_stats.update({'dex': 5, 'str': 5})
     msg = player.equip(testing_sword)
     print msg
     ok_(msg == "Equipped Testing Sword.")
@@ -87,6 +87,7 @@ def player_equip_test():
 
     ## Equip a weapon in the empty hand
     testing_shield = items.Weapon(TESTING_SHIELD)
+    player.base_stats['str'] = 10 
     player.pick_up(testing_shield)
     msg = player.equip(testing_shield)
     print msg
@@ -96,7 +97,7 @@ def player_equip_test():
 
     ## Equip 2H weapon while equipping one weapon in each hand
     testing_bow = items.Weapon(TESTING_BOW)
-    player.base_stats['dex'] = 5
+    player.base_stats['dex'] = 10 
     msg = player.equip(testing_bow)
     print msg
     ok_(msg == "Equipped Testing Bow.")
@@ -117,10 +118,39 @@ def player_equip_test():
 
 
 def update_stats_test():
-    # Test application of bonus stats and attacks on equipment change
-    # NOTE: implement this
+    # Test if bonus stat and effective stat are calculated properly
+
+    # unequip all items and empty inventory
     player = char.Player()
-    pass
+    player.unequip('R_hand')
+    player.inventory = []
+
+    # set player base stats to be able to equip everything
+    player.base_stats.update({'dex': 100, 'str': 100, 'AC': 100})
+
+    # one weapon (1H)
+    w1 = items.Weapon(TESTING_KNIFE)
+    player.equip(w1)
+    ok_(player.bonus_stats['dex'] == 10)
+    ok_(player.effective_stats['dex'] == 110)
+
+    # two weapons
+    w2 = items.Weapon(TESTING_SWORD)
+    w3 = items.Weapon(TESTING_SHIELD)
+    player.equip(w2)
+    player.equip(w3)
+    ok_(player.bonus_stats['str'] == 10)
+    ok_(player.bonus_stats['AC'] == 20)
+    ok_(player.bonus_stats['dex'] == -10)
+    ok_(player.effective_stats['str'] == 110)
+    ok_(player.effective_stats['AC'] == 120)
+    ok_(player.effective_stats['dex'] == 90)
+
+    # one weapon (2H)
+    w4 = items.Weapon(TESTING_BOW)
+    player.equip(w4)
+    ok_(player.bonus_stats['dex'] == 10)
+    ok_(player.effective_stats['dex'] == 110)
 
 
 def player_unequip_test():
