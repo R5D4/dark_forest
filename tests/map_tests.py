@@ -45,26 +45,78 @@ def cmd_drop_test():
     a_map = map_.Map('story')
     a_map.add_player()
     sc = map_gen.new_scene(a_map, 'random', (0,0))
-    # create item
-    w = items.get_weapon("Hunting Knife")
-    # initialize player inventory
+
+    # initialize player equipment and inventory
     player = sc.characters['player']
-    player.inventory = [w]
+    player.unequip('R_hand')
+    player.inventory = []
+    knife = items.Weapon(TESTING_KNIFE)
+    bow = items.Weapon(TESTING_BOW)
+    shield = items.Weapon(TESTING_SHIELD)
+
+    # set player base stats to be able to equip everything
+    player.base_stats.update({'dex': 100, 'str': 100, 'AC': 100})
 
     ## Testing the 'drop' command
     # no item ID
     msg = sc.cmd_drop(None)
     ok_(msg == "Please indicate item ID.")
-    # invalid item ID
+    # invalid item ID (out of range)
     msg = sc.cmd_drop('9')
     ok_(msg == "No such item.")
-    # invalid item ID 
+    # invalid item ID (not an integer)
     msg = sc.cmd_drop('nop')
     ok_(msg == "No such item.")
-    # valid scenario
+    # drop unequipped weapon
+    player.pick_up(knife)
     msg = sc.cmd_drop('0')
-    ok_(msg == "Dropped Hunting Knife.")
-    ok_(w not in player.inventory)
+    ok_(msg == "Dropped Testing Knife.")
+    ok_(knife not in player.inventory)
+    ok_(knife in sc.items)
+    # drop equipped weapon (1H)
+    sc.items = []
+    player.pick_up(knife)
+    player.equip(knife)
+    msg = sc.cmd_drop('0')
+    ok_(msg == "Dropped Testing Knife.")
+    ok_(not knife.equipped)
+    ok_(knife not in player.equipped)
+    ok_(player.equipped_names['R_hand'] is None)
+    ok_(knife not in player.inventory)
+    ok_(knife in sc.items)
+    # drop equipped weapon (2H)
+    sc.items = []
+    player.pick_up(bow)
+    player.equip(bow)
+    msg = sc.cmd_drop('0')
+    ok_(msg == "Dropped Testing Bow.")
+    ok_(not bow.equipped)
+    ok_(bow not in player.equipped)
+    ok_(player.equipped_names['R_hand'] is None)
+    ok_(player.equipped_names['L_hand'] is None)
+    ok_(bow not in player.inventory)
+    ok_(bow in sc.items)
+
+    ## drop one of two equipped weapons
+    sc.items = []
+    player.pick_up(shield)
+    player.pick_up(knife)
+    player.equip(shield)
+    player.equip(knife)
+    msg = sc.cmd_drop('0') # drop shield
+    # check left hand is unequipped
+    ok_(msg == "Dropped Testing Shield.")
+    ok_(not shield.equipped)
+    ok_(shield not in player.equipped)
+    ok_(player.equipped_names['L_hand'] is None)
+    ok_(shield not in player.inventory)
+    ok_(shield in sc.items)
+    # check right hand is still equipped
+    ok_(knife.equipped)
+    ok_(knife in player.equipped)
+    ok_(player.equipped_names['R_hand'] == "Testing Knife")
+    ok_(knife in player.inventory)
+    ok_(knife not in sc.items)
 
 
 def cmd_take_test():

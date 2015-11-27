@@ -319,6 +319,10 @@ class Scene(object):
             except:
                 return "No such item."
             if item is not None:
+                # if item is equipped, unequip it
+                if item.equipped:
+                    slot = item.desc['slot'][0] # we only need one slot
+                    self.cmd_unequip(slot)
                 # add item to scene
                 self.items.append(item)
                 # remove item from inventory
