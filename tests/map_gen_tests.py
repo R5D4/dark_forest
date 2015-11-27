@@ -47,7 +47,7 @@ def add_item_stashes_test():
             nmap += 1
     # Test if the correct number of item stashes are added
     n = len(a_map.scenes.values())
-    ok_(nmap >= 1 and nmap <= 0.1*n)
+    ok_(nmap >= 3 and nmap <= int(0.15*n))
 
 
 def get_item_stash_goal_test():
