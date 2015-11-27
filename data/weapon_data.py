@@ -68,7 +68,7 @@ Tirith."
     {
     'name': 'Knight Shield',
     'class': 'shield',
-    'rarity': 80,
+    'rarity': 90,
     'slot': ['L_hand'],
     'atk_type': 'blunt',
     'attribute': 'str',
@@ -78,20 +78,32 @@ Tirith."
     'description': "A large sturdy shield almost as tall as you. The White \
 Tree of Minath Tirith is painted on top of a black background."
     },
-#    {
-#    'name': 'Estoc',
-#    'class': '2h_sword',
-#    'attack': ['pierce'],
-#    'attribute': 'str',
-#    'min_str': 5,
-#    'min_dex': 3,
-#    'hit_bonus': 3,
-#    'dmg_roll': '1d8',
-#    'dmg_bonus': 3,
-#    'AC_bonus': ('parry', 1),
-#    'description': "A really long and straight sword. It's stiff and has no \
-#cutting edge. The blade comes to a fine point."
-#    },
+    {
+    'name': 'Estoc',
+    'class': '2h_sword',
+    'rarity': 60,
+    'slot': ['R_hand', 'L_hand'],
+    'atk_type': 'pierce',
+    'attribute': 'str',
+    'require': {'str': 6, 'dex': 5},
+    'bonus': {'str': 2, 'dex': 2, 'AC': 2},
+    'dmg_roll': '1d10',
+    'description': "A really long and straight sword. It's stiff and has no \
+cutting edge. The blade comes to a fine point."
+    },
+    {
+    'name': "Assassin's Dagger",
+    'class': 'knife',
+    'rarity': 80,
+    'slot': ['R_hand'],
+    'atk_type': 'pierce',
+    'attribute': 'dex',
+    'require': {'str': 0, 'dex': 8},
+    'bonus': {'str': 0, 'dex': 0, 'AC': 0},
+    'dmg_roll': '1d12',
+    'description': "An enchanted dagger used for assassinations. It easily \
+finds the heart of the target."
+    },
 #    {
 #    'name': 'Long Sword',
 #    'class': '2h_sword',

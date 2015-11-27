@@ -54,7 +54,7 @@ def get_item_stash_goal_test():
     # Test for correct goal of number of item stashes
     n = 100
     goal = map_gen.get_item_stash_goal(n)
-    ok_(goal >= 1 and goal <= 10)
+    ok_(goal >= 3 and goal <= 15)
 
 
 def add_landmark_test():
