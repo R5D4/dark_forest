@@ -15,7 +15,8 @@ python game.py
   * 'attack' - Attack the enemy once you see it
   * 'time' - Tell the time of day
   * 'wait' - Wait for 1 hour
-  * 'rest' - Rest for 3 hours (heals some hp)
+  * 'rest' - Rest for 3 hours (heals hp)
+  * 'sleep' - Sleep for 8 hours (heals hp)
   * 'pray' - Pray to Elbereth (takes 1 hour - does nothing currently)
   * 'stats' - Print character stats
   * 'inventory' - Print inventory and item ID
@@ -25,15 +26,17 @@ python game.py
   * 'examine <item ID>' - Examine item in inventory (specify item ID)
   * 'search' - Search the scene for loot (takes 1 hour)
   * 'take <item ID>' - Take an item from the area (specify item ID)
+  * 'drop <item ID>' - Drop an item from inventory into the scene
   * 'help' - Show all available commands
 
-### Combat Commands
+### Combat
   * Simplified verion of DnD 3.5e/Pathfinder
   * Attack options depends on the equipped weapon
   * e.g. Default weapon (Hunting Knife) provides the 'pierce' attack
   * Type 'pierce' once in combat to use it
 
 ### Gameplay tips
+* Search the map for artifacts from ancient battles!
 * The boss is more likely to be found where there are signs of its activity
 * There's a chance that the boss will attack you when encountered
 * 'run' from combat and 'rest' if you are low on HP
@@ -43,8 +46,7 @@ python game.py
 
 ## Unofficial Story
 Middle-Earth inspired.
-Update - new background story:
-* Class/race/background TBD
+* Age of the world at this point is unclear
 * Enter forest with minimal equipment
 * Evil power prevents you from leaving, must defeat boss
 
@@ -53,7 +55,7 @@ Update - new background story:
   * All scenes and map topography are procedurally generated!
   * 24-hour game clock with day/night cycle
   * Boss encounter chance depends on your natural surroundings and time
-  * Explore and find better weapons
+  * Explore and find better equipment
 2. Characters
   * 1 Player character and 1 Boss character
   * Equip different weapons to use different attacks
@@ -68,10 +70,8 @@ Update - new background story:
 
 ## Planned Features
 2. Items
-  * Properly implemented 2H weapons
-  * Armor and consummables
-2. Misc. Gameplay Mechanics
-  * Check for encounters every hour (boss can interrupt actions > 1 hour)
+  * Implement armor 
+  * Implement consummables 
 1. Character Update
   * Character classes
   * More boss types
@@ -87,6 +87,5 @@ Update - new background story:
 4. Interface
   * Interactive game interface with curses
 
-## Next Action
-  * Boss also heals outside combat
-  * Add more weapons
+## Next Major Update
+  * Gameplay mechanics update
