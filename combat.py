@@ -174,7 +174,7 @@ class Attack(object):
                 print self.messages['hit_success_msg']
                 print to_char.update_hp(-dmg)
         # noncritical hit roll, but beats enemy's AC
-        elif hit > hit_against:
+        elif hit > hit_against and hit_roll > 1: # miss on natural 1
             print self.messages['hit_success_msg']
             print "Calculating damage:",
             dmg = attribute + roll(self.dmg_roll, True)[0] 
