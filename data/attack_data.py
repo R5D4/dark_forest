@@ -5,8 +5,10 @@ This module contains data about attacks.
 # attack types
 #'slash'
 #'pierce'
-#'blunt'
+#'smash'
 #'charge'
+#'kick'
+#'bite'
 
 ATTACKS = { 
     # New attack template
@@ -30,7 +32,7 @@ ATTACKS = {
             'hit_success_msg': "The attack connects!",
             'hit_fail_msg': "The attack misses!",
             },
-    'blunt': {
+    'smash': {
             'prep_msg': "The %s smashes the %s with its %s!",
             'hit_crit_msg': "The attack shatters the defences!",
             'hit_success_msg': "The smash connects!",

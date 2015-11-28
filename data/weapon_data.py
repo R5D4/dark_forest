@@ -24,6 +24,7 @@ WEAPONS = [
     #   'attribute': <the player attribute the weapon depends on>
     #   'require': <minimum base stats required to equip>
     #   'bonus': <weapon's stat bonuses>
+    #   'crit_range': <min attack roll that will crit>
     #   'dmg_roll': <weapon's dmg die>
     #   'description': <Flavour text description>
     # }
@@ -36,6 +37,7 @@ WEAPONS = [
     'attribute': 'str',
     'require': {'str': 4, 'dex': 4},
     'bonus': {'str': 3, 'dex': 3, 'AC': 3},
+    'crit_range': 20,
     'dmg_roll': '1d8',
     'description': "A hand-and-a-half sword commonly used by men of Gondor.\
 There are faint markings on the pommel depicting the tiered rings of Minas \
@@ -50,6 +52,7 @@ Tirith."
     'attribute': 'dex',
     'require': {'str': 2, 'dex': 5},
     'bonus': {'str': 0, 'dex': 5, 'AC': 1},
+    'crit_range': 19,
     'dmg_roll': '1d8',
     'description': "An elegant longbow made by one of the sylvan folk."
     },
@@ -62,22 +65,23 @@ Tirith."
     'attribute': 'dex',
     'require': {'str': 0, 'dex': 0},
     'bonus': {'str': 1, 'dex': 4, 'AC': 2},
+    'crit_range': 20,
     'dmg_roll': '1d6',
     'description': "A standard hunting knife. Simple but effective."
     },
-    {
-    'name': 'Knight Shield',
-    'class': 'shield',
-    'rarity': 90,
-    'slot': ['L_hand'],
-    'atk_type': 'blunt',
-    'attribute': 'str',
-    'require': {'str': 6, 'dex': 0},
-    'bonus': {'str': 0, 'dex': -4, 'AC': 10},
-    'dmg_roll': '1d4',
-    'description': "A large sturdy shield almost as tall as you. The White \
-Tree of Minath Tirith is painted on top of a black background."
-    },
+#    {
+#    'name': 'Knight Shield',
+#    'class': 'shield',
+#    'rarity': 90,
+#    'slot': ['L_hand'],
+#    'atk_type': 'smash',
+#    'attribute': 'str',
+#    'require': {'str': 6, 'dex': 0},
+#    'bonus': {'str': 0, 'dex': -4, 'AC': 10},
+#    'dmg_roll': '1d4',
+#    'description': "A large sturdy shield almost as tall as you. The White \
+#Tree of Minath Tirith is painted on top of a black background."
+#    },
     {
     'name': 'Estoc',
     'class': '2h_sword',
@@ -87,6 +91,7 @@ Tree of Minath Tirith is painted on top of a black background."
     'attribute': 'str',
     'require': {'str': 6, 'dex': 5},
     'bonus': {'str': 2, 'dex': 2, 'AC': 2},
+    'crit_range': 20,
     'dmg_roll': '1d10',
     'description': "A really long and straight sword. It's stiff and has no \
 cutting edge. The blade comes to a fine point."
@@ -100,6 +105,7 @@ cutting edge. The blade comes to a fine point."
     'attribute': 'dex',
     'require': {'str': 0, 'dex': 8},
     'bonus': {'str': 0, 'dex': 0, 'AC': 0},
+    'crit_range': 17,
     'dmg_roll': '1d12',
     'description': "An enchanted dagger used for assassinations. It easily \
 finds the heart of the target."
@@ -130,6 +136,7 @@ BOSS_WEAPONS = [
     'attribute': 'str',
     'require': {'str': 0, 'dex': 0},
     'bonus': {'str': 3, 'dex': 0, 'AC': 0},
+    'crit_range': 20,
     'dmg_roll': '1d8',
     'description': "A pair of sharp tusks made of animal bone."
     },
@@ -137,10 +144,11 @@ BOSS_WEAPONS = [
     'name': 'Hooves',
     'class': 'feet',
     'rarity': 0,
-    'atk_type': 'blunt',
+    'atk_type': 'smash',
     'attribute': 'str',
     'require': {'str': 0, 'dex': 0},
     'bonus': {'str': 2, 'dex': 2, 'AC': 0},
+    'crit_range': 20,
     'dmg_roll': '1d8',
     'description': "Some strong hooves."
     },
@@ -152,6 +160,7 @@ BOSS_WEAPONS = [
     'attribute': 'str',
     'require': {'str': 0, 'dex': 0},
     'bonus': {'str': 1, 'dex': 0, 'AC': 0},
+    'crit_range': 20,
     'dmg_roll': '1d6',
     'description': "Sharp teeth."
     }

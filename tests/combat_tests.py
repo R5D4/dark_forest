@@ -6,6 +6,7 @@ from nose.tools import *
 import combat
 import map_
 import map_gen
+from tests.test_data import *
 
 
 def run_away_test():
@@ -29,13 +30,7 @@ def run_away_test():
 
 def attack_create_test():
     # Test creating Attack objects
-    wpn_desc = {
-               'name': 'Testing Sword',
-               'atk_type': 'slash',
-               'attribute': 'str',
-               'dmg_roll': '1d8',
-               }
-    attack = combat.Attack(wpn_desc)
+    attack = combat.Attack(TESTING_SWORD)
     ok_(attack.wpn_name == 'Testing Sword')
     ok_(attack.attribute == 'str')
     ok_(attack.dmg_roll == '1d8')

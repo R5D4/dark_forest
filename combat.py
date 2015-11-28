@@ -118,6 +118,7 @@ class Attack(object):
         self.wpn_name = wpn_desc['name']
         self.attribute = wpn_desc['attribute']
         self.dmg_roll = wpn_desc['dmg_roll']
+        self.crit_range = wpn_desc['crit_range']
         # get combat messages
         atk_type = wpn_desc['atk_type']
         self.init_messages(atk_type)
@@ -160,7 +161,7 @@ class Attack(object):
         #   dmg = dmg roll + attacker's weapon attribute (dex or str)
 
         # critical hit roll
-        if hit_roll == crit_roll:
+        if hit_roll >= self.crit_range:
             # crit and successful hit, max damage
             if hit > hit_against:
                 dmg = attribute + roll(self.dmg_roll, True)[1] 

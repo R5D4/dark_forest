@@ -4,6 +4,7 @@ Tests for the items module.
 
 from nose.tools import *
 import items
+from tests.test_data import *
 
 
 def get_weapon_test():
@@ -26,12 +27,5 @@ def new_weapon_test():
 
 def weapon_test():
     # Tests the creation of a Weapon object
-    wpn_desc = {
-               'name': 'Testing Sword',
-               'atk_type': 'slash',
-               'attribute': 'str',
-               'dmg_roll': '1d8',
-               'description': "Sword for testing only."
-               }
-    weapon = items.Weapon(wpn_desc)
-    ok_(weapon.desc == wpn_desc)
+    weapon = items.Weapon(TESTING_SWORD)
+    ok_(weapon.desc == TESTING_SWORD)

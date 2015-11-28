@@ -10,6 +10,7 @@ TESTING_KNIFE = {
            'attribute': 'dex',
            'require': {'str': 0, 'dex': 0},
            'bonus': {'str': 0, 'dex': 10, 'AC': 0},
+           'crit_range': 20,
            'dmg_roll': '1d6',
            'description': "For testing only!"
            }
@@ -23,6 +24,7 @@ TESTING_SWORD = {
            'attribute': 'str',
            'require': {'str': 5, 'dex': 5},
            'bonus': {'str': 10, 'dex': 0, 'AC': 0},
+           'crit_range': 20,
            'dmg_roll': '1d8',
            'description': "For testing only!"
            }
@@ -32,10 +34,11 @@ TESTING_SHIELD = {
            'class': 'shield',
            'rarity': 0,
            'slot': ['L_hand'],
-           'atk_type': 'blunt',
+           'atk_type': 'smash',
            'attribute': 'str',
            'require': {'str': 10, 'dex': 0},
            'bonus': {'str': 0, 'dex': -10, 'AC': 20},
+           'crit_range': 20,
            'dmg_roll': '1d4',
            'description': "For testing only!"
            }
@@ -49,6 +52,7 @@ TESTING_BOW = {
            'attribute': 'dex',
            'require': {'str': 0, 'dex': 10},
            'bonus': {'str': 0, 'dex': 10, 'AC': 0},
+           'crit_range': 19,
            'dmg_roll': '1d8',
            'description': "For testing only!"
            }

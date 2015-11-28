@@ -222,17 +222,7 @@ def cmd_examine_test():
     # Tests the Scene.examine method
     player = char.Player()
     scene = map_.Scene({'player': player})
-    wpn_desc = {
-               'name': 'Testing Sword',
-               'class': '1h_sword',
-               'atk_type': 'slash',
-               'attribute': 'str',
-               'require': {'str': 0, 'dex': 0},
-               'bonus': {'str': 0, 'dex': 0},
-               'dmg_roll': '1d8',
-               'description': "For testing only!"
-               }
-    wpn = items.Weapon(wpn_desc)
+    wpn = items.Weapon(TESTING_SWORD)
     player.inventory = [wpn]
     args = '0'
     out = scene.cmd_examine(args)
