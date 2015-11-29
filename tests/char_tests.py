@@ -6,6 +6,36 @@ import items
 from tests.test_data import *
 
 
+def new_player_test():
+    # Test new player objects are created properly
+    player = char.Player()
+    
+    # check stats (including health and conditions)
+    ok_(player.base_stats['str'] > 0)
+    ok_(player.base_stats['dex'] > 0)
+    ok_(player.base_stats['AC'] > 10)
+    ok_(player.base_stats['max_HP'] > 100)
+    ok_(player.health['HP'] == player.base_stats['max_HP'])
+    ok_(not player.conditions['surprised']) # conditions all False
+    ok_(not player.conditions['bloodied'])
+    ok_(not player.conditions['poisoned'])
+
+    # check description
+    ok_('name' in player.desc)
+    ok_('job' in player.desc)
+    ok_('desc' in player.desc)
+
+    # check inventory and equipment
+    ok_(player.inventory[0].desc['name'] == 'Hunting Knife') # default weapon
+    ok_(player.equipped[0].desc['name'] == 'Hunting Knife') # equipped
+    ok_(not player.equipped_names['head'])
+    ok_(not player.equipped_names['torso'])
+    ok_(player.equipped_names['R_hand']) # not None
+    ok_(not player.equipped_names['L_hand'])
+    ok_(not player.equipped_names['legs'])
+    ok_(not player.equipped_names['feet'])
+
+
 def sleep_test():
     # Test if sleep recovers the appropriate amount of HP
     player = char.Player()

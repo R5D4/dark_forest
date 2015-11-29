@@ -32,6 +32,8 @@ class Character(object):
         {'str': int, 'dex': int, 'AC': int, 'max_HP': int}
     health:
         {'HP': int}
+    conditions:
+        {'surprised': bool, 'bloodied': bool, 'poisoned': bool}
     desc:
         {'name': string, 'job': string, 'bio': string}
     inventory:
@@ -58,6 +60,7 @@ class Character(object):
         self.bonus_stats = {}
         self.effective_stats = {}
         self.health = {}
+        self.conditions = {}
         self.inventory = []
         self.equipped = [] 
         self.equipped_names = {} # just the names of equipped items
@@ -65,6 +68,7 @@ class Character(object):
         # update stats and health
         self.init_stats(min_stats)
         self.health = { 'HP': self.effective_stats['max_HP'] }
+        self.init_conditions()
         # update equipment slots
         self.init_equip_slots(equip_slots)
         # update description
@@ -83,6 +87,13 @@ class Character(object):
             self.base_stats[stat] += roll('2d6', False)[0]
         # update effective stats
         self.update_stats()
+
+    def init_conditions(self):
+        """ Initialize status conditions."""
+        self.conditions.update({'surprised': False,
+                                'bloodied': False,
+                                'poisoned': False
+                               })
 
     def init_equip_slots(self, slots):
         """ Add equipment slots."""
