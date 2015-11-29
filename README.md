@@ -60,6 +60,8 @@ Middle-Earth inspired.
   * 1 Player character and 1 Boss character
   * Equip different weapons to use different attacks
   * Randomly generated character attributes
+3. Items
+  * Various pierces of weapon and armor
 3. Combat
   * D&D-inspired, in that virtual dice are rolled
   * Boss has a chance of initiating combat if encountered
