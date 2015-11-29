@@ -69,19 +69,6 @@ Tirith."
     'dmg_roll': '1d6',
     'description': "A standard hunting knife. Simple but effective."
     },
-#    {
-#    'name': 'Knight Shield',
-#    'class': 'shield',
-#    'rarity': 90,
-#    'slot': ['L_hand'],
-#    'atk_type': 'smash',
-#    'attribute': 'str',
-#    'require': {'str': 6, 'dex': 0},
-#    'bonus': {'str': 0, 'dex': -4, 'AC': 10},
-#    'dmg_roll': '1d4',
-#    'description': "A large sturdy shield almost as tall as you. The White \
-#Tree of Minath Tirith is painted on top of a black background."
-#    },
     {
     'name': 'Estoc',
     'class': '2h_sword',

@@ -4,6 +4,7 @@ Contains functions to randomly generate an item.
 """
 
 import data.weapon_data as wd
+import data.armor_data as ad
 from random import choice
 import combat
 
@@ -39,14 +40,8 @@ class Weapon(Item):
         # initialize attributes
         self.item_type = 'weapon'
         self.desc.update(desc)
-        self.attack = None
         # generate the associated Attack object
-        self.generate_attack(desc)
-
-    def generate_attack(self, desc):
-        """ Generate Attack object based on weapon description."""
-        attack = combat.Attack(desc)
-        self.attack = attack
+        self.attack = combat.Attack(desc)
 
 
 class Armor(Item):
@@ -55,16 +50,13 @@ class Armor(Item):
     def __init__(self, desc):
         super(Armor, self).__init__()
         # initialize attributes
-        self.item_type = 'weapon'
+        self.item_type = 'armor'
         self.desc.update(desc)
         self.attack = None
-        # generate the associated Attack object
-        self.generate_attack(desc)
     
 
 class Consummable(Item):
     """ Represents a consummable item."""
-
 
 ########## ITEM GENERATORS ##########
 
@@ -98,3 +90,27 @@ def boss_weapon():
     """
     w_desc = choice(wd.BOSS_WEAPONS)
     return Weapon(w_desc)
+
+
+def get_armor(name):
+    """
+    Return an Armor object by name.
+    """
+    for desc in ad.ARMOR:
+        if desc['name'] == name:
+            break
+    return Armor(desc)
+
+
+def new_armor():
+    """ 
+    Return a player Armor object created from a armor description.
+    
+    Armor descriptions are in the data.armor_data module.
+    """
+    # randomly grab an armor description
+    desc = choice(ad.ARMOR)
+    return Armor(desc)
+
+########## HELPER FUNCTIONS ##########
+

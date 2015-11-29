@@ -52,7 +52,7 @@ def cmd_drop_test():
     player.inventory = []
     knife = items.Weapon(TESTING_KNIFE)
     bow = items.Weapon(TESTING_BOW)
-    shield = items.Weapon(TESTING_SHIELD)
+    shield = items.Armor(TESTING_SHIELD)
 
     # set player base stats to be able to equip everything
     player.base_stats.update({'dex': 100, 'str': 100, 'AC': 100})

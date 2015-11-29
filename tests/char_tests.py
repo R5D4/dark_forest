@@ -88,7 +88,7 @@ def player_equip_test():
     ok_(player.equipped_names['R_hand'] == "Testing Sword")
 
     ## Equip two weapons
-    testing_shield = items.Weapon(TESTING_SHIELD)
+    testing_shield = items.Armor(TESTING_SHIELD)
     player.base_stats['str'] = 10 
     player.pick_up(testing_shield)
     msg = player.equip(testing_shield)
@@ -136,7 +136,7 @@ def player_unequip_test():
     player.unequip('R_hand')
     player.inventory = []
     sword  = items.Weapon(TESTING_SWORD)
-    shield  = items.Weapon(TESTING_SHIELD)
+    shield  = items.Armor(TESTING_SHIELD)
     bow  = items.Weapon(TESTING_BOW)
     player.pick_up(sword)
     player.pick_up(shield)
@@ -202,7 +202,7 @@ def update_stats_test():
 
     # two weapons
     w2 = items.Weapon(TESTING_SWORD)
-    w3 = items.Weapon(TESTING_SHIELD)
+    w3 = items.Armor(TESTING_SHIELD)
     player.equip(w2)
     player.equip(w3)
     ok_(player.bonus_stats['str'] == 10)

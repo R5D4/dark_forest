@@ -1,5 +1,7 @@
 """ Contains data used by tests."""
 
+########## TEST WEAPONS ##########
+
 # 1H, equip in R_hand, no stat requirements
 TESTING_KNIFE = {
            'name': 'Testing Knife',
@@ -28,20 +30,6 @@ TESTING_SWORD = {
            'dmg_roll': '1d8',
            'description': "For testing only!"
            }
-# 1H, equip in L_hand
-TESTING_SHIELD = {
-           'name': 'Testing Shield',
-           'class': 'shield',
-           'rarity': 0,
-           'slot': ['L_hand'],
-           'atk_type': 'smash',
-           'attribute': 'str',
-           'require': {'str': 10, 'dex': 0},
-           'bonus': {'str': 0, 'dex': -10, 'AC': 20},
-           'crit_range': 20,
-           'dmg_roll': '1d4',
-           'description': "For testing only!"
-           }
 # 2H, equip in both R_hand and L_hand
 TESTING_BOW = {
            'name': 'Testing Bow',
@@ -54,6 +42,19 @@ TESTING_BOW = {
            'bonus': {'str': 0, 'dex': 10, 'AC': 0},
            'crit_range': 19,
            'dmg_roll': '1d8',
+           'description': "For testing only!"
+           }
+
+########## TEST ARMOR ##########
+
+# 1H, equip in L_hand
+TESTING_SHIELD = {
+           'name': 'Testing Shield',
+           'class': 'shield',
+           'rarity': 0,
+           'slot': ['L_hand'],
+           'require': {'str': 10, 'dex': 0},
+           'bonus': {'str': 0, 'dex': -10, 'AC': 20},
            'description': "For testing only!"
            }
 

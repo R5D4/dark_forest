@@ -16,6 +16,7 @@ Location tuple is (x, y)
 
 from random import randint
 from random import choice
+from random import shuffle
 import random
 import map_
 import items
@@ -287,12 +288,21 @@ def get_item_stash_goal(n):
 
 def add_item_stash(scene):
     """ Add an item stash to a scene."""
-    # create 1-2 weapons
-    w = []
+    # Create pool of items to choose from
+    # 1. Take 2 weapons, put in pool
+    pool = []
+    for i in range(2):
+        pool.append(items.new_weapon())
+    # 2. Take 1 armor, put in pool
+    for i in range(1):
+        pool.append(items.new_armor())
+    # 3. Randomly pick 1-2 items from pool
+    shuffle(pool)
+    final = []
     for i in range(randint(1, 2)):
-        w.append(items.new_weapon())
-    # create item stash and add to scene
-    stash = map_.ItemStash(w)
+        final.append(pool.pop())
+    # Create item stash and add to scene
+    stash = map_.ItemStash(final)
     scene.features.append(stash)
 
 

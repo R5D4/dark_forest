@@ -35,7 +35,7 @@ def add_item_stashes_test():
     map_gen.generate_scenes(a_map)
     map_gen.add_item_stashes(a_map)
     
-    # Test that no scene has more than one landmark
+    # Test that no scene has more than one item stash 
     nmap = 0 # total number of stashes in a map
     for sc in a_map.scenes.values():
         nsc = 0 # number of stashes in one scene
@@ -45,7 +45,7 @@ def add_item_stashes_test():
         ok_(nsc <= 1)
         if nsc:
             nmap += 1
-    # Test if the correct number of item stashes are added
+    # Test if the correct number of item stashes are added to the map
     n = len(a_map.scenes.values())
     ok_(nmap >= 3 and nmap <= int(0.15*n))
 
