@@ -168,6 +168,8 @@ class Scene(object):
         """
         Execute actions upon entering a scene.
         """
+        player = self.characters['player']
+
         # 1. Print scene description
         self.describe()
 
@@ -183,6 +185,9 @@ class Scene(object):
         # 3. Enter user-input loop
         while True:
             action = raw_input("> ")
+            # reset surprised condition since we can take an action
+            player.conditions['surprised'] = False
+
             # exit scene
             if action in self.exits.keys() and self.flags['can_leave']:
                 self.clock_tick()
@@ -193,6 +198,8 @@ class Scene(object):
             # map commands
             else: 
                 self.process_action(action)
+                # NOTE: for debugging
+                print "Surprised = %s" % player.conditions['surprised']
                 self.print_encounter_msg() # print encounter msg after action
                 # if the boss attacks, go into combat
                 if self.get_boss_attack():
@@ -261,9 +268,13 @@ class Scene(object):
         for i in xrange(n):
             if self.flags['encounter']:
                 msg.append("You are woken up by a noise!")
+                player.conditions['surprised'] = True
                 break
             msg.append(player.rest())
             msg.append(self.clock_tick())
+        # add regular wake up message
+        if not self.flags['encounter']:
+            msg.append("You wake up from your rest.")
         return '\n'.join(msg)
 
     def cmd_sleep(self):
@@ -275,9 +286,13 @@ class Scene(object):
         for i in xrange(n):
             if self.flags['encounter']:
                 msg.append("You are woken up by a noise!")
+                player.conditions['surprised'] = True
                 break
             msg.append(player.sleep())
             msg.append(self.clock_tick())
+        # add regular wake up message
+        if not self.flags['encounter']:
+            msg.append("You wake up from your sleep.")
         return '\n'.join(msg)
         
     def cmd_take(self, args):

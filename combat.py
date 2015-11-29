@@ -39,10 +39,16 @@ def begin_combat(characters, scene, can_run):
     print "*" * 10
     
     # Determine initiative
+    # NOTE: for debugging
+    print "Surprised = %s" % player.conditions['surprised']
+
+    # calculate initiative bonus
+    b_bonus = 5 if player.conditions['surprised'] else 0
+    p_bonus = 5 if boar.conditions['surprised'] else 0
 
     print "Rolling initiatives:"
-    player_init = roll('1d20', True)[0]
-    boar_init = roll('1d20', True)[0]
+    player_init = roll('1d20', True)[0] + p_bonus
+    boar_init = roll('1d20', True)[0] + b_bonus
     print "Player's initiative: %d" % player_init
     print "Boar's initiative: %d" % boar_init
     if player_init > boar_init:
