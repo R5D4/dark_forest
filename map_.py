@@ -198,8 +198,6 @@ class Scene(object):
             # map commands
             else: 
                 self.process_action(action)
-                # NOTE: for debugging
-                print "Surprised = %s" % player.conditions['surprised']
                 self.print_encounter_msg() # print encounter msg after action
                 # if the boss attacks, go into combat
                 if self.get_boss_attack():
