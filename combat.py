@@ -87,7 +87,7 @@ def begin_combat(characters, scene, can_run):
             raw_input("Press any key to continue.")
         elif turn == 'boar':
             print "Boar's turn:"
-            #print "HP: %d" % boar.health['HP']
+            print "HP: %d" % boar.health['HP']
             # output bloodied message if HP < 30%
             if boar.health['HP']/float(boar.effective_stats['max_HP']) < 0.3:
                 print "The boar is bloodied!"

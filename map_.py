@@ -460,6 +460,9 @@ class Scene(object):
 
         Update time-based flags. Recalculates encounter chance.
         """
+        # boss heals when outside of combat
+        boar = self.characters['boar']
+        boar.heal()
         self.scene_map.clock.tick()
         return "Encounter chance is {}".format(self.update_encounter())
 

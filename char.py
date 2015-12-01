@@ -352,3 +352,8 @@ tusks.'
         self.update_stats()
         return "Equipped {}.".format(item.desc['name'])
 
+    def heal(self):
+        """ Heal naturally when outside combat."""
+        # recover 5% of max HP per tick
+        hp = int(floor((0.05 * self.effective_stats['max_HP'])))
+        return self.update_hp(hp)
