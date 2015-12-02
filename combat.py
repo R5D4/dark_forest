@@ -5,6 +5,7 @@ Contains the function begin_combat and the Attack class.
 """
 
 from random import choice
+from random import randint
 from util import roll
 import data.attack_data as atk_data
 
@@ -43,8 +44,8 @@ def begin_combat(characters, scene, can_run):
     print "Surprised = %s" % player.conditions['surprised']
 
     # calculate initiative bonus
-    b_bonus = 5 if player.conditions['surprised'] else 0
-    p_bonus = 5 if boar.conditions['surprised'] else 0
+    b_bonus = 10 if player.conditions['surprised'] else 0
+    p_bonus = 10 if boar.conditions['surprised'] else 0
 
     print "Rolling initiatives:"
     player_init = roll('1d20', True)[0] + p_bonus
@@ -88,9 +89,17 @@ def begin_combat(characters, scene, can_run):
         elif turn == 'boar':
             print "Boar's turn:"
             print "HP: %d" % boar.health['HP']
+
             # output bloodied message if HP < 30%
             if boar.health['HP']/float(boar.effective_stats['max_HP']) < 0.3:
                 print "The boar is bloodied!"
+
+            # chance to run away if HP < 20%
+            if boar.health['HP']/float(boar.effective_stats['max_HP']) < 0.2:
+                if randint(1, 100) <= 75: # 75% chance
+                    print "The boar turned and ran away!"
+                    return scene.name # send the player back to same scene
+
             boar_attack = boar.attacks[choice(boar.attacks.keys())]
             boar_attack.attack(boar, player)
             turn = 'player'
@@ -106,6 +115,7 @@ def run_away(scene):
     scene.clock_tick()
     name = choice(scene.exits.values())
     return name
+
 
 ########## ATTACK CLASS ##########
 

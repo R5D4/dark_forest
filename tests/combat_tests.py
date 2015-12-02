@@ -4,6 +4,7 @@ Tests for combat module.
 
 from nose.tools import *
 import combat
+import char
 import map_
 import map_gen
 from tests.test_data import *
@@ -12,8 +13,13 @@ from tests.test_data import *
 def run_away_test():
     # Test running away!
 
-    # add two adjacent scenes
+    # create map and characters
     a_map = map_.Map('story')
+    player = char.Player()
+    boar = char.Boar()
+    a_map.characters['player'] = player
+    a_map.characters['boar'] = boar
+    # add two adjacent scenes
     s1 = map_gen.new_scene(a_map, None, (5, 5))
     s1.name = 'scene1'
     a_map.add_scene(s1)
