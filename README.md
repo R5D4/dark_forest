@@ -65,14 +65,14 @@ Middle-Earth inspired.
 3. Combat
   * D&D-inspired, in that virtual dice are rolled
   * Boss has a chance of initiating combat if encountered
-  * Can run from combat
+  * Player can run from combat with the 'run' command
+  * Boss has a chance to run from combat at low HP
   * One action per character per turn, alternating turns
   * Boss will randomly use one of its predefined attacks
   * Critical hits
 
 ## Planned Features
 2. Items
-  * Implement armor 
   * Implement consummables 
 1. Character Update
   * Character classes
@@ -86,8 +86,12 @@ Middle-Earth inspired.
 4. Map/Environment
   * Weather (includes phase of the moon)
   * Weather-based special actions
+  * Different maps with distinct environments (e.g. volcanic lair)
 4. Interface
   * Interactive game interface with curses
 
 ## Next Major Update
-  * Gameplay mechanics update
+  * Core gameplay update: agent-based tracking system
+
+## Next Minor Update
+  * Provide access to informational commands during combat
