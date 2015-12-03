@@ -12,7 +12,10 @@ import data.attack_data as atk_data
 # user types this to signal attack
 ATTACK = 'attack'
 ENV_ACTIONS = {
-              'run': ['r', 'run']
+              'run': ['r', 'run'],
+              'stats': ['stats'],
+              'inventory': ['i', 'inventory'],
+              'help': ['h', 'help']
               }
 # make single list of supported actions to check against user action
 SUPPORTED_ACTIONS = \
@@ -41,7 +44,7 @@ def begin_combat(characters, scene, can_run):
     
     # Determine initiative
     # NOTE: for debugging
-    print "Surprised = %s" % player.conditions['surprised']
+    # print "Surprised = %s" % player.conditions['surprised']
 
     # calculate initiative bonus
     b_bonus = 10 if player.conditions['surprised'] else 0
@@ -67,21 +70,27 @@ def begin_combat(characters, scene, can_run):
         if turn == 'player':
             print "Player's turn:"
             print "HP: %d" % player.health['HP']
-            # loop until valid combat command is entered
-            valid = False
-            while not valid:
+            # loop until player has taken a turn
+            took_turn = False 
+            while not took_turn:
                 action = raw_input("> ")
-                if action in player.attacks.keys():
+                if action in player.attacks:
                     player_attack = player.attacks[action]
                     player_attack.attack(player, boar)
-                    valid = True
+                    took_turn = True # an attack counts as a turn
                 elif action in SUPPORTED_ACTIONS:
                     if action in ENV_ACTIONS['run'] and can_run:
                         print "Run away! Run away!"
                         return run_away(scene)               
                     elif action in ENV_ACTIONS['run'] and not can_run:
                         print "Can't run away!"
-                    valid = True
+                        took_turn = True # attempt to run counts as a turn
+                    elif action in ENV_ACTIONS['stats']:
+                        print player.get_stats()
+                    elif action in ENV_ACTIONS['inventory']:
+                        print player.get_inventory()
+                    elif action in ENV_ACTIONS['help']:
+                        print combat_help(player)
                 else:
                     print "You can't do that."
             turn = 'boar'
@@ -108,6 +117,16 @@ def begin_combat(characters, scene, can_run):
             return 'death' 
         elif boar.health['HP'] <= 0:
             return 'win' 
+
+
+def combat_help(player):
+    """ Return output string containing all valid commands and shortcuts."""
+    message = []
+    for cmd, keywords in ENV_ACTIONS.items():
+        message.append("{}: {}".format(cmd, keywords))
+    for attack in player.attacks.keys():
+        message.append("attack: ['{}']".format(attack))
+    return '\n'.join(message)
 
 
 def run_away(scene):
