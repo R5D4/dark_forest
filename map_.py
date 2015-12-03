@@ -197,15 +197,22 @@ class Scene(object):
                 return combat.begin_combat(self.characters, self, True)
             # map commands
             else: 
-                self.process_action(action)
-                self.print_encounter_msg() # print encounter msg after action
-                # if the boss attacks, go into combat
-                if self.get_boss_attack():
-                    print "The boar notices you and charges!"
-                    return combat.begin_combat(self.characters, self, True)
+                if self.process_action(action): # valid action
+                    self.print_encounter_msg()
+                    # if the boss attacks, go into combat
+                    if self.get_boss_attack():
+                        print "The boar notices you and charges!"
+                        return combat.begin_combat(self.characters, self, True)
+                else:
+                    # if invalid action, prompt for input again
+                    pass
 
     def process_action(self, r_action):
-        """ Process user action that doesn't change scenes."""
+        """
+        Process user action that doesn't change scenes.
+        
+        Return True if the action was a valid action. False otherwise.
+        """
         # The ' '.join and split() ensures only one space between each word.
         # Then we add another space to make sure we can always unpack 
         # into two vars.
@@ -214,6 +221,7 @@ class Scene(object):
         player = self.characters['player']
         
         if action in SUPPORTED_ACTIONS:
+            is_valid = True
             if action in ENV_ACTIONS['look']:
                 self.describe()
                 self.print_items()
@@ -253,9 +261,13 @@ class Scene(object):
             elif action in ENV_ACTIONS['help']:
                 print self.cmd_help()
         else:
+            is_valid = False
             print "You can't do that."
 
+        return is_valid
+
     ##### Command Methods ##### 
+
 
     def cmd_rest(self):
         """ Execute 'rest' command. Return output string."""
