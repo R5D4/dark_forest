@@ -170,8 +170,9 @@ class Scene(object):
         """
         player = self.characters['player']
 
-        # 1. Print scene description
+        # 1. Print scene description and items
         self.describe()
+        self.print_items()
 
         # 2. Calculate encounter chance and print encounter message
         e_chance = self.update_encounter()
