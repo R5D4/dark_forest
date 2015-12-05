@@ -29,6 +29,13 @@ python game.py
   * 'drop <item ID>' - Drop an item from inventory into the scene
   * 'help' - Show all available commands
 
+### Combat Commands
+  * 'stats' - Print character stats
+  * 'inventory' - Print inventory and item ID
+  * 'run' - Run from the fight to a random adjacent area
+  * 'help' - Print all available commands
+  * Attack command (varies depending on weapon, e.g. 'pierce' w/ dagger)
+
 ### Combat
   * Simplified verion of DnD 3.5e/Pathfinder
   * Attack options depends on the equipped weapon
@@ -94,4 +101,3 @@ Middle-Earth inspired.
   * Core gameplay update: agent-based tracking system
 
 ## Next Minor Update
-  * Provide access to informational commands during combat
