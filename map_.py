@@ -7,6 +7,7 @@ Contains the Scene class and all special scene subclasses.
 
 from sys import exit
 from random import randint
+from random import choice
 import char
 import combat
 import map_gen
@@ -67,6 +68,7 @@ class Map(object):
         self.scenes = {} # (name, Scene object)
         self.special_scenes = {} # (name, Scene object)
         self.characters = {}; # (name, Character object)
+        self.boss_scene_name = None # scene name of boss' location
         self.clock = game_clock.GameClock()
 
     def next_scene(self, scene_name):
@@ -428,10 +430,19 @@ class Scene(object):
 
         Perform actions that are done every clock tick, e.g. passive healing.
         """
+        # advance clock
+        self.scene_map.clock.tick()
         # boss heals when outside of combat
         boar = self.characters['boar']
         boar.heal()
-        self.scene_map.clock.tick()
+        # boss has a chance to move to another scene
+        if randint(1, 100) < 75: # 75% chance to move
+            boss_sc = self.scene_map.scenes[self.scene_map.boss_scene_name]
+            next_sc_name = choice(boss_sc.exits.values())
+            next_sc = self.scene_map.scenes[next_sc_name]
+            boss_sc.flags['encounter'] = False
+            next_sc.flags['encounter'] = True
+            self.scene_map.boss_scene_name = next_sc_name
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""

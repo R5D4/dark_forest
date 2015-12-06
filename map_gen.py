@@ -327,7 +327,10 @@ def add_description(scene):
 
 def spawn_boss(a_map):
     """ Place the boss in a random scene on the map."""
-    sc = choice(a_map.scenes.values())
+    sc_name = choice(a_map.scenes.keys()) # pick random scene from map
+    a_map.boss_scene_name = sc_name
+    # set encounter flag in the scene
+    sc = a_map.scenes[sc_name]
     sc.flags['encounter'] = True
 
 
