@@ -27,6 +27,8 @@ def run_away_test():
     s2.name = 'scene2'
     a_map.add_scene(s2)
     map_gen.create_link(s1, s2)
+    # set up the boss scenes
+    map_gen.spawn_boss(a_map)
     # run away from one of the scenes
     name = combat.run_away(s1)
     ok_(name == s2.name)
