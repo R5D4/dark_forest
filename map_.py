@@ -50,27 +50,6 @@ ACTION_DURATION = {
 SUPPORTED_ACTIONS = \
     [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
 
-ENCOUNTER_BASE = 1 # 1% base encounter chance for all scenes
-# time-based bonus for encounter chance (%)
-ENCOUNTER_TIME = { 
-                 'sunrise': 2,
-                 'dawn': 1,
-                 'dusk': 1,
-                 'sundown': 2,
-                 'night1': 3,
-                 'midnight': 3,
-                 'night2': 3 
-                 }
-
-# environment-based bonus for encounter chance (%)
-ENCOUNTER_ENV = {
-                'wallow': 10,
-                'rooting': 4,
-                'damaged_tree': 3,
-                'dead_wood': 2, 
-                'bed': 5, 
-                'track': 5
-                }
 
 ##########  MAP CLASS  ##########
 
@@ -156,7 +135,6 @@ class Scene(object):
         self.characters = characters
         self.exits = {}
         self.flags = {
-            'encounter_chance': ENCOUNTER_BASE,
             'encounter': False,
             'can_leave': True 
         }
@@ -174,9 +152,7 @@ class Scene(object):
         self.describe()
         self.print_items()
 
-        # 2. Calculate encounter chance and print encounter message
-        e_chance = self.update_encounter()
-        print "Encounter chance is {}".format(e_chance)
+        # 2. Print encounter message
         self.print_encounter_msg()
         # if the boss attacks, go into combat
         if self.get_boss_attack():
@@ -233,7 +209,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['wait']:
                 # advance clock by one tick
                 print "You wait."
-                print self.clock_tick()
+                self.clock_tick()
             elif action in ENV_ACTIONS['rest']:
                 print self.cmd_rest()
             elif action in ENV_ACTIONS['sleep']:
@@ -241,7 +217,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['pray']:
                 # currently only advances the clock by one tick
                 print "You offer a prayer to Elbereth."
-                print self.clock_tick()
+                self.clock_tick()
             elif action in ENV_ACTIONS['stats']:
                 print player.get_stats()
             elif action in ENV_ACTIONS['inventory']:
@@ -254,7 +230,7 @@ class Scene(object):
                 print self.cmd_examine(args)
             elif action in ENV_ACTIONS['search']:
                 print self.cmd_search()
-                print self.clock_tick()
+                self.clock_tick()
             elif action in ENV_ACTIONS['take']:
                 print self.cmd_take(args)
             elif action in ENV_ACTIONS['drop']:
@@ -282,7 +258,7 @@ class Scene(object):
                 player.conditions['surprised'] = True
                 break
             msg.append(player.rest())
-            msg.append(self.clock_tick())
+            self.clock_tick()
         # add regular wake up message
         if not self.flags['encounter']:
             msg.append("You wake up from your rest.")
@@ -300,7 +276,7 @@ class Scene(object):
                 player.conditions['surprised'] = True
                 break
             msg.append(player.sleep())
-            msg.append(self.clock_tick())
+            self.clock_tick()
         # add regular wake up message
         if not self.flags['encounter']:
             msg.append("You wake up from your sleep.")
@@ -446,38 +422,16 @@ class Scene(object):
         if self.flags['encounter']:
             print "You see the boar! You don't think it notices you."
 
-    def update_encounter(self):
-        """
-        Determine if player encounters the boss and print a message.
-
-        Only recalculate after time has passed.
-        """
-        # Calculate encounter chance
-        base = self.flags['encounter_chance']
-        time_mod = ENCOUNTER_TIME.get(self.scene_map.clock.time_period(), 0)
-        # environmental(feature) encounter bonus
-        environ_mod = 0
-        for f in self.features:
-            environ_mod += f.get_encounter_rate()
-        # signs of activity bonus
-        clue_mod = 0 
-        chance = base + time_mod + environ_mod + clue_mod
-        # set the encounter flag to True if boss in encountered
-        self.flags['encounter'] = randint(1,100) <= chance
-        # for diagnostic
-        return chance
-
     def clock_tick(self):
         """
-        Advance the clock by one tick. Return encounter chance message."
+        Advance the clock by one tick.
 
-        Update time-based flags. Recalculates encounter chance.
+        Perform actions that are done every clock tick, e.g. passive healing.
         """
         # boss heals when outside of combat
         boar = self.characters['boar']
         boar.heal()
         self.scene_map.clock.tick()
-        return "Encounter chance is {}".format(self.update_encounter())
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""

@@ -229,19 +229,3 @@ def cmd_examine_test():
     print out
     ok_('name: Testing Sword' in out)
 
-
-def update_encounter_test():
-    # Scene class.
-    # Test if encounter chance is calculated as desired.
-
-    a_map = map_.Map('story')
-    sc = map_.Scene(None)
-    sc.features.append(map_.Landmark('wallow', 'large')) # +10
-    a_map.add_scene(sc)
-    map_gen.add_descriptions(a_map)
-
-    a_map.clock.time = 22 # night1 (+3)
-    # Recall base encounter rate is 1
-    # chance = 10 + 3 + 1 = 14
-    ok_(sc.update_encounter() == 14)
-
