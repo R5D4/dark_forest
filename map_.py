@@ -85,9 +85,9 @@ class Map(object):
     def __init__(self, start_scene_name):
         """ Set start scene name, create characters, create scene objects."""
         self.start_scene_name = start_scene_name
-        self.scenes = {}
-        self.special_scenes = {}
-        self.characters = {};
+        self.scenes = {} # (name, Scene object)
+        self.special_scenes = {} # (name, Scene object)
+        self.characters = {}; # (name, Character object)
         self.clock = game_clock.GameClock()
 
     def next_scene(self, scene_name):

@@ -95,6 +95,7 @@ def new_map():
     add_item_stashes(a_map)
     add_links(a_map) # add additional links
     add_descriptions(a_map)
+    spawn_boss(a_map) # spawn the boss on the map
 
     # add special scenes
     a_map.add_special_scene('story', map_.Story(a_map.characters))
@@ -322,6 +323,12 @@ def add_description(scene):
     descriptions.append("The path leads towards {}".format(
                                                        scene.exits.keys()))
     scene.description = ' '.join(descriptions)
+
+
+def spawn_boss(a_map):
+    """ Place the boss in a random scene on the map."""
+    sc = choice(a_map.scenes.values())
+    sc.flags['encounter'] = True
 
 
 def empty_adjacent(ref_loc, occupied_locs):

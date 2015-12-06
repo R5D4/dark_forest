@@ -6,6 +6,7 @@ import map_gen
 
 SYMBOL_SCENE = '#' # symbol on the map that represents a scene
 SYMBOL_PLAYER = 'P' # symbol on the map that represents player's location
+SYMBOL_BOSS = 'B' # symbol on the map that represents boss' location
 SYMBOL_LINK = {
                 'n': '|',
                 'ne': '/',
@@ -29,6 +30,9 @@ def prepare_canvas(a_map, player_loc):
         # determine the symbol to put on canvas for the scene
         if s1.location  == player_loc: # scene is where the player is
             symbol = SYMBOL_PLAYER
+        # NOTE: drawing the boss is for debugging only
+        elif s1.flags['encounter']: # scene is where the boss is
+            symbol = SYMBOL_BOSS
         else:
             symbol = SYMBOL_SCENE
         # determine canvas location of x and y
