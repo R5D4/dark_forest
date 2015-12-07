@@ -585,7 +585,7 @@ class Stratum(Feature):
 
 
 class Landmark(Feature):
-    """ A landmark indicating boss activity."""
+    """ An environmental landmark indicating long-term boss activity."""
 
     def __init__(self, landmark_type, landmark_desc):
         """
@@ -606,6 +606,66 @@ class Landmark(Feature):
         Overrides Feature.get_encounter_rate
         """
         return ENCOUNTER_ENV[self.l_type]
+
+########## CLUE BASE CLASS ##########
+
+
+class Clue(object):
+    """ A clue indicating recent boss activity."""
+    
+    def __init__(self, c_type):
+        """
+        Initialize clue details.
+
+        c_type: string - clue type
+        """
+        self.lifetime = 0 # number of clock ticks since creation
+        self.clue_type = c_type
+        self.visible = True # really old clues become invisible and deleted
+
+    def update(self):
+        """ Update the clue and desc each clock tick. Extend in subclas."""
+        # increment lifetime by one clock tick
+        self.lifetime += 1
+
+    def get_desc(self):
+        """ Construct and return description string. Extend in subclass."""
+        return ""
+
+########## CLUE SUBCLASSES ##########
+
+
+class FootprintClue(Clue):
+    """ A footprint left by the boss."""
+
+    def __init__(self):
+        """ Extends Clue.__init__ method."""
+        super(FootprintClue, self).__init__("footprint")
+
+    def update(self):
+        """ Update the clue and desc each clock tick. Extend in subclas."""
+        super(FootprintClue, self).update()
+        if self.lifetime >= 48: # delete if footprints are >48 ticks old
+            self.visible = False
+
+    def get_desc(self):
+        """ Construct and return description string. Extends Clue.get_desc."""
+        if self.lifetime < 4: # 0-3 clock ticks old
+            return "You see a fresh set of footprints."
+        elif self.lifetime < 13: # 4-12 clock ticks old
+            return "You make out a set of footprints, but they've been here \
+for a while."
+        elif self.lifetime < 25: # 13-24 clock ticks old
+            return "You barely make out some footprints, but they are old."
+        else: 
+            return "You think there are faint markings of footprints, but you \
+can't be certain."
+
+
+class DroppingsClue(Clue):
+    """ Droppings left by the boss."""
+
+
 
 ########## HELPER FUNCTIONS ##########
 
