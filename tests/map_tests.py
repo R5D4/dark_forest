@@ -8,8 +8,17 @@ import items
 from tests.test_data import *
 
 
+def random_clue_test():
+    # Test generation of random Clue object
+    for i in xrange(50):
+        clue = map_.random_clue()
+        ok_(clue) # not None
+        ok_(clue.clue_type in ['footprint', 'droppings', 'rubbing'])
+
+
 def cmd_unequip_test():
     # Test 'unequip' command
+    # NOTE: implement this
     pass
 
 
