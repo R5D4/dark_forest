@@ -320,7 +320,7 @@ def add_description(scene):
     for f in scene.features:
         descriptions.append(f.get_desc()) 
     # Update description of exits
-    descriptions.append("The path leads towards {}".format(
+    descriptions.append("\nThe path leads towards {}".format(
                                                        scene.exits.keys()))
     scene.description = ' '.join(descriptions)
 
