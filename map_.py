@@ -142,6 +142,7 @@ class Scene(object):
         }
         self.features = [] # Feature objects
         self.items = [] # uncovered items player can pick up
+        self.clues = [] # Clue objects
         self.description = "No description available."
 
     def enter(self):
@@ -151,8 +152,7 @@ class Scene(object):
         player = self.characters['player']
 
         # 1. Print scene description and items
-        self.describe()
-        self.print_items()
+        self.cmd_look()
 
         # 2. Print encounter message
         self.print_encounter_msg()
@@ -202,8 +202,7 @@ class Scene(object):
         if action in SUPPORTED_ACTIONS:
             is_valid = True
             if action in ENV_ACTIONS['look']:
-                self.describe()
-                self.print_items()
+                self.cmd_look()
             elif action in ENV_ACTIONS['map']:
                 self.scene_map.draw_map(self.location)
             elif action in ENV_ACTIONS['time']:
@@ -247,6 +246,12 @@ class Scene(object):
 
     ##### Command Methods ##### 
 
+
+    def cmd_look(self):
+        """ Execute 'look' command. Print scene descriptions."""
+        self.describe()
+        self.print_items()
+        self.print_clues()
 
     def cmd_rest(self):
         """ Execute 'rest' command. Return output string."""
@@ -419,6 +424,14 @@ class Scene(object):
                                           item.desc['name']))
             print '\n'.join(msg)
 
+    def print_clues(self):
+        """ Print description of clues in the scene."""
+        if self.clues:
+            msg = []
+            for clue in self.clues:
+                msg.append(clue.get_desc())
+            print '\n'.join(msg)
+
     def print_encounter_msg(self):
         """ Print a message indicating if the boss is in the area."""
         if self.flags['encounter']:
@@ -435,6 +448,9 @@ class Scene(object):
         # boss heals when outside of combat
         boar = self.characters['boar']
         boar.heal()
+        # boss has a chance to leave a clue
+        if randint(1, 100) < 50: # 50% chance to leave a clue
+            self.clues.append(new_clue())
         # boss has a chance to move to another scene
         if randint(1, 100) < 75: # 75% chance to move
             boss_sc = self.scene_map.scenes[self.scene_map.boss_scene_name]
@@ -713,7 +729,7 @@ recently dried."
 ########## HELPER FUNCTIONS ##########
 
 
-def random_clue():
+def new_clue():
     """ Return a generated Clue object from a random clue type."""
     n = randint(1, 3)
     if n == 1:
