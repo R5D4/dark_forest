@@ -448,17 +448,37 @@ class Scene(object):
         # boss heals when outside of combat
         boar = self.characters['boar']
         boar.heal()
-        # boss has a chance to leave a clue
-        if randint(1, 100) < 50: # 50% chance to leave a clue
-            self.clues.append(new_clue())
+        # move boss to different scene
+        direction = self.move_boss()
+        # leave a clue in current scene
+        self.leave_clue(direction)
+
+    def leave_clue(self, direction):
+        """ Leave a clue in the current scene."""
+        # 80% chance to leave footprints on move
+        if direction and randint(1, 100) < 80: 
+            self.clues.append(FootprintClue(direction))
+        if randint(1, 100) < 20: # 20% chance to leave droppings
+            self.clues.append(DroppingsClue())
+        if randint(1, 100) < 10: # 10% chance to leave rubbing
+            self.clues.append(RubbingClue())
+
+    def move_boss(self):
+        """
+        Determine and execute the boss' movement.
+
+        Return direction of movement, or None if didn't move.
+        """
         # boss has a chance to move to another scene
+        direction = None
         if randint(1, 100) < 75: # 75% chance to move
             boss_sc = self.scene_map.scenes[self.scene_map.boss_scene_name]
-            next_sc_name = choice(boss_sc.exits.values())
+            direction, next_sc_name = choice(boss_sc.exits.items())
             next_sc = self.scene_map.scenes[next_sc_name]
             boss_sc.flags['encounter'] = False
             next_sc.flags['encounter'] = True
             self.scene_map.boss_scene_name = next_sc_name
+        return direction
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""
@@ -654,9 +674,10 @@ class Clue(object):
 class FootprintClue(Clue):
     """ A footprint left by the boss."""
 
-    def __init__(self):
+    def __init__(self, direction):
         """ Extends Clue.__init__ method."""
         super(FootprintClue, self).__init__("footprint")
+        self.direction = direction
 
     def update(self):
         """ Update the clue and desc each clock tick. Extends Clue.update."""
@@ -666,16 +687,16 @@ class FootprintClue(Clue):
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
+        msg = []
         if self.lifetime < 4: # 0-3 clock ticks old
-            return "You see a fresh set of footprints."
+            msg.append("You see a fresh set of footprints.")
         elif self.lifetime < 13: # 4-12 clock ticks old
-            return "You make out a set of footprints, but they've been here \
-for a while."
-        elif self.lifetime < 25: # 13-24 clock ticks old
-            return "You barely make out some footprints, but they are old."
-        else: 
-            return "You think there are faint markings of footprints, but you \
-can't be certain."
+            msg.append("You see a set of footprints, but they've been here \
+for a while.")
+        else:
+            msg.append("You barely make out some footprints.")
+        msg.append("The footprints point {}.".format(self.direction))
+        return ' '.join(msg)
 
 
 class DroppingsClue(Clue):
@@ -727,18 +748,6 @@ recently dried."
             return "The tree trunk is caked in flaky dried mud."
 
 ########## HELPER FUNCTIONS ##########
-
-
-def new_clue():
-    """ Return a generated Clue object from a random clue type."""
-    n = randint(1, 3)
-    if n == 1:
-        return FootprintClue()
-    elif n == 2:
-        return DroppingsClue()
-    else:
-        return RubbingClue()
-
 
 def uncover(item, chance):
     """ Return True if a search with the specified chance would
