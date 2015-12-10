@@ -449,19 +449,24 @@ class Scene(object):
         boar = self.characters['boar']
         boar.heal()
         # move boss to different scene
-        direction = self.move_boss()
+        scene_name, direction = self.move_boss()
         # leave a clue in current scene
-        self.leave_clue(direction)
+        self.leave_clue(scene_name, direction)
 
-    def leave_clue(self, direction):
-        """ Leave a clue in the current scene."""
+    def leave_clue(self, scene_name, direction):
+        """ Leave a clue in the given scene."""
+        boss_sc = self.scene_map.scenes[scene_name]
         # 80% chance to leave footprints on move
-        if direction and randint(1, 100) < 80: 
-            self.clues.append(FootprintClue(direction))
-        if randint(1, 100) < 20: # 20% chance to leave droppings
-            self.clues.append(DroppingsClue())
-        if randint(1, 100) < 10: # 10% chance to leave rubbing
-            self.clues.append(RubbingClue())
+        # NOTE: debugging - 100% chance of leaving footprint
+        if direction and randint(1, 100) <= 100:
+            boss_sc.clues.append(FootprintClue(direction))
+            # NOTE: print debugging statements
+            print "Left footprints in {} pointing {}.".format(scene_name, 
+                                                              direction)
+        #if randint(1, 100) <= 20: # 20% chance to leave droppings
+        #    boss_sc.clues.append(DroppingsClue())
+        #if randint(1, 100) <= 10: # 10% chance to leave rubbing
+        #    boss_sc.clues.append(RubbingClue())
 
     def move_boss(self):
         """
@@ -471,14 +476,21 @@ class Scene(object):
         """
         # boss has a chance to move to another scene
         direction = None
-        if randint(1, 100) < 75: # 75% chance to move
+        #if randint(1, 100) <= 75: # 75% chance to move
+        #NOTE: debug, always move
+        if randint(1, 100) <= 100:
+            # boss' location
             boss_sc = self.scene_map.scenes[self.scene_map.boss_scene_name]
+            # pick adjacent location
             direction, next_sc_name = choice(boss_sc.exits.items())
             next_sc = self.scene_map.scenes[next_sc_name]
             boss_sc.flags['encounter'] = False
             next_sc.flags['encounter'] = True
             self.scene_map.boss_scene_name = next_sc_name
-        return direction
+            # NOTE: print debugging statements
+            print "Moved {} from {} to {}.".format(direction, boss_sc.name,
+                                                              next_sc_name)
+        return (boss_sc.name, direction) 
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""
@@ -688,13 +700,14 @@ class FootprintClue(Clue):
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
-        if self.lifetime < 4: # 0-3 clock ticks old
+        if self.lifetime < 2: # 0-1 clock ticks old
             msg.append("You see a fresh set of footprints.")
-        elif self.lifetime < 13: # 4-12 clock ticks old
-            msg.append("You see a set of footprints, but they've been here \
-for a while.")
+        #elif self.lifetime < 13: # 4-12 clock ticks old
+        #    msg.append("You see a set of footprints, but they've been here \
+#for a while.")
         else:
             msg.append("You barely make out some footprints.")
+
         msg.append("The footprints point {}.".format(self.direction))
         return ' '.join(msg)
 
