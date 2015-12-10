@@ -31,15 +31,11 @@ def move_boss_test():
     s2.name = 'scene2'
     a_map.add_scene(s2)
     map_gen.create_link(s1, s2)
-    # add third scene for player observation
-    s3 = map_gen.new_scene(a_map, None, (1, 1))
-    s3.name = 'observation'
-    a_map.add_scene(s3)
     # spawn the boss in s1
     a_map.boss_scene_name = s1.name
     s1.flags['encounter'] = True
     # move the boss
-    direction = s3.move_boss()
+    direction = a_map.move_boss()
     ok_(direction is (s1.name, None) or direction == (s1.name, 'e'))
     if direction == 'e':
         ok_(not s1.flags['encounter'])
