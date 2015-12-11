@@ -8,6 +8,22 @@ import items
 from tests.test_data import *
 
 
+def map_update_clues_test():
+    # Test Map.update_clues method
+    # NOTE: implement this
+    pass
+
+def clue_update_test():
+    # Test update method of Clue subclasses
+    clue = map_.FootprintClue('n')
+    ok_(clue.ttl == 12)
+    clue.update()
+    ok_(clue.ttl == 11)
+    clue.ttl = 0
+    clue.update()
+    ok_(clue.ttl == -1)
+
+
 def footprint_init_test():
     # Test creating FootprintClue objects
     clue = map_.FootprintClue('n')

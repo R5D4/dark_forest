@@ -165,6 +165,21 @@ class Map(object):
         #    boss_sc.clues.append(DroppingsClue())
         #if randint(1, 100) <= 10: # 10% chance to leave rubbing
         #    boss_sc.clues.append(RubbingClue())
+    
+    def update_clues(self):
+        """ Update all clues on the map."""
+        # for each clue on map, decrement TTL and remove clues if necessary
+        for sc in self.scenes.values():
+            if sc.clues: # not None
+                for clue in sc.clues:
+                    clue.update()
+                    if clue.ttl <= 0:
+                        sc.clues.remove(clue)
+                    else: # clue is still fresh
+                        pass
+            else: # no clues in scene
+                pass
+
 
 ##########  SCENE CLASS  ##########
 
@@ -493,6 +508,8 @@ class Scene(object):
         # boss heals when outside of combat
         boar = self.characters['boar']
         boar.heal()
+        # update all clues on map
+        self.scene_map.update_clues()
         # move boss to different scene
         scene_name, direction = self.scene_map.move_boss()
         # leave a clue in current scene
@@ -667,20 +684,21 @@ class Landmark(Feature):
 class Clue(object):
     """ A clue indicating recent boss activity."""
     
-    def __init__(self, c_type):
+    def __init__(self, c_type, ttl):
         """
         Initialize clue details.
 
         c_type: string - clue type
+        ttl: integer - # clock ticks that the clue lasts
         """
-        self.lifetime = 0 # number of clock ticks since creation
-        self.clue_type = c_type
         self.visible = True # really old clues become invisible and deleted
+        self.ttl = ttl # time to live - clue disappears once ttl reaches 0
+        self.clue_type = c_type
 
     def update(self):
         """ Update the clue and desc each clock tick. Extend in subclass."""
-        # increment lifetime by one clock tick
-        self.lifetime += 1
+        # decrement ttl by 1
+        self.ttl -= 1
 
     def get_desc(self):
         """ Construct and return description string. Override in subclass."""
@@ -694,23 +712,18 @@ class FootprintClue(Clue):
 
     def __init__(self, direction):
         """ Extends Clue.__init__ method."""
-        super(FootprintClue, self).__init__("footprint")
+        super(FootprintClue, self).__init__("footprint", 12)
         self.direction = direction
 
     def update(self):
         """ Update the clue and desc each clock tick. Extends Clue.update."""
         super(FootprintClue, self).update()
-        if self.lifetime >= 48: # delete if footprints are >48 ticks old
-            self.visible = False
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
-        if self.lifetime < 2: # 0-1 clock ticks old
+        if self.ttl >= 11: 
             msg.append("You see a fresh set of footprints.")
-        #elif self.lifetime < 13: # 4-12 clock ticks old
-        #    msg.append("You see a set of footprints, but they've been here \
-#for a while.")
         else:
             msg.append("You barely make out some footprints.")
 
@@ -723,46 +736,36 @@ class DroppingsClue(Clue):
 
     def __init__(self):
         """ Extends Clue.__init__ method."""
-        super(DroppingsClue, self).__init__("droppings")
+        super(DroppingsClue, self).__init__("droppings", 8)
 
     def update(self):
         """ Update the clue and desc each clock tick. Extends Clue.update."""
         super(DroppingsClue, self).update()
-        if self.lifetime >= 72: # delete if >72 ticks old
-            self.visible = False
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
-        if self.lifetime < 7: # 0-6 clock ticks old
+        if self.ttl >= 6:
             return "You find some droppings that belong to the beast. They \
 seem fresh."
-        elif self.lifetime < 25: # 7-24 clock ticks old
-            return "You find some droppings that belong to the beast. They \
-seem to have been here for a while."
         else:
-            return "You find some droppings. They're more than a day old."
+            return "You find some dried droppings."
 
 class RubbingClue(Clue):
     """ Rubbing left by the boss."""
 
     def __init__(self):
         """ Extends Clue.__init__ method."""
-        super(RubbingClue, self).__init__("rubbing")
+        super(RubbingClue, self).__init__("rubbing", 12)
 
     def update(self):
         """ Update the clue and desc each clock tick. Extends Clue.update."""
         super(RubbingClue, self).update()
-        if self.lifetime >= 72: # delete if are >72 ticks old
-            self.visible = False
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
-        if self.lifetime < 7: # 0-6 clock ticks old
+        if self.ttl >= 11:
             return "The beast has rubbed its muddy hide on a tree. The mud is \
 still wet."
-        elif self.lifetime < 25: # 7-24 clock ticks old
-            return "The beast has rubbed its muddy hide on a tree. The mud has \
-recently dried."
         else:
             return "The tree trunk is caked in flaky dried mud."
 
