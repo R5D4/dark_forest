@@ -168,7 +168,7 @@ class Map(object):
     
     def update_clues(self):
         """ Update all clues on the map."""
-        # for each clue on map, decrement TTL and remove clues if necessary
+        # for each clue on map, decrement TTL, then remove clues if necessary
         for sc in self.scenes.values():
             if sc.clues: # not None
                 for clue in sc.clues:
