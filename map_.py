@@ -125,15 +125,14 @@ class Map(object):
         """
         Determine and execute the boss' movement.
 
-        Return direction of movement, or None if didn't move.
+        Return duplet: (boss scene name, direction of movement)
+        Return None as direction if boss didn't move.
         """
         # boss has a chance to move to another scene
         direction = None
-        #if randint(1, 100) <= 75: # 75% chance to move
-        #NOTE: debug, always move
-        if randint(1, 100) <= 100:
+        boss_sc = self.scenes[self.boss_scene_name]
+        if randint(1, 100) <= 75: # 75% chance to move
             # boss' location
-            boss_sc = self.scenes[self.boss_scene_name]
             # pick adjacent location
             direction, next_sc_name = choice(boss_sc.exits.items())
             next_sc = self.scenes[next_sc_name]
@@ -154,17 +153,16 @@ class Map(object):
         direction: direction in which the boss moved
         """
         boss_sc = self.scenes[scene_name]
-        # 80% chance to leave footprints on move
-        # NOTE: debugging - 100% chance of leaving footprint
-        if direction and randint(1, 100) <= 100:
+        # 75% chance to leave footprints on move
+        if direction and randint(1, 100) <= 75:
             boss_sc.clues.append(FootprintClue(direction))
             # NOTE: print debugging statements
             print "Left footprints in {} pointing {}.".format(scene_name, 
                                                               direction)
-        #if randint(1, 100) <= 20: # 20% chance to leave droppings
-        #    boss_sc.clues.append(DroppingsClue())
-        #if randint(1, 100) <= 10: # 10% chance to leave rubbing
-        #    boss_sc.clues.append(RubbingClue())
+        if randint(1, 100) <= 20: # 20% chance to leave droppings
+            boss_sc.clues.append(DroppingsClue())
+        if randint(1, 100) <= 20: # 10% chance to leave rubbing
+            boss_sc.clues.append(RubbingClue())
     
     def update_clues(self):
         """ Update all clues on the map."""
