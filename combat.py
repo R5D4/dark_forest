@@ -67,6 +67,8 @@ def begin_combat(characters, scene, can_run):
 
     while True:
         print '-' * 20
+
+        ### PLAYER'S TURN ###
         if turn == 'player':
             print "Player's turn:"
             print "HP: %d" % player.health['HP']
@@ -95,6 +97,8 @@ def begin_combat(characters, scene, can_run):
                     print "You can't do that."
             turn = 'boar'
             raw_input("Press any key to continue.")
+
+        ### BOSS' TURN ###
         elif turn == 'boar':
             print "Boar's turn:"
             print "HP: %d" % boar.health['HP']
@@ -113,6 +117,7 @@ def begin_combat(characters, scene, can_run):
             boar_attack.attack(boar, player)
             turn = 'player'
         
+        ### COMBAT FINISHED ###
         if player.health['HP'] <= 0:
             return 'death' 
         elif boar.health['HP'] <= 0:
