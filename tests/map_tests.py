@@ -27,9 +27,11 @@ def get_boss_attack_test():
     boar.health['HP'] = 29
     ok_(not s1.get_boss_attack())
     # Should attack with non-zero chance
+    s1.flags['encounter'] = True
+    boar.health['HP'] = 30
     attacked = False
     for i in xrange(50): # 99.999...% chance that this result is correct
-        attacked = s1.get_boss_attack
+        attacked = s1.get_boss_attack()
         if attacked:
             break
     ok_(attacked)
