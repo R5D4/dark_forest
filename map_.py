@@ -515,9 +515,12 @@ class Scene(object):
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""
-        # NOTE: Currently 50% chance boss will attack if encountered. 
-        #       upgrade this algorithm..
-        return self.flags['encounter'] and randint(1, 100) <= 50 
+        boar = self.characters['boar']
+        # don't attack when bloodied
+        if boar.health['HP']/float(boar.effective_stats['max_HP']) < 0.3:
+            return False
+        else: # 50% random chance
+            return self.flags['encounter'] and randint(1, 100) <= 50 
 
 ##########  SPECIAL SCENES  ##########
 

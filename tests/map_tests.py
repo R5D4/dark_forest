@@ -8,6 +8,33 @@ import items
 from tests.test_data import *
 
 
+def get_boss_attack_test():
+    # Test when the boss will attack
+    # create map and characters
+    a_map = map_.Map('story')
+    boar = char.Boar()
+    boar.effective_stats['max_HP'] = 100
+    a_map.characters['boar'] = boar
+    # add two adjacent scenes
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    # Should not attack (boss not in scene)
+    s1.flags['encounter'] = False
+    ok_(not s1.get_boss_attack())
+    # Should not attack (HP too low)
+    s1.flags['encounter'] = True
+    boar.health['HP'] = 29
+    ok_(not s1.get_boss_attack())
+    # Should attack with non-zero chance
+    attacked = False
+    for i in xrange(50): # 99.999...% chance that this result is correct
+        attacked = s1.get_boss_attack
+        if attacked:
+            break
+    ok_(attacked)
+
+
 def map_update_clues_test():
     # Test Map.update_clues method
 
@@ -83,7 +110,8 @@ def move_boss_test():
     s1.flags['encounter'] = True
     # move the boss
     direction = a_map.move_boss()
-    ok_(direction is (s1.name, None) or direction == (s1.name, 'e'))
+    print direction
+    ok_(direction == (s1.name, None) or direction == (s1.name, 'e'))
     if direction == 'e':
         ok_(not s1.flags['encounter'])
         ok_(s2.flags['encounter'])
