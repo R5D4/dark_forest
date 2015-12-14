@@ -140,8 +140,8 @@ class Map(object):
             next_sc.flags['encounter'] = True
             self.boss_scene_name = next_sc_name
             # NOTE: print debugging statements
-            print "Moved {} from {} to {}.".format(direction, boss_sc.name,
-                                                              next_sc_name)
+            #print "Moved {} from {} to {}.".format(direction, boss_sc.name,
+            #                                                  next_sc_name)
         # return current scene and direction of movement
         return (boss_sc.name, direction) 
 
@@ -157,8 +157,8 @@ class Map(object):
         if direction and randint(1, 100) <= 75:
             boss_sc.clues.append(FootprintClue(direction))
             # NOTE: print debugging statements
-            print "Left footprints in {} pointing {}.".format(scene_name, 
-                                                              direction)
+            #print "Left footprints in {} pointing {}.".format(scene_name, 
+            #                                                  direction)
         if randint(1, 100) <= 20: # 20% chance to leave droppings
             boss_sc.clues.append(DroppingsClue())
         if randint(1, 100) <= 20: # 10% chance to leave rubbing

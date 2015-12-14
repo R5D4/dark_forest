@@ -65,12 +65,21 @@ def begin_combat(characters, scene, can_run):
 
     # Start combat loop
 
+    # escape flags
+    escape = {'player': False, 'boar': False}
+
     while True:
         print '-' * 20
 
         ### PLAYER'S TURN ###
         if turn == 'player':
             print "Player's turn:"
+
+            # escape if the player has chosen to run away
+            if escape['player']:
+                print "Run away! Run away!"
+                return run_away(scene)               
+
             print "HP: %d" % player.health['HP']
             # loop until player has taken a turn
             took_turn = False 
@@ -82,11 +91,12 @@ def begin_combat(characters, scene, can_run):
                     took_turn = True # an attack counts as a turn
                 elif action in SUPPORTED_ACTIONS:
                     if action in ENV_ACTIONS['run'] and can_run:
-                        print "Run away! Run away!"
-                        return run_away(scene)               
+                        took_turn = True
+                        print "You turn to run away."
+                        escape['player'] = True # escape on next turn
                     elif action in ENV_ACTIONS['run'] and not can_run:
-                        print "Can't run away!"
                         took_turn = True # attempt to run counts as a turn
+                        print "Can't run away!"
                     elif action in ENV_ACTIONS['stats']:
                         print player.get_stats()
                     elif action in ENV_ACTIONS['inventory']:
@@ -101,6 +111,12 @@ def begin_combat(characters, scene, can_run):
         ### BOSS' TURN ###
         elif turn == 'boar':
             print "Boar's turn:"
+
+            # escape if the boar has chosen to run away
+            if escape['boar']:
+                print "The boar turned and ran away!"
+                return scene.name # send the player back to same scene
+
             print "HP: %d" % boar.health['HP']
 
             # output bloodied message if HP < 30%
@@ -110,9 +126,10 @@ def begin_combat(characters, scene, can_run):
             # chance to run away if HP < 20%
             if boar.health['HP']/float(boar.effective_stats['max_HP']) < 0.2:
                 if randint(1, 100) <= 75: # 75% chance
-                    print "The boar turned and ran away!"
-                    return scene.name # send the player back to same scene
+                    print "The boar turns to run away."
+                    escape['boar'] = True # escape on next turn
 
+            # boss makes its attack
             boar_attack = boar.attacks[choice(boar.attacks.keys())]
             boar_attack.attack(boar, player)
             turn = 'player'
