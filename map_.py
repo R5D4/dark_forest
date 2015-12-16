@@ -70,6 +70,7 @@ class Map(object):
         self.characters = {}; # (name, Character object)
         self.boss_scene_name = None # scene name of boss' location
         self.clock = game_clock.GameClock()
+        self.path = [] # current path that the boss is on
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -145,16 +146,42 @@ class Map(object):
         # return current scene and direction of movement
         return (boss_sc.name, direction) 
 
-
     def move_boss2(self):
         """ Move the boss using the new targeted movement algorithm."""
         # NOTE: Changed the name of this method; replace move_boss when done.
-        # 1. Choose desired resource type (food, water, bed, wallow)
-        # 2. Find torget scene with desired resource type
-        # 3. Construct path from boss' current scene to target scene
-        # 4. Move the boss to next scene in path
-        # 5. Pop the scene that the boss just moved to from path
+        # 0. If we've previously picked a path, go to 4. Else, go to 1
+        if not self.path: # no path chosen yet
+            # 1. Choose desired resource type (food, water, bed, wallow)
+            resource = self.choose_resource()
+            # 2. Find target scene with desired resource type
+            target_name = self.find_resource_scene(resource)
+            # 3. Construct path from boss' current scene to target scene
+            self.path = self.construct_path(boss_scene_name, target_name)
+            # 4. Pop the scene that the boss just moved to from path
+            next_sc_name = self.path.pop(0)
+            # 5. Move the boss to next scene in path
+            next_sc = self.scenes[next_sc_name]
+            boss_sc.flags['encounter'] = False
+            next_sc.flags['encounter'] = True
+            self.boss_scene_name = next_sc_name
 
+    def choose_resource(self):
+        """ Choose an appropriate resource type for the boss to seek."""
+        # NOTE: rough copy
+        return choice(['food', 'water', 'wallow', 'bed'])
+
+    def find_resource_scene(self, resource_type):
+        """ Find a scene on the map with the desired resource type."""
+        # NOTE: implement this
+        # Construct list of scenes (from all scenes on map) that
+        #   contains the desired resource type
+        # Randomly pick a scene from the constructed list and return its name
+        pass
+    
+    def construct_path(self, boss_scene_name, target_scene_name):
+        """ Construct a path through the map given a start and target scene."""
+        # NOTE: implement this
+        pass
 
     def leave_clue(self, scene_name, direction):
         """

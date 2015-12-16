@@ -8,6 +8,42 @@ import items
 from tests.test_data import *
 
 
+def move_boss2_test():
+    # Test the new boss movement algorithm
+    # NOTE: rename this after renaming the method
+    pass
+
+
+def move_boss_test():
+    # Tests boss' movement on the map
+
+    # create map and characters
+    a_map = map_.Map('story')
+    player = char.Player()
+    boar = char.Boar()
+    a_map.characters['player'] = player
+    a_map.characters['boar'] = boar
+    # add two adjacent scenes
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    a_map.add_scene(s2)
+    map_gen.create_link(s1, s2)
+    # spawn the boss in s1
+    a_map.boss_scene_name = s1.name
+    s1.flags['encounter'] = True
+    # move the boss
+    direction = a_map.move_boss()
+    print direction
+    ok_(direction == (s1.name, None) or direction == (s1.name, 'e'))
+    if direction == 'e':
+        ok_(not s1.flags['encounter'])
+        ok_(s2.flags['encounter'])
+        a_map.boss_scene_name == s2.name
+
+
 def get_boss_attack_test():
     # Test when the boss will attack
     # create map and characters
@@ -88,36 +124,6 @@ def footprint_init_test():
     # Test creating FootprintClue objects
     clue = map_.FootprintClue('n')
     ok_(clue.direction == 'n')
-
-
-def move_boss_test():
-    # Tests boss' movement on the map
-
-    # create map and characters
-    a_map = map_.Map('story')
-    player = char.Player()
-    boar = char.Boar()
-    a_map.characters['player'] = player
-    a_map.characters['boar'] = boar
-    # add two adjacent scenes
-    s1 = map_gen.new_scene(a_map, None, (5, 5))
-    s1.name = 'scene1'
-    a_map.add_scene(s1)
-    s2 = map_gen.new_scene(a_map, None, (6, 5))
-    s2.name = 'scene2'
-    a_map.add_scene(s2)
-    map_gen.create_link(s1, s2)
-    # spawn the boss in s1
-    a_map.boss_scene_name = s1.name
-    s1.flags['encounter'] = True
-    # move the boss
-    direction = a_map.move_boss()
-    print direction
-    ok_(direction == (s1.name, None) or direction == (s1.name, 'e'))
-    if direction == 'e':
-        ok_(not s1.flags['encounter'])
-        ok_(s2.flags['encounter'])
-        a_map.boss_scene_name == s2.name
 
 
 def cmd_unequip_test():
