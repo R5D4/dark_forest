@@ -145,6 +145,17 @@ class Map(object):
         # return current scene and direction of movement
         return (boss_sc.name, direction) 
 
+
+    def move_boss2(self):
+        """ Move the boss using the new targeted movement algorithm."""
+        # NOTE: Changed the name of this method; replace move_boss when done.
+        # 1. Choose desired resource type (food, water, bed, wallow)
+        # 2. Find torget scene with desired resource type
+        # 3. Construct path from boss' current scene to target scene
+        # 4. Move the boss to next scene in path
+        # 5. Pop the scene that the boss just moved to from path
+
+
     def leave_clue(self, scene_name, direction):
         """
         Leave a clue in the given scene.
@@ -171,7 +182,7 @@ class Map(object):
             if sc.clues: # not None
                 for clue in sc.clues:
                     clue.update()
-                    if clue.ttl <= 0:
+                    if clue.ttl <= 0: # remove clue if its TTL <= 0
                         sc.clues.remove(clue)
                     else: # clue is still fresh
                         pass
