@@ -57,37 +57,35 @@ def get_item_stash_goal_test():
     ok_(goal >= 3 and goal <= 15)
 
 
-def add_landmark_test():
-    # Test if a landmark is properly added to a scene
-    for l_type in map_gen.LANDMARKS.keys():
+def add_resources_test():
+    # Test if a resources is properly added to a scene
+    for l_type in map_gen.RESOURCES.keys():
         sc = map_.Scene(None)
-        map_gen.add_landmark(sc, l_type)
+        map_gen.add_resources(sc, l_type)
         map_gen.add_description(sc)
         # check if the specified Landmark object is in features
         ok_(l_type in sc.description)
 
 
-def get_landmark_limits_test():
+def get_resources_limits_test():
     # test if generated values are within limits
     n = 100
     for i in xrange(0, 100): # 100 trials
-        limits = map_gen.get_landmark_limits(n)
+        limits = map_gen.get_resource_limits(n)
         print limits
         ok_(limits['wallow'] >= 1 and limits['wallow'] <= 10)
-        ok_(limits['rooting'] >= 2 and limits['rooting'] <= 20)
-        ok_(limits['damaged_tree'] >= 0 and limits['damaged_tree'] <= 5)
+        ok_(limits['roots'] >= 2 and limits['roots'] <= 20)
         ok_(limits['dead_wood'] >= 1 and limits['dead_wood'] <= 5)
         ok_(limits['bed'] >= 1 and limits['bed'] <= 2)
-        ok_(limits['track'] >= 5 and limits['track'] <= 20)
 
 
-def add_landmarks_test():
+def add_resources_test():
     a_map = map_.Map('story')
     map_gen.generate_scenes(a_map)
-    map_gen.add_landmarks(a_map)
+    map_gen.add_resources(a_map)
     
-    # Test if correct number of landmarks added?
-    # Test that no scene has more than one landmark
+    # Test if correct number of resourcess added?
+    # Test that no scene has more than one resources
     for sc in a_map.scenes.values():
         count = 0
         for f in sc.features:
@@ -377,7 +375,7 @@ def generate_scenes_test():
         # Test for map connectedness
         ok_(check_map_connectedness(a_map))
 
-        # Test if each scene is well-formed (features, landmarks)
+        # Test if each scene is well-formed (features, resourcess)
         # NOTE: Implement this
 
 

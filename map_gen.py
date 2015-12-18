@@ -71,14 +71,12 @@ CANOPY = ['none', 'oak', 'hickory', 'pine']
 UNDERSTORY = ['none', 'dogwood', 'cedar', 'holly', 'young chestnut']
 SHRUBS = ['none', 'blackberry', 'honeysuckle', 'poison ivy']
 FLOOR = ['leafy', 'dirt', 'rocky']
-# landmarks
-LANDMARKS = {
+# resources such as food, water, bed, etc.
+RESOURCES = {
             'wallow': ['large', 'medium', 'small'], 
-            'rooting': ['large', 'medium', 'small'], 
-            'damaged_tree': ['default'], 
+            'roots': ['large', 'medium', 'small'], 
             'dead_wood': ['default'], 
             'bed': ['covered', 'open'], 
-            'track': ['wide', 'narrow']
             }
 
 
@@ -91,7 +89,7 @@ def new_map():
     ID_SEQ = 1 # reset sequence number for new map
 
     generate_scenes(a_map)
-    add_landmarks(a_map)
+    add_resources(a_map)
     add_item_stashes(a_map)
     add_links(a_map) # add additional links
     add_descriptions(a_map)
@@ -191,29 +189,29 @@ def add_flora(scene):
     scene.features.append(new_stratum)
 
 
-def add_landmarks(a_map):
-    """ Add landmarks to the map."""
-    limits = get_landmark_limits(len(a_map.scenes))
+def add_resources(a_map):
+    """ Add resources to the map."""
+    limits = get_resource_limits(len(a_map.scenes))
     candidates = a_map.scenes.values()
-    # for each type of landmark
+    # for each type of resource
     for l_type, goal in limits.items():
         count = 0
         # loop until we've reached our goal or no more scenes
         while count < goal and candidates:
             # pick random scene from map
             sc = choice(candidates)
-            # add the landmark to the scene
+            # add the resource to the scene
             # NOTE: confusing function name, think of better one
-            add_landmark(sc, l_type)
-            # remove scene from list (we want one landmark/scene if possible)
+            add_resource(sc, l_type)
+            # remove scene from list (we want one resource/scene if possible)
             candidates.remove(sc)
             # increment count
             count += 1
 
 
-def get_landmark_limits(n):
+def get_resource_limits(n):
     """ 
-    Return limits for each landmark type.
+    Return limits for each resources type.
     
     n: number of scenes
     """
@@ -223,38 +221,28 @@ def get_landmark_limits(n):
     rand_goal = randint(0, int(0.1 * n)) # random bounded goal
     goal = max(base, rand_goal)
     limits['wallow'] = goal # (so far, goal)
-    # number of rootings on map
+    # number of rootss on map
     base = 2 # lower limit
     rand_goal = randint(0, int(0.2 * n)) # random bounded goal
     goal = max(base, rand_goal)
-    limits['rooting'] = goal
-    # number of damaged trees on map
-    base = 0 # lower limit
-    rand_goal = randint(0, int(0.05 * n)) # random bounded goal
-    goal = max(base, rand_goal)
-    limits['damaged_tree'] = goal
+    limits['roots'] = goal
     # number of chewed open dead wood on map
     goal = randint(1, int(0.05 * n)) # random bounded goal
     limits['dead_wood'] = goal
     # number of hog bed on map
     goal = randint(1, 2) # random bounded goal
     limits['bed'] = goal
-    # number of track on map
-    base = 5 # lower limit
-    rand_goal = randint(0, int(0.2 * n)) # random bounded goal
-    goal = max(base, rand_goal)
-    limits['track'] = goal
 
     return limits
 
 
-def add_landmark(scene, l_type):
-    """ Add the appropriate type of landmark to a scene."""
-    if l_type in LANDMARKS.keys():
-        lm = map_.Landmark(l_type, choice(LANDMARKS[l_type]))
+def add_resource(scene, l_type):
+    """ Add the appropriate type of resources to a scene."""
+    if l_type in RESOURCES.keys():
+        lm = map_.Landmark(l_type, choice(RESOURCES[l_type]))
         scene.features.append(lm)
     else:
-        print "Invalid landmark type during landmark generation."
+        print "Invalid resources type during resources generation."
 
 
 def add_item_stashes(a_map):
