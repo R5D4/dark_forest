@@ -73,6 +73,7 @@ SHRUBS = ['none', 'blackberry', 'honeysuckle', 'poison ivy']
 FLOOR = ['leafy', 'dirt', 'rocky']
 # resources such as food, water, bed, etc.
 RESOURCES = {
+            'lair': ['default'],
             'wallow': ['large', 'medium', 'small'], 
             'roots': ['large', 'medium', 'small'], 
             'dead_wood': ['default'], 
@@ -216,6 +217,8 @@ def get_resource_limits(n):
     n: number of scenes
     """
     limits = {}
+    # exactly one lair on map
+    limits['lair'] = 1 
     # number of wallows on map
     base = 1 # lower limit
     rand_goal = randint(0, int(0.1 * n)) # random bounded goal
