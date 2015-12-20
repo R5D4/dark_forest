@@ -52,10 +52,11 @@ python game.py
   * Game commands have shortened forms, use the 'help' command in-game to see.
 
 ## Unofficial Story
-Middle-Earth inspired.
-* Age of the world at this point is unclear
-* Somehow you've found yourself trying to take out a monstrous beast in a 
-gloomy forest. And you've only got a knife on ya.
+* Fantasy setting inspired by J.R.R. Tolkien and other authors
+* On the night of the new moon, the guardian of the dark forest, corrupted and
+driven mad by an unknown evil, ravages the surrounding countryside. 
+* You are a youth, armed with only a hunting knife, on a mission to stop this
+from happening again, before the next new moon.
 
 ## Current Features
 1. Map
@@ -81,13 +82,14 @@ gloomy forest. And you've only got a knife on ya.
   * One action per character per turn, alternating turns
 
 ## Planned Features
+2. Gameplay
+  * More coherent behaviour model for the boss based on its backstory
+  * Environmental features have bigger impact on gameplay
 4. Map/Environment
+  * Time limit to story mode
+  * Phases of the moon and weather
   * More coherent environment generation (rivers connect across scenes, etc.)
   * More environments (currently only mixed forest)
-  * Weather (includes phase of the moon)
-2. Gameplay
-  * More realistic behaviour model for the boss (based on real-life wild boars)
-  * Environmental features have bigger impact on gameplay
 1. Flavour text (descriptions)
   * Extract all flavour text into own file
   * Expand on descriptions
