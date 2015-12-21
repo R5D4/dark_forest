@@ -7,6 +7,8 @@ import char
 import items
 from tests.test_data import *
 
+########## Map Class Tests ##########
+
 
 def move_boss2_test():
     # Test the new boss movement algorithm
@@ -44,35 +46,6 @@ def move_boss_test():
         a_map.boss_scene_name == s2.name
 
 
-def get_boss_attack_test():
-    # Test when the boss will attack
-    # create map and characters
-    a_map = map_.Map('story')
-    boar = char.Boar()
-    boar.effective_stats['max_HP'] = 100
-    a_map.characters['boar'] = boar
-    # add two adjacent scenes
-    s1 = map_gen.new_scene(a_map, None, (5, 5))
-    s1.name = 'scene1'
-    a_map.add_scene(s1)
-    # Should not attack (boss not in scene)
-    s1.flags['encounter'] = False
-    ok_(not s1.get_boss_attack())
-    # Should not attack (HP too low)
-    s1.flags['encounter'] = True
-    boar.health['HP'] = 29
-    ok_(not s1.get_boss_attack())
-    # Should attack with non-zero chance
-    s1.flags['encounter'] = True
-    boar.health['HP'] = 30
-    attacked = False
-    for i in xrange(50): # 99.999...% chance that this result is correct
-        attacked = s1.get_boss_attack()
-        if attacked:
-            break
-    ok_(attacked)
-
-
 def map_update_clues_test():
     # Test Map.update_clues method
 
@@ -108,28 +81,34 @@ def map_update_clues_test():
         a_map.update_clues()
     ok_(not s1.clues) # footprints should disappear
 
-
-def clue_update_test():
-    # Test update method of Clue subclasses
-    clue = map_.FootprintClue('n')
-    ok_(clue.ttl == 12)
-    clue.update()
-    ok_(clue.ttl == 11)
-    clue.ttl = 0
-    clue.update()
-    ok_(clue.ttl == -1)
-
-
-def footprint_init_test():
-    # Test creating FootprintClue objects
-    clue = map_.FootprintClue('n')
-    ok_(clue.direction == 'n')
+########## Scene Class Tests ##########
 
 
 def cmd_unequip_test():
     # Test 'unequip' command
     # NOTE: implement this
     pass
+
+
+def cmd_help_test():
+    # Test the print_help method
+    player = char.Player()
+    scene = map_.Scene({'player': player})
+    msg = scene.cmd_help()
+    for k in map_.ENV_ACTIONS.keys():
+        ok_(k in msg)
+
+
+def cmd_examine_test():
+    # Tests the Scene.examine method
+    player = char.Player()
+    scene = map_.Scene({'player': player})
+    wpn = items.Weapon(TESTING_SWORD)
+    player.inventory = [wpn]
+    args = '0'
+    out = scene.cmd_examine(args)
+    print out
+    ok_('name: Testing Sword' in out)
 
 
 def cmd_equip_test():
@@ -287,6 +266,56 @@ def cmd_search_test():
     ok_("Hunting Knife" in msg)
 
 
+def get_boss_attack_test():
+    # Test when the boss will attack
+    # create map and characters
+    a_map = map_.Map('story')
+    boar = char.Boar()
+    boar.effective_stats['max_HP'] = 100
+    a_map.characters['boar'] = boar
+    # add two adjacent scenes
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    # Should not attack (boss not in scene)
+    s1.flags['encounter'] = False
+    ok_(not s1.get_boss_attack())
+    # Should not attack (HP too low)
+    s1.flags['encounter'] = True
+    boar.health['HP'] = 29
+    ok_(not s1.get_boss_attack())
+    # Should attack with non-zero chance
+    s1.flags['encounter'] = True
+    boar.health['HP'] = 30
+    attacked = False
+    for i in xrange(50): # 99.999...% chance that this result is correct
+        attacked = s1.get_boss_attack()
+        if attacked:
+            break
+    ok_(attacked)
+
+########## Clue Class/Subclasses Tests ##########
+
+
+def clue_update_test():
+    # Test update method of Clue subclasses
+    clue = map_.FootprintClue('n')
+    ok_(clue.ttl == 12)
+    clue.update()
+    ok_(clue.ttl == 11)
+    clue.ttl = 0
+    clue.update()
+    ok_(clue.ttl == -1)
+
+
+def footprint_init_test():
+    # Test creating FootprintClue objects
+    clue = map_.FootprintClue('n')
+    ok_(clue.direction == 'n')
+
+########## ItemStash Class Tests ##########
+
+
 def itemstash_search_test():
     # Test ItemStash.search method
 
@@ -327,24 +356,36 @@ def itemstash_search_test():
     ok_(w1 in discovered and w3 not in discovered)
     ok_(stash.hidden_items == [w3])
 
-
-def cmd_help_test():
-    # Test the print_help method
-    player = char.Player()
-    scene = map_.Scene({'player': player})
-    msg = scene.cmd_help()
-    for k in map_.ENV_ACTIONS.keys():
-        ok_(k in msg)
+########## Lair Class Tests ##########
 
 
-def cmd_examine_test():
-    # Tests the Scene.examine method
-    player = char.Player()
-    scene = map_.Scene({'player': player})
-    wpn = items.Weapon(TESTING_SWORD)
-    player.inventory = [wpn]
-    args = '0'
-    out = scene.cmd_examine(args)
-    print out
-    ok_('name: Testing Sword' in out)
+def lair_init_test():
+    # Test creating a Lair object
+    lair = map_.Lair()
+    ok_(not lair.revealed)
+
+
+def lair_get_desc_test():
+    # Test returning the description
+    lair = map_.Lair()
+    # not revealed
+    msg = lair.get_desc()
+    ok_(not msg)
+    # revealed
+    lair.revealed = True
+    msg = lair.get_desc()
+    ok_(msg == "There's a cave entrance behind the thick brush, it's the \
+lair of the forest guardian!")
+
+
+def lair_search_test():
+    # Test searching for the lair
+    lair = map_.Lair()
+    msg = ""
+    for i in xrange(50): # 99.5% accurate test
+        msg = lair.search()
+        if msg: # if not empty string, meaning search as successful
+            break
+    ok_(msg == "You've uncovered a secret lair!")
+    ok_(lair.revealed)
 
