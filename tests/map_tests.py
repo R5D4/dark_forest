@@ -382,6 +382,7 @@ def lair_search_test():
     # Test searching for the lair
     lair = map_.Lair()
     msg = ""
+    # test that the search method eventually uncovers the lair
     for i in xrange(50): # 99.5% accurate test
         msg = lair.search()
         if msg: # if not empty string, meaning search as successful

@@ -75,7 +75,7 @@ def add_lair_test():
 def add_flora_test():
     # Test if flora is added for each stratum
     a_map = map_.Map('story')
-    for i in xrange(0, 100): # 100 trials
+    for i in xrange(100):
         scene = map_gen.new_scene(a_map, 'random', (1, 1))
         map_gen.add_flora(scene)
         map_gen.add_description(scene)
@@ -141,7 +141,7 @@ def add_links_test():
 
 
 def empty_adjacent_test():
-    for x in range(1, 101):
+    for x in xrange(100):
         loc = (randint(1, 9), randint(1, 9))
         scenes = {}
         scenes[loc] = "This is a test scene."
@@ -158,7 +158,7 @@ def valid_location_test():
     gs = map_gen.GRID_SIZE
     print "Grid size is {} x {}".format(gs, gs)
     # success test cases
-    for x in range(1, 101):
+    for x in xrange(100):
         loc = (randint(1, gs), randint(1, gs))
         print "Location is {}".format(loc)
         ok_(map_gen.valid_location(loc) is True)
@@ -319,7 +319,7 @@ def create_link_test():
 
 def generate_scenes_test():
     # 100 trials
-    for x in range(1, 101):
+    for x in xrange(100):
         a_map = map_.Map('story')
         map_gen.ID_SEQ = 1
         map_gen.generate_scenes(a_map)
