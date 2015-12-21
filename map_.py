@@ -51,7 +51,6 @@ ACTION_DURATION = {
 SUPPORTED_ACTIONS = \
     [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
 
-
 ##########  MAP CLASS  ##########
 
 
@@ -649,10 +648,6 @@ class Feature(object):
         """ Return feature description."""
         return "No feature description. Override this method."
 
-    def get_encounter_rate(self):
-        """Return this feature's contribution to encounter rate."""
-        return 0
-
 ########## SCENE FEATURE SUBCLASSES ##########
 
 
@@ -708,14 +703,6 @@ class Landmark(Feature):
     def get_desc(self):
         """ Return feature description. Overrides Feature.get_desc"""
         return "The {} is {}.".format(self.l_type, self.l_desc)
-
-    def get_encounter_rate(self):
-        """
-        Return feature's encounter rate. 
-
-        Overrides Feature.get_encounter_rate
-        """
-        return ENCOUNTER_ENV[self.l_type]
 
 ########## CLUE BASE CLASS ##########
 
