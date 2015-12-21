@@ -435,21 +435,27 @@ class Scene(object):
         return message
 
     def cmd_search(self):
-        """ Search the scene and uncover items. Return output string."""
+        """ Search the scene. Return output string."""
         uncovered = [] # list of all uncovered items from all item stashes
-        # search all item stashes in this scene
+        lair_msg = None # msg for discovering the lair
+
+        # search all item stashes and lairs in this scene
         for f in self.features:
             if isinstance(f, ItemStash):
                 uncovered.extend(f.search())
+            if isinstance(f, Lair):
+                lair_msg = f.search()
         # add uncovered items to scene.items
         self.items.extend(uncovered)
-        # return a nice message
-        msg = ["You spend some time searching."]
+
+        msg = ["You spend some time searching."] # start output message
         if uncovered: # not empty
             msg.append("Uncovered the following items:")
             for item in uncovered:
                 msg.append(item.desc['name'])
-        else:
+        if lair_msg: # not empty message
+            msg.append(lair_msg)
+        if not uncovered and not lair_msg: # no discovered items or lairs
             msg.append("You found nothing.")
         return '\n'.join(msg)
 
@@ -504,9 +510,7 @@ class Scene(object):
     ##### Helper Methods #####
 
     def describe(self): 
-        """
-        Print a description of the scene.
-        """
+        """ Print a description of the scene."""
         print '-' * 40
         print self.description
 
@@ -639,7 +643,9 @@ class Story(Scene):
 
 
 class Feature(object):
-    """ Base class for a scene feature."""
+    """
+    Base class for a scene feature. Specifies the interface for all subclasses.
+    """
 
     def __init__(self):
         pass
@@ -649,6 +655,32 @@ class Feature(object):
         return "No feature description. Override this method."
 
 ########## SCENE FEATURE SUBCLASSES ##########
+
+
+class Lair(Feature):
+    """ A boss lair."""
+
+    def __init__(self):
+        """ Initialize lair attributes."""
+        self.revealed = False
+
+    def get_desc(self):
+        """ Return lair description if revealed. Otherwise return empty str."""
+        if self.revealed:
+            return "There's a cave entrance behind the thick brush, it's the \
+lair of the forest guardian!"
+        else:
+            return ""
+
+    def search(self):
+        """ Execute a search for the lair."""
+        chance = randint(1, 100)
+        # 10% chance of discovering the lair in the scene
+        if chance <= 10:
+            self.revealed = True
+            return "You've uncovered a secret lair!"
+        else:
+            return ""
 
 
 class ItemStash(Feature):
@@ -691,6 +723,7 @@ class Stratum(Feature):
 
 class Landmark(Feature):
     """ An environmental landmark indicating long-term boss activity."""
+    # NOTE: obsoleted by long-term clues
 
     def __init__(self, landmark_type, landmark_desc):
         """
@@ -795,9 +828,22 @@ still wet."
         else:
             return "The tree trunk is caked in flaky dried mud."
 
-########## HELPER FUNCTIONS ##########
+########## UTILITY FUNCTIONS ##########
+
 
 def uncover(item, chance):
     """ Return True if a search with the specified chance would
     uncover the item. Otherwise return False."""
     return item.desc['rarity'] <= chance
+
+
+def update_desc(scene):
+    """ Update description of a scene."""
+    # Update description of features
+    descriptions = []
+    for f in scene.features:
+        descriptions.append(f.get_desc()) 
+    # Update description of exits
+    descriptions.append("\nThe path leads towards {}".format(
+                                                       scene.exits.keys()))
+    scene.description = ' '.join(descriptions)

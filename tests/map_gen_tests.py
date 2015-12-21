@@ -57,42 +57,19 @@ def get_item_stash_goal_test():
     ok_(goal >= 3 and goal <= 15)
 
 
-def add_resources_test():
-    # Test if a resources is properly added to a scene
-    for l_type in map_gen.RESOURCES.keys():
-        sc = map_.Scene(None)
-        map_gen.add_resources(sc, l_type)
-        map_gen.add_description(sc)
-        # check if the specified Landmark object is in features
-        ok_(l_type in sc.description)
-
-
-def get_resources_limits_test():
-    # test if generated values are within limits
-    n = 100
-    for i in xrange(0, 100): # 100 trials
-        limits = map_gen.get_resource_limits(n)
-        print limits
-        ok_(limits['wallow'] >= 1 and limits['wallow'] <= 10)
-        ok_(limits['roots'] >= 2 and limits['roots'] <= 20)
-        ok_(limits['dead_wood'] >= 1 and limits['dead_wood'] <= 5)
-        ok_(limits['bed'] >= 1 and limits['bed'] <= 2)
-
-
-def add_resources_test():
+def add_lair_test():
+    # Test adding the boss' lair
     a_map = map_.Map('story')
     map_gen.generate_scenes(a_map)
-    map_gen.add_resources(a_map)
+    map_gen.add_lair(a_map)
     
-    # Test if correct number of resourcess added?
-    # Test that no scene has more than one resources
+    # Test that the map has exactly one lair
+    count = 0
     for sc in a_map.scenes.values():
-        count = 0
         for f in sc.features:
-            if isinstance(f, map_.Landmark):
+            if isinstance(f, map_.Lair):
                 count +=1
-        print "count: {}. features: {}".format(count, sc.features)
-        ok_(count <= 1)
+    ok_(count == 1)
     
 
 def add_flora_test():
@@ -375,7 +352,7 @@ def generate_scenes_test():
         # Test for map connectedness
         ok_(check_map_connectedness(a_map))
 
-        # Test if each scene is well-formed (features, resourcess)
+        # Test if each scene is well-formed (features)
         # NOTE: Implement this
 
 
