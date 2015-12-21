@@ -11,7 +11,7 @@ from tests.test_data import *
 
 
 def run_away_test():
-    # Test running away!
+    # Test player running away!
 
     # create map and characters
     a_map = map_.Map('story')
@@ -27,7 +27,8 @@ def run_away_test():
     s2.name = 'scene2'
     a_map.add_scene(s2)
     map_gen.create_link(s1, s2)
-    # set up the boss scenes
+    # spawn the boss in one of the scenes
+    map_gen.add_lair(a_map)
     map_gen.spawn_boss(a_map)
     # run away from one of the scenes
     name = combat.run_away(s1)

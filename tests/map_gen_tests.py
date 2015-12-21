@@ -67,7 +67,9 @@ def add_lair_test():
     count = 0
     for sc in a_map.scenes.values():
         for f in sc.features:
-            if isinstance(f, map_.Lair):
+            if isinstance(f, map_.Lair): # found a scene with a lair
+                # test if it's the scene the map thinks the lair is in
+                ok_(sc.name == a_map.lair_scene_name)
                 count +=1
     ok_(count == 1)
     
@@ -84,6 +86,16 @@ def add_flora_test():
         ok_('understory' in scene.description)
         ok_('shrubs' in scene.description)
         ok_('floor' in scene.description)
+
+
+def spawn_boss_test():
+    # Test if boss is spawned in correct location
+    a_map = map_gen.new_map()
+    # check if lair and boss's scene names agree
+    ok_(a_map.boss_scene_name == a_map.lair_scene_name)
+    # check if boss is actually in scene
+    sc = a_map.scenes[a_map.boss_scene_name]
+    ok_(sc.flags['encounter'])
 
 
 def add_links_test():
@@ -356,7 +368,7 @@ def generate_scenes_test():
         # NOTE: Implement this
 
 
-########## HELPER FUNCTIONS ##########
+########## HELPER FUNCTIONS (Not Tests) ##########
 
 def check_map_connectedness(a_map):
     """ 

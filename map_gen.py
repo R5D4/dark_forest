@@ -187,6 +187,8 @@ def add_lair(a_map):
     scene = choice(a_map.scenes.values())
     lair = map_.Lair()
     scene.features.append(lair)
+    # add lair's scene name to the map
+    a_map.lair_scene_name = scene.name
 
 
 def add_item_stashes(a_map):
@@ -258,8 +260,8 @@ def add_description(scene):
 
 
 def spawn_boss(a_map):
-    """ Place the boss in a random scene on the map."""
-    sc_name = choice(a_map.scenes.keys()) # pick random scene from map
+    """ Spawn the boss in its lair."""
+    sc_name = a_map.lair_scene_name
     a_map.boss_scene_name = sc_name
     # set encounter flag in the scene
     sc = a_map.scenes[sc_name]

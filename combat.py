@@ -152,7 +152,12 @@ def combat_help(player):
 
 
 def run_away(scene):
-    """ Run away from combat. Return name of a random adjacent location."""
+    """
+    Player runs away from combat. 
+
+    scene: current Scene object of the player
+    Return name of a random adjacent location.
+    """
     scene.clock_tick()
     name = choice(scene.exits.values())
     return name

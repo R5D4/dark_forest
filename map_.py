@@ -67,6 +67,7 @@ class Map(object):
         self.scenes = {} # (name, Scene object)
         self.special_scenes = {} # (name, Scene object)
         self.characters = {}; # (name, Character object)
+        self.lair_scene_name = None # scene name of the lair
         self.boss_scene_name = None # scene name of boss' location
         self.clock = game_clock.GameClock()
         self.path = [] # current path that the boss is on
