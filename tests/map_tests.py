@@ -390,3 +390,34 @@ def lair_search_test():
     ok_(msg == "You've uncovered a secret lair!")
     ok_(lair.revealed)
 
+########## Utility Functions Tests ##########
+
+
+def update_desc_test():
+    # Test update description function
+
+    # create map and characters
+    a_map = map_.Map('story')
+    player = char.Player()
+    boar = char.Boar()
+    a_map.characters['player'] = player
+    a_map.characters['boar'] = boar
+    # add a scene
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    s1.features = [] # no features
+    # add a lair as the only feature
+    map_gen.add_lair(a_map)
+    lair = s1.features[0]
+
+    # unrevealed lair
+    ok_(s1.description == "No description available.")
+    # revealed lair
+    lair.revealed = True
+    map_.update_desc(s1)
+    print s1.description
+    ok_("There's a cave entrance behind the thick brush, it's the lair of the \
+forest guardian!" in s1.description)
+
+    

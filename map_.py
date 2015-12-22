@@ -345,6 +345,7 @@ class Scene(object):
 
     def cmd_look(self):
         """ Execute 'look' command. Print scene descriptions."""
+        update_desc(self)
         self.describe()
         self.print_items()
         self.print_clues()
@@ -676,8 +677,8 @@ lair of the forest guardian!"
     def search(self):
         """ Execute a search for the lair."""
         chance = randint(1, 100)
-        # 10% chance of discovering the lair in the scene
-        if chance <= 10:
+        # 30% chance of discovering the lair in the scene
+        if chance <= 30:
             self.revealed = True
             return "You've uncovered a secret lair!"
         else:
