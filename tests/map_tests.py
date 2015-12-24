@@ -266,6 +266,60 @@ def cmd_search_test():
     ok_("Hunting Knife" in msg)
 
 
+def print_encounter_msg_test():
+    # Test if encounter messages are printed correctly
+
+    # create map and characters
+    a_map = map_.Map('story')
+    player = char.Player()
+    boar = char.Boar()
+    a_map.characters['player'] = player
+    a_map.characters['boar'] = boar
+    # add a scene
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    # spawn the boss in s1 and put it in the lair
+    a_map.boss_scene_name = s1.name
+    s1.features = [] # no features
+    map_gen.add_lair(a_map)
+    lair = s1.features[0]
+
+    # boss in lair, lair unrevealed
+    lair.revealed = False
+    lair.has_boss = True
+    s1.flags['encounter'] = False
+    ok_(s1.print_encounter_msg() is None)
+    # boss in lair, lair revealed
+    lair.revealed = True
+    lair.has_boss= True
+    s1.flags['encounter'] = True
+    ok_(s1.print_encounter_msg() == "You can see movement inside the beast's \
+lair!")
+    # boss not in scene, lair unrevealed
+    lair.revealed = False
+    lair.has_boss = False
+    s1.flags['encounter'] = False
+    ok_(s1.print_encounter_msg() is None)
+    # boss not in scene, lair revealed
+    lair.revealed = True
+    lair.has_boss = False
+    s1.flags['encounter'] = False
+    ok_(s1.print_encounter_msg() is None)
+    # boss in scene (not in lair), lair unrevealed
+    lair.revealed = False
+    lair.has_boss= False
+    s1.flags['encounter'] = True
+    ok_(s1.print_encounter_msg() == "You see the boar! You don't think it \
+notices you.")
+    # boss in scene (not in lair), lair revealed
+    lair.revealed = True
+    lair.has_boss= False
+    s1.flags['encounter'] = True
+    ok_(s1.print_encounter_msg() == "You see the boar! You don't think it \
+notices you.")
+
+
 def get_boss_attack_test():
     # Test when the boss will attack
     # create map and characters

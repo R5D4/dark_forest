@@ -233,7 +233,8 @@ class Scene(object):
         self.characters = characters
         self.exits = {}
         self.flags = {
-            'encounter': False,
+            # indicates that the player is aware of the boss' presence here
+            'encounter': False, 
             'can_leave': True 
         }
         self.features = [] # Feature objects
@@ -534,9 +535,30 @@ class Scene(object):
             print '\n'.join(msg)
 
     def print_encounter_msg(self):
-        """ Print a message indicating if the boss is in the area."""
-        if self.flags['encounter']:
-            print "You see the boar! You don't think it notices you."
+        """
+        Print a message indicating if the boss is in the area.
+        
+        Return the printed message (for testing).
+        """
+        # get the Lair object from the scene if applicable
+        lair = None
+        for f in self.features:
+            if isinstance(f, Lair):
+                lair = f
+                break
+
+        if self.flags['encounter']: # player sees the boss
+            # boss in revealed lair
+            if lair and lair.revealed and lair.has_boss: 
+                msg = "You can see movement inside the beast's lair!"
+                print msg
+                return msg
+            else: # boss in scene
+                msg = "You see the boar! You don't think it notices you."
+                print msg
+                return msg
+        else: # player doesn't see the boss
+            return None
 
     def clock_tick(self):
         """
@@ -665,6 +687,7 @@ class Lair(Feature):
     def __init__(self):
         """ Initialize lair attributes."""
         self.revealed = False
+        self.has_boss = False
 
     def get_desc(self):
         """ Return lair description if revealed. Otherwise return empty str."""
