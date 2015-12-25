@@ -14,9 +14,16 @@ class GameClock(object):
     """
 
     def __init__(self):
-        self.time = START_TIME
+        self.time = START_TIME # 24-hr clock (values: 0-23)
 
     def tick(self):
         """ Advance time by one clock tick."""
         self.time = (self.time + TICK) % 24
+
+    def is_day(self):
+        """ Return True if it's daytime, else False."""
+        if self.time >= 7 and self.time <= 19: # 0700 to 1900 is daytime
+            return True
+        else:
+            return False
 

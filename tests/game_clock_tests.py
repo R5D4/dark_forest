@@ -22,3 +22,21 @@ def tick_test():
     clock.tick()
     ok_(clock.time == 0)
 
+def is_day_test():
+    # Test if day/night is determined correctly
+    clock = game_clock.GameClock()
+    # test cases
+    clock.time = 6
+    ok_(not clock.is_day())
+    clock.time = 7
+    ok_(clock.is_day())
+    clock.time = 8
+    ok_(clock.is_day())
+    clock.time = 18
+    ok_(clock.is_day())
+    clock.time = 19
+    ok_(clock.is_day())
+    clock.time = 20
+    ok_(not clock.is_day())
+
+
