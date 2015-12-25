@@ -332,13 +332,21 @@ def get_boss_attack_test():
     s1.name = 'scene1'
     a_map.add_scene(s1)
     # Should not attack (boss not in scene)
+    a_map.clock.time = 22
     s1.flags['encounter'] = False
     ok_(not s1.get_boss_attack())
     # Should not attack (HP too low)
+    a_map.clock.time = 22
     s1.flags['encounter'] = True
     boar.health['HP'] = 29
     ok_(not s1.get_boss_attack())
+    # Should not attack (daytime)
+    a_map.clock.time = 10
+    s1.flags['encounter'] = True
+    boar.health['HP'] = 30
+    ok_(not s1.get_boss_attack())
     # Should attack with non-zero chance
+    a_map.clock.time = 22
     s1.flags['encounter'] = True
     boar.health['HP'] = 30
     attacked = False

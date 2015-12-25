@@ -584,8 +584,11 @@ class Scene(object):
         # don't attack when bloodied
         if boar.health['HP']/float(boar.effective_stats['max_HP']) < 0.3:
             return False
-        else: # 50% random chance
-            return self.flags['encounter'] and randint(1, 100) <= 50 
+        # don't attack during daytime
+        if self.scene_map.clock.is_day():
+            return False
+        # otherwise, 50% random chance
+        return self.flags['encounter'] and randint(1, 100) <= 50 
 
 ##########  SPECIAL SCENES  ##########
 
