@@ -147,8 +147,8 @@ class Map(object):
         return (boss_sc.name, direction) 
 
     def move_boss2(self):
-        """ Move the boss using the new targeted movement algorithm."""
-        # NOTE: Changed the name of this method; replace move_boss when done.
+        """ Move the boss using the new movement algorithm."""
+        # NOTE: Change the name of this method; replace move_boss when done.
 
         direction = None
         boss_sc = self.scenes[self.boss_scene_name]
