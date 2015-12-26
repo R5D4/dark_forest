@@ -70,7 +70,7 @@ class Map(object):
         self.lair_scene_name = None # scene name of the lair
         self.boss_scene_name = None # scene name of boss' location
         self.clock = game_clock.GameClock()
-        self.path = [] # current path that the boss is on
+        self.path = [] # list of scene names in path
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -149,35 +149,41 @@ class Map(object):
     def move_boss2(self):
         """ Move the boss using the new targeted movement algorithm."""
         # NOTE: Changed the name of this method; replace move_boss when done.
-        # 0. If we've previously picked a path, go to 4. Else, go to 1
-        if not self.path: # no path chosen yet
-            # 1. Choose desired resource type (food, water, bed, wallow)
-            resource = self.choose_resource()
-            # 2. Find target scene with desired resource type
-            target_name = self.find_resource_scene(resource)
-            # 3. Construct path from boss' current scene to target scene
-            self.path = self.construct_path(boss_scene_name, target_name)
-            # 4. Pop the scene that the boss just moved to from path
-            next_sc_name = self.path.pop(0)
-            # 5. Move the boss to next scene in path
+
+        direction = None
+        boss_sc = self.scenes[self.boss_scene_name]
+        if self.clock.is_day(): # day time, get to the lair
+            # if in lair scene, stay
+            if self.boss_scene_name == self.lair_scene_name:
+                pass
+            else: # not in lair scene, go to lair scene
+                # if no path yet, construct path
+                if not self.path:
+                    self.path = self.construct_path(self.boss_scene_name,
+                                                    self.lair_scene_name)
+                # move on path
+                if self.path: # redundant check?
+                    next_sc_name = path.pop()
+                    boss_sc.flags['encounter'] = False
+                    next_sc.flags['encounter'] = True
+                    self.boss_scene_name = next_sc_name
+                    # NOTE: print debugging statements
+                    print "Moved {} from {} to {}.".format(direction, 
+                                                           boss_sc.name,
+                                                           next_sc_name)
+        else: # night time, move randomly
+            self.path = [] # reset path, don't need it
+            direction, next_sc_name = choice(boss_sc.exits.items())
             next_sc = self.scenes[next_sc_name]
             boss_sc.flags['encounter'] = False
             next_sc.flags['encounter'] = True
             self.boss_scene_name = next_sc_name
+            # NOTE: print debugging statements
+            print "Moved {} from {} to {}.".format(direction, boss_sc.name,
+                                                              next_sc_name)
 
-    def choose_resource(self):
-        """ Choose an appropriate resource type for the boss to seek."""
-        # NOTE: rough copy
-        return choice(['food', 'water', 'wallow', 'bed'])
+        return (boss_sc.name, direction) 
 
-    def find_resource_scene(self, resource_type):
-        """ Find a scene on the map with the desired resource type."""
-        # NOTE: implement this
-        # Construct list of scenes (from all scenes on map) that
-        #   contains the desired resource type
-        # Randomly pick a scene from the constructed list and return its name
-        pass
-    
     def construct_path(self, boss_scene_name, target_scene_name):
         """ Construct a path through the map given a start and target scene."""
         # NOTE: implement this
@@ -192,7 +198,7 @@ class Map(object):
         """
         boss_sc = self.scenes[scene_name]
         # 75% chance to leave footprints on move
-        if direction and randint(1, 100) <= 75:
+        if direction and randint(1, 100) <= 75: # direction not None
             boss_sc.clues.append(FootprintClue(direction))
             # NOTE: print debugging statements
             #print "Left footprints in {} pointing {}.".format(scene_name, 
@@ -574,7 +580,9 @@ class Scene(object):
         # update all clues on map
         self.scene_map.update_clues()
         # move boss to different scene
-        scene_name, direction = self.scene_map.move_boss()
+        # NOTE: changed for testing
+        #scene_name, direction = self.scene_map.move_boss()
+        scene_name, direction = self.scene_map.move_boss2()
         # leave a clue in current scene
         self.scene_map.leave_clue(scene_name, direction)
 
@@ -751,7 +759,6 @@ class Stratum(Feature):
 
 class Landmark(Feature):
     """ An environmental landmark indicating long-term boss activity."""
-    # NOTE: obsoleted by long-term clues
 
     def __init__(self, landmark_type, landmark_desc):
         """
