@@ -187,6 +187,7 @@ class Map(object):
     def construct_path(self, boss_scene_name, target_scene_name):
         """ Construct a path through the map given a start and target scene."""
         # NOTE: implement this
+        # Use BFS
         pass
 
     def leave_clue(self, scene_name, direction):
