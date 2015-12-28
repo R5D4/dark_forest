@@ -45,6 +45,10 @@ def construct_path_test():
     path = a_map.construct_path(s2.name, s4.name)
     print path
     ok_(path == ['scene4', 'scene3'])
+    # test 3: 3 to 4
+    path = a_map.construct_path(s3.name, s4.name)
+    print path
+    ok_(path == ['scene4'])
 
     # map 2: 
     #   1
