@@ -70,7 +70,7 @@ class Map(object):
         self.lair_scene_name = None # scene name of the lair
         self.boss_scene_name = None # scene name of boss' location
         self.clock = game_clock.GameClock()
-        self.path = [] # list of scene names in path
+        self.path = [] # list of scene names in path (destination first)
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -184,11 +184,46 @@ class Map(object):
 
         return (boss_sc.name, direction) 
 
-    def construct_path(self, boss_scene_name, target_scene_name):
-        """ Construct a path through the map given a start and target scene."""
-        # NOTE: implement this
-        # Use BFS
-        pass
+    def construct_path(self, start, goal):
+        """
+        Construct shortest path from start to goal.
+
+        start: starting scene name
+        goal: goal scene name
+        """
+        # Use BFS for now
+        tree = {} # search tree: { scene_name: parent_scene_name, ... }
+        queue = [] # for BFS
+        visited = [] # visited scenes during BFS
+        path = [] # final results
+
+        tree[start] = None # no parent
+        visited.append(start)
+        queue.append(start)
+        
+        # construct search tree until we reach the goal
+        found = False
+        while queue and not found:
+            current = queue.pop(0) # current scene name
+            exits = self.scenes[current].exits.values()
+            #  for each unvisited scene that is adjacent to current
+            for adj in [ node for node in exits if node not in visited ]:
+                if adj not in tree: # unvisited scene
+                    tree[adj] = current # set parent
+                    visited.append(adj)
+                    queue.append(adj)
+                # stop searching when we reach the goal
+                if adj == goal:
+                    found = True
+                    break;
+
+        # backtrace to construct path
+        sc = goal
+        while sc != start: # exclude starting scene from path
+            path.append(sc)
+            sc = tree[sc] # set sc to its parent
+
+        return path
 
     def leave_clue(self, scene_name, direction):
         """

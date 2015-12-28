@@ -16,6 +16,11 @@ def move_boss2_test():
     pass
 
 
+def construct_path_test():
+    # Test path construction
+    pass
+
+
 def move_boss_test():
     # Tests boss' movement on the map
 
