@@ -18,7 +18,70 @@ def move_boss2_test():
 
 def construct_path_test():
     # Test path construction
-    pass
+
+    # map 1: 1-2-3-4
+    a_map = map_.Map('story')
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    a_map.add_scene(s2)
+    s3 = map_gen.new_scene(a_map, None, (7, 5))
+    s3.name = 'scene3'
+    a_map.add_scene(s3)
+    s4 = map_gen.new_scene(a_map, None, (8, 5))
+    s4.name = 'scene4'
+    a_map.add_scene(s4)
+    # create links
+    map_gen.create_link(s1, s2)
+    map_gen.create_link(s2, s3)
+    map_gen.create_link(s3, s4)
+    # test 1: 1 to 4
+    path = a_map.construct_path(s1.name, s4.name)
+    print path
+    ok_(path == ['scene4', 'scene3', 'scene2'])
+    # test 2: 2 to 4
+    path = a_map.construct_path(s2.name, s4.name)
+    print path
+    ok_(path == ['scene4', 'scene3'])
+
+    # map 2: 
+    #   1
+    #   |\
+    #   2 3
+    #   | |
+    #   5-4
+    a_map = map_.Map('story')
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    s2 = map_gen.new_scene(a_map, None, (5, 6))
+    s2.name = 'scene2'
+    a_map.add_scene(s2)
+    s3 = map_gen.new_scene(a_map, None, (6, 6))
+    s3.name = 'scene3'
+    a_map.add_scene(s3)
+    s4 = map_gen.new_scene(a_map, None, (6, 7))
+    s4.name = 'scene4'
+    a_map.add_scene(s4)
+    s5 = map_gen.new_scene(a_map, None, (5, 7))
+    s5.name = 'scene5'
+    a_map.add_scene(s5)
+    # create links
+    map_gen.create_link(s1, s2)
+    map_gen.create_link(s1, s3)
+    map_gen.create_link(s2, s5)
+    map_gen.create_link(s3, s4)
+    map_gen.create_link(s4, s5)
+    # test 1: 1 to 5
+    path = a_map.construct_path(s1.name, s5.name)
+    print path
+    ok_(path == ['scene5', 'scene2'])
+    # test 2: 3 to 2
+    path = a_map.construct_path(s3.name, s2.name)
+    print path
+    ok_(path == ['scene2', 'scene1'])
 
 
 def move_boss_test():

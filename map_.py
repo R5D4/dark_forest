@@ -273,7 +273,7 @@ class Scene(object):
         self.name = None
         self.location = None
         self.characters = characters
-        self.exits = {}
+        self.exits = {} # (direction, scene_name)
         self.flags = {
             # indicates that the player is aware of the boss' presence here
             'encounter': False, 
