@@ -161,9 +161,12 @@ class Map(object):
                 if not self.path:
                     self.path = self.construct_path(self.boss_scene_name,
                                                     self.lair_scene_name)
+                    # NOTE: print debugging statements
+                    print "Constructing path to lair: {}".format(self.path)
                 # move on path
                 if self.path: # redundant check?
-                    next_sc_name = path.pop()
+                    next_sc_name = self.path.pop()
+                    next_sc = self.scenes[next_sc_name]
                     boss_sc.flags['encounter'] = False
                     next_sc.flags['encounter'] = True
                     self.boss_scene_name = next_sc_name
