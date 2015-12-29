@@ -10,12 +10,6 @@ from tests.test_data import *
 ########## Map Class Tests ##########
 
 
-def move_boss2_test():
-    # Test the new boss movement algorithm
-    # NOTE: rename this after renaming the method
-    pass
-
-
 def construct_path_test():
     # Test path construction
 
@@ -91,31 +85,50 @@ def construct_path_test():
 def move_boss_test():
     # Tests boss' movement on the map
 
-    # create map and characters
+    # create map: 1-2-3 
     a_map = map_.Map('story')
-    player = char.Player()
-    boar = char.Boar()
-    a_map.characters['player'] = player
-    a_map.characters['boar'] = boar
-    # add two adjacent scenes
     s1 = map_gen.new_scene(a_map, None, (5, 5))
     s1.name = 'scene1'
     a_map.add_scene(s1)
     s2 = map_gen.new_scene(a_map, None, (6, 5))
     s2.name = 'scene2'
     a_map.add_scene(s2)
+    s3 = map_gen.new_scene(a_map, None, (7, 5))
+    s3.name = 'scene3'
+    a_map.add_scene(s3)
     map_gen.create_link(s1, s2)
-    # spawn the boss in s1
+    map_gen.create_link(s2, s3)
+    # set lair and spawn boss
     a_map.boss_scene_name = s1.name
+    a_map.lair_scene_name = s1.name
     s1.flags['encounter'] = True
-    # move the boss
-    direction = a_map.move_boss()
-    print direction
-    ok_(direction == (s1.name, None) or direction == (s1.name, 'e'))
-    if direction == 'e':
-        ok_(not s1.flags['encounter'])
-        ok_(s2.flags['encounter'])
-        a_map.boss_scene_name == s2.name
+
+    # test 1: daytime, in lair scene
+    for t in range(7, 20): # 0700 to 1900
+        a_map.clock.time = t
+        new_scene, direction = a_map.move_boss()
+        ok_(not a_map.path) # no path chosen
+        ok_(new_scene == s1.name and not direction) # should stay in same scene
+
+    # test 2: daytime, not in lair scene
+    for t in range(7, 20): # 0700 to 1900
+        a_map.clock.time = t
+        a_map.path = [] # reset path
+        a_map.boss_scene_name = s3.name # spawn boss away from lair
+        new_scene, direction = a_map.move_boss()
+        ok_(a_map.path) # path to lair constructed
+
+    # test 3: nighttime
+    moved = False
+    a_map.clock.time = 20
+    for t in range(10): # 2000 to 0600
+        a_map.clock.tick()
+        a_map.boss_scene_name = s3.name # spawn boss away from lair
+        new_scene, direction = a_map.move_boss()
+        if direction: # not None
+            moved = True
+        ok_(not a_map.path) # no path chosen
+    ok_(moved) # should have moved at least once (randomly)
 
 
 def map_update_clues_test():

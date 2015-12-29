@@ -22,7 +22,7 @@ class GameClock(object):
 
     def is_day(self):
         """ Return True if it's daytime, else False."""
-        if self.time >= 7 and self.time <= 19: # 0700 to 1900 is daytime
+        if self.time >= 7 and self.time <= 19: # 0700 to 1900 inclusive
             return True
         else:
             return False

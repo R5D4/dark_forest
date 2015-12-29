@@ -123,33 +123,7 @@ class Map(object):
         draw_map.print_canvas(draw_map.prepare_canvas(self, current_loc))
 
     def move_boss(self):
-        """
-        Determine and execute the boss' movement.
-
-        Return duplet: (boss scene name, direction of movement)
-        Return None as direction if boss didn't move.
-        """
-        # boss has a chance to move to another scene
-        direction = None
-        boss_sc = self.scenes[self.boss_scene_name]
-        if randint(1, 100) <= 75: # 75% chance to move
-            # boss' location
-            # pick adjacent location
-            direction, next_sc_name = choice(boss_sc.exits.items())
-            next_sc = self.scenes[next_sc_name]
-            boss_sc.flags['encounter'] = False
-            next_sc.flags['encounter'] = True
-            self.boss_scene_name = next_sc_name
-            # NOTE: print debugging statements
-            #print "Moved {} from {} to {}.".format(direction, boss_sc.name,
-            #                                                  next_sc_name)
-        # return current scene and direction of movement
-        return (boss_sc.name, direction) 
-
-    def move_boss2(self):
         """ Move the boss using the new movement algorithm."""
-        # NOTE: Change the name of this method; replace move_boss when done.
-
         direction = None
         boss_sc = self.scenes[self.boss_scene_name]
         if self.clock.is_day(): # day time, get to the lair
@@ -619,9 +593,7 @@ class Scene(object):
         # update all clues on map
         self.scene_map.update_clues()
         # move boss to different scene
-        # NOTE: changed for testing
-        #scene_name, direction = self.scene_map.move_boss()
-        scene_name, direction = self.scene_map.move_boss2()
+        scene_name, direction = self.scene_map.move_boss()
         # leave a clue in current scene
         self.scene_map.leave_clue(scene_name, direction)
 
