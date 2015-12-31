@@ -553,19 +553,22 @@ class Scene(object):
                 msg.append(clue.get_desc())
             print '\n'.join(msg)
 
+    def get_lair(self):
+        """ Return the Lair object from the scene if applicable. Else None."""
+        lair = None
+        for f in self.features:
+            if isinstance(f, Lair):
+                lair = f
+                break
+        return lair
+
     def print_encounter_msg(self):
         """
         Print a message indicating if the boss is in the area.
         
         Return the printed message (for testing).
         """
-        # get the Lair object from the scene if applicable
-        lair = None
-        for f in self.features:
-            if isinstance(f, Lair):
-                lair = f
-                break
-
+        lair = self.get_lair()
         if self.flags['encounter']: # player sees the boss
             # boss in revealed lair
             if lair and lair.revealed and lair.has_boss: 

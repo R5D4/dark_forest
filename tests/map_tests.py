@@ -416,6 +416,7 @@ def get_boss_attack_test():
     s1 = map_gen.new_scene(a_map, None, (5, 5))
     s1.name = 'scene1'
     a_map.add_scene(s1)
+
     # Should not attack (boss not in scene)
     a_map.clock.time = 22
     s1.flags['encounter'] = False
@@ -440,6 +441,24 @@ def get_boss_attack_test():
         if attacked:
             break
     ok_(attacked)
+
+
+def get_lair_test():
+    # Test retrieving the Lair object from a scene
+
+    # create map and characters
+    a_map = map_.Map('story')
+    # add a scene
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    s1.features = [] # no features
+    # add a lair as the only feature
+    map_gen.add_lair(a_map)
+
+    # Get the Lair object
+    lair = s1.get_lair()
+    ok_(isinstance(lair, map_.Lair))
 
 ########## Clue Class/Subclasses Tests ##########
 
