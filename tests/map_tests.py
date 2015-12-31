@@ -10,6 +10,31 @@ from tests.test_data import *
 ########## Map Class Tests ##########
 
 
+def boss_at_lair_test():
+    # Test if we can correctly determine if the boss is in the lair scene
+    # create map
+    a_map = map_.Map('story')
+    # add a scene
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    s1.features = [] # no features
+    # add a lair in s1
+    map_gen.add_lair(a_map)
+    # add another scene
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    a_map.add_scene(s2)
+    s2.features = [] # no features
+
+    # Test 1: boss at lair
+    a_map.boss_scene_name = s1.name
+    ok_(a_map.boss_at_lair())
+    # Test 2: boss not at lair
+    a_map.boss_scene_name = s2.name
+    ok_(not a_map.boss_at_lair())
+
+
 def construct_path_test():
     # Test path construction
 
@@ -446,7 +471,7 @@ def get_boss_attack_test():
 def get_lair_test():
     # Test retrieving the Lair object from a scene
 
-    # create map and characters
+    # create map
     a_map = map_.Map('story')
     # add a scene
     s1 = map_gen.new_scene(a_map, None, (5, 5))

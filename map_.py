@@ -126,9 +126,10 @@ class Map(object):
         """ Move the boss using the new movement algorithm."""
         direction = None
         boss_sc = self.scenes[self.boss_scene_name]
+        lair = boss_sc.get_lair()
         if self.clock.is_day(): # day time, get to the lair
-            # if in lair scene, stay
-            if self.boss_scene_name == self.lair_scene_name:
+            # if in lair scene, stay hidden in lair
+            if self.boss_at_lair():
                 pass
             else: # not in lair scene, go to lair scene
                 # if no path yet, construct path
@@ -148,7 +149,20 @@ class Map(object):
                     print "Moved {} from {} to {}.".format(direction, 
                                                            boss_sc.name,
                                                            next_sc_name)
+                # if after moving, we are in the lair scene, hide in lair
+                boss_sc = self.scenes[self.boss_scene_name]
+                lair = boss_sc.get_lair()
+                if self.boss_at_lair() and not lair.has_boss:
+                    lair.has_boss = True
+                    # NOTE: print debugging statements
+                    print "Boss has hid in the lair."
+                    
         else: # night time, move randomly
+            # if in lair scene and boss in lair, get out of lair
+            if self.boss_at_lair() and lair.has_boss:
+                lair.has_boss = False
+                # NOTE: print debugging statements
+                print "Boss has left the lair."
             self.path = [] # reset path, don't need it
             direction, next_sc_name = choice(boss_sc.exits.items())
             next_sc = self.scenes[next_sc_name]
@@ -160,6 +174,10 @@ class Map(object):
                                                               next_sc_name)
 
         return (boss_sc.name, direction) 
+
+    def boss_at_lair(self):
+        """ Return True if the boss is in the lair scene. Else False."""
+        return self.boss_scene_name == self.lair_scene_name
 
     def construct_path(self, start, goal):
         """

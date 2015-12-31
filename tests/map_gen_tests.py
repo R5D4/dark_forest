@@ -96,6 +96,9 @@ def spawn_boss_test():
     # check if boss is actually in scene
     sc = a_map.scenes[a_map.boss_scene_name]
     ok_(sc.flags['encounter'])
+    # check if the boss is in the lair
+    lair = sc.get_lair()
+    ok_(lair.has_boss)
 
 
 def add_links_test():

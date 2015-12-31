@@ -266,6 +266,9 @@ def spawn_boss(a_map):
     # set encounter flag in the scene
     sc = a_map.scenes[sc_name]
     sc.flags['encounter'] = True
+    # put the boss in the lair
+    lair = sc.get_lair()
+    lair.has_boss = True
 
 
 def empty_adjacent(ref_loc, occupied_locs):
