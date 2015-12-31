@@ -150,10 +150,12 @@ class Map(object):
                                                            boss_sc.name,
                                                            next_sc_name)
                 # if after moving, we are in the lair scene, hide in lair
-                boss_sc = self.scenes[self.boss_scene_name]
-                lair = boss_sc.get_lair()
+                lair = next_sc.get_lair()
                 if self.boss_at_lair() and not lair.has_boss:
                     lair.has_boss = True
+                    # make boss undetectable in hidden lair
+                    if not lair.revealed:
+                        next_sc.flags['encounter'] = False
                     # NOTE: print debugging statements
                     print "Boss has hid in the lair."
                     
