@@ -123,12 +123,12 @@ class Map(object):
         draw_map.print_canvas(draw_map.prepare_canvas(self, current_loc))
 
     def move_boss(self):
-        """ Move the boss using the new movement algorithm."""
+        """ Define boss behavior."""
         direction = None
         boss_sc = self.scenes[self.boss_scene_name]
         lair = boss_sc.get_lair()
         if self.clock.is_day(): # day time, get to the lair
-            # if in lair scene, stay hidden in lair
+            # if already in lair scene, stay hidden in lair (assumed in lair)
             if self.boss_at_lair():
                 pass
             else: # not in lair scene, go to lair scene
@@ -582,12 +582,24 @@ class Scene(object):
                 break
         return lair
 
+    def update_encounter(self):
+        """ Update the scene's encounter flag."""
+        lair = self.get_lair()
+        if lair:
+            if lair.has_boss and lair.revealed:
+                self.flags['encounter'] = True
+            elif lair.has_boss and not lair.revealed:
+                self.flags['encounter'] = False
+        else:
+            pass
+
     def print_encounter_msg(self):
         """
         Print a message indicating if the boss is in the area.
         
         Return the printed message (for testing).
         """
+        self.update_encounter()
         lair = self.get_lair()
         if self.flags['encounter']: # player sees the boss
             # boss in revealed lair
