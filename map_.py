@@ -146,6 +146,7 @@ class Map(object):
                     next_sc.flags['encounter'] = True
                     self.boss_scene_name = next_sc_name
                     # NOTE: print debugging statements
+                    direction = get_exit_dir(boss_sc, next_sc)
                     print "Moved {} from {} to {}.".format(direction, 
                                                            boss_sc.name,
                                                            next_sc_name)
@@ -928,3 +929,9 @@ def update_desc(scene):
     descriptions.append("\nThe path leads towards {}".format(
                                                        scene.exits.keys()))
     scene.description = ' '.join(descriptions)
+
+
+def get_exit_dir(s1, s2):
+    """ Return exit direction from s1 to s2. s1 and s2 are Scene objects."""
+    return map_gen.link_direction(s1.location, s2.location)
+    
