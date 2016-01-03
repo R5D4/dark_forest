@@ -263,8 +263,8 @@ def spawn_boss(a_map):
     """ Spawn the boss in its lair."""
     sc_name = a_map.lair_scene_name
     a_map.boss_scene_name = sc_name
-    # set encounter flag in the scene
     sc = a_map.scenes[sc_name]
+    # NOTE: uncomment to show boss spawn location on map, should be False
     sc.flags['encounter'] = True
     # put the boss in the lair
     lair = sc.get_lair()
