@@ -893,8 +893,8 @@ class FootprintClue(Clue):
         return ' '.join(msg)
 
 
-class DroppingsClue(Clue):
-    """ Droppings left by the boss."""
+class BrokenTreeClue(Clue):
+    """ Trees broken by the boss."""
 
     def __init__(self):
         """ Extends Clue.__init__ method."""
@@ -912,8 +912,9 @@ seem fresh."
         else:
             return "You find some dried droppings."
 
-class RubbingClue(Clue):
-    """ Rubbing left by the boss."""
+
+class SlainAnimalClue(Clue):
+    """ Carcass of slain animals."""
 
     def __init__(self):
         """ Extends Clue.__init__ method."""
