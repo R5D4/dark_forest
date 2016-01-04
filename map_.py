@@ -389,7 +389,8 @@ class Scene(object):
         update_desc(self)
         self.describe()
         self.print_items()
-        self.print_clues()
+        # NOTE: disabled for updates
+        # self.print_clues()
 
     def cmd_rest(self):
         """ Execute 'rest' command. Return output string."""
@@ -627,11 +628,13 @@ class Scene(object):
         boar = self.characters['boar']
         boar.heal()
         # update all clues on map
-        self.scene_map.update_clues()
+        # NOTE: disabled for updates
+        # self.scene_map.update_clues()
         # move boss to different scene
         scene_name, direction = self.scene_map.move_boss()
         # leave a clue in current scene
-        self.scene_map.leave_clue(scene_name, direction)
+        # NOTE: disabled for updates
+        #self.scene_map.leave_clue(scene_name, direction)
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""
@@ -825,21 +828,27 @@ class Landmark(Feature):
 class Clue(object):
     """ A clue indicating recent boss activity."""
     
-    def __init__(self, c_type, ttl):
+    def __init__(self, c_type, fresh):
         """
-        Initialize clue details.
-
+        Initialize clue details. 
+        
         c_type: string - clue type
-        ttl: integer - # clock ticks that the clue lasts
+        fresh: freshness, how many ticks is the clue fresh for?
         """
-        self.visible = True # really old clues become invisible and deleted
-        self.ttl = ttl # time to live - clue disappears once ttl reaches 0
+        self.count = 0 # number of clues of this type in the scene, increases
         self.clue_type = c_type
+        self.fresh = fresh # >0 is fresh, counts down every tick
+
+    def add_clue(self):
+        """ Add one more clue of same type. Extend in subclass."""
+        self.count += 1
 
     def update(self):
         """ Update the clue and desc each clock tick. Extend in subclass."""
-        # decrement ttl by 1
-        self.ttl -= 1
+        # decrement freshness by 1, lower limit = 0
+        self.freshness -= 1
+        if freshness < 0:
+            freshness = 0
 
     def get_desc(self):
         """ Construct and return description string. Override in subclass."""
@@ -853,7 +862,16 @@ class FootprintClue(Clue):
 
     def __init__(self, direction):
         """ Extends Clue.__init__ method."""
-        super(FootprintClue, self).__init__("footprint", 12)
+        super(FootprintClue, self).__init__("footprint", 2) # fresh for 2 ticks
+        self.direction = direction # direction of latest footprints
+
+    def add_clue(self, direction):
+        """
+        Add one more clue of same type. Extends Clue.add_clue.
+
+        direction: direction of the newest set of footprints
+        """
+        super(FootprintClue, self).add_clue()
         self.direction = direction
 
     def update(self):
@@ -863,12 +881,15 @@ class FootprintClue(Clue):
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
-        if self.ttl >= 11: 
+        if self.count > 1:
+            msg.append("There are multiple sets of foot prints.")
+
+        if self.fresh: # fresh = 0
             msg.append("You see a fresh set of footprints.")
         else:
-            msg.append("You barely make out some footprints.")
+            msg.append("The footprints have been here for a while.")
 
-        msg.append("The footprints point {}.".format(self.direction))
+        msg.append("The freshest footprints point {}.".format(self.direction))
         return ' '.join(msg)
 
 
