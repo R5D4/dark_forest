@@ -874,10 +874,6 @@ class FootprintClue(Clue):
         super(FootprintClue, self).add_clue()
         self.direction = direction
 
-    def update(self):
-        """ Update the clue and desc each clock tick. Extends Clue.update."""
-        super(FootprintClue, self).update()
-
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
@@ -898,19 +894,19 @@ class BrokenTreeClue(Clue):
 
     def __init__(self):
         """ Extends Clue.__init__ method."""
-        super(DroppingsClue, self).__init__("droppings", 8)
-
-    def update(self):
-        """ Update the clue and desc each clock tick. Extends Clue.update."""
-        super(DroppingsClue, self).update()
+        super(BrokenTreeClue, self).__init__("broken_tree", 2)
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
-        if self.ttl >= 6:
-            return "You find some droppings that belong to the beast. They \
-seem fresh."
+        msg = []
+        if self.count > 1:
+            msg.append("{} trees are knocked over.".format(self.count))
+
+        if self.fresh:
+            msg.append("You see a freshly broken tree.")
         else:
-            return "You find some dried droppings."
+            msg.append("The tree has been knocked over for a while.")
+        return ' '.join(msg)
 
 
 class SlainAnimalClue(Clue):
@@ -918,19 +914,19 @@ class SlainAnimalClue(Clue):
 
     def __init__(self):
         """ Extends Clue.__init__ method."""
-        super(RubbingClue, self).__init__("rubbing", 12)
-
-    def update(self):
-        """ Update the clue and desc each clock tick. Extends Clue.update."""
-        super(RubbingClue, self).update()
+        super(SlainAnimalClue, self).__init__("slain_animal", 2)
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
-        if self.ttl >= 11:
-            return "The beast has rubbed its muddy hide on a tree. The mud is \
-still wet."
+        msg = []
+        if self.count > 1:
+            msg.append("{} animal carcasses lay here.".format(self.count))
+
+        if self.fresh:
+            msg.append("You see a freshly deceased deer.")
         else:
-            return "The tree trunk is caked in flaky dried mud."
+            msg.append("You see a rotting corpse of a deer.")
+        return ' '.join(msg)
 
 ########## UTILITY FUNCTIONS ##########
 
