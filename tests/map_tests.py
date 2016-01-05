@@ -489,7 +489,20 @@ def get_lair_test():
 ########## Clue Class/Subclasses Tests ##########
 
 
-# NOTE: disabled for updates
+def add_clue_test():
+    # Test the Clue.add_clue method
+
+    # FootprintClue
+    clue = map_.FootprintClue('n')
+    ok_(clue.count == 1)
+    clue.add_clue('w')
+    clue.direction == 'w'
+    ok_(clue.count == 2)
+    clue.add_clue('s')
+    clue.direction == 's'
+    ok_(clue.count == 3)
+
+
 def clue_update_test():
     # Test update method of Clue subclasses
 

@@ -835,7 +835,7 @@ class Clue(object):
         c_type: string - clue type
         fresh: freshness, how many ticks is the clue fresh for?
         """
-        self.count = 0 # number of clues of this type in the scene, increases
+        self.count = 1 # number of clues of this type in the scene, increases
         self.clue_type = c_type
         self.fresh = fresh # >0 is fresh, counts down every tick
 
