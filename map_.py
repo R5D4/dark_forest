@@ -846,9 +846,9 @@ class Clue(object):
     def update(self):
         """ Update the clue and desc each clock tick. Extend in subclass."""
         # decrement freshness by 1, lower limit = 0
-        self.freshness -= 1
-        if freshness < 0:
-            freshness = 0
+        self.fresh -= 1
+        if self.fresh < 0:
+            self.fresh = 0
 
     def get_desc(self):
         """ Construct and return description string. Override in subclass."""

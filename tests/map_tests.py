@@ -490,21 +490,41 @@ def get_lair_test():
 
 
 # NOTE: disabled for updates
-#def clue_update_test():
-#    # Test update method of Clue subclasses
-#    clue = map_.FootprintClue('n')
-#    ok_(clue.ttl == 12)
-#    clue.update()
-#    ok_(clue.ttl == 11)
-#    clue.ttl = 0
-#    clue.update()
-#    ok_(clue.ttl == -1)
-#
-#
-#def footprint_init_test():
-#    # Test creating FootprintClue objects
-#    clue = map_.FootprintClue('n')
-#    ok_(clue.direction == 'n')
+def clue_update_test():
+    # Test update method of Clue subclasses
+
+    # FootprintClue
+    clue = map_.FootprintClue('n')
+    ok_(clue.fresh == 2)
+    clue.update()
+    ok_(clue.fresh == 1)
+    clue.fresh = 0
+    clue.update()
+    ok_(clue.fresh == 0)
+    
+    # BrokenTreeClue
+    clue = map_.BrokenTreeClue()
+    ok_(clue.fresh == 2)
+    clue.update()
+    ok_(clue.fresh == 1)
+    clue.fresh = 0
+    clue.update()
+    ok_(clue.fresh == 0)
+
+    # SlainAnimalClue
+    clue = map_.SlainAnimalClue()
+    ok_(clue.fresh == 2)
+    clue.update()
+    ok_(clue.fresh == 1)
+    clue.fresh = 0
+    clue.update()
+    ok_(clue.fresh == 0)
+
+
+def footprint_init_test():
+    # Test creating FootprintClue objects
+    clue = map_.FootprintClue('n')
+    ok_(clue.direction == 'n')
 
 ########## ItemStash Class Tests ##########
 
