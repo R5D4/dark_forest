@@ -489,11 +489,52 @@ def get_lair_test():
 ########## Clue Class/Subclasses Tests ##########
 
 
+def clue_get_desc_test():
+    # Test the get_desc method of each Clue subclass
+    
+    # FootprintClue
+    # test for count and freshness
+    clue = map_.FootprintClue('n') # 1 clue
+    ok_("You see a fresh set of footprints." in clue.get_desc())
+    clue.add_clue('s') # 2 clues
+    desc = clue.get_desc()
+    ok_("There are multiple sets of footprints." in desc)
+    ok_("You see a fresh set of footprints." in desc)
+    clue.fresh = 0
+    desc = clue.get_desc()
+    ok_("The footprints have been here for a while." in desc)
+
+    # BrokenTreeClue
+    # test for count and freshness
+    clue = map_.BrokenTreeClue() # 1 clue
+    ok_("You see a freshly broken tree." in clue.get_desc())
+    clue.add_clue() # 2 clues
+    desc = clue.get_desc()
+    ok_("2 trees are knocked over." in desc)
+    ok_("You see a freshly broken tree." in clue.get_desc())
+    clue.fresh = 0
+    desc = clue.get_desc()
+    ok_("The tree has been knocked over for a while." in desc)
+
+    # SlainAnimalClue
+    # test for count and freshness
+    clue = map_.SlainAnimalClue() # 1 clue
+    ok_("You see a freshly deceased deer." in clue.get_desc())
+    clue.add_clue() # 2 clues
+    desc = clue.get_desc()
+    ok_("2 animal carcasses lay here." in desc)
+    ok_("You see a freshly deceased deer." in clue.get_desc())
+    clue.fresh = 0
+    desc = clue.get_desc()
+    ok_("You see a rotting corpse of a deer." in desc)
+
+
 def add_clue_test():
     # Test the Clue.add_clue method
 
     # FootprintClue
     clue = map_.FootprintClue('n')
+    # test for direction and count
     ok_(clue.count == 1)
     clue.add_clue('w')
     clue.direction == 'w'
@@ -501,6 +542,37 @@ def add_clue_test():
     clue.add_clue('s')
     clue.direction == 's'
     ok_(clue.count == 3)
+    # test for freshness
+    clue.fresh = 0
+    clue.add_clue('n')
+    ok_(clue.fresh == 2)
+
+    # BrokenTreeClue
+    clue = map_.BrokenTreeClue()
+    # test for count
+    ok_(clue.count == 1)
+    clue.add_clue()
+    ok_(clue.count == 2)
+    clue.add_clue()
+    ok_(clue.count == 3)
+    # test for freshenss
+    clue.fresh = 0 
+    clue.add_clue()
+    ok_(clue.fresh == 2)
+
+
+    # SlainAnimalClue
+    clue = map_.SlainAnimalClue()
+    # test for count
+    ok_(clue.count == 1)
+    clue.add_clue()
+    ok_(clue.count == 2)
+    clue.add_clue()
+    ok_(clue.count == 3)
+    # test for freshenss
+    clue.fresh = 0 
+    clue.add_clue()
+    ok_(clue.fresh == 2)
 
 
 def clue_update_test():

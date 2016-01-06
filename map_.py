@@ -873,12 +873,13 @@ class FootprintClue(Clue):
         """
         super(FootprintClue, self).add_clue()
         self.direction = direction
+        self.fresh = 2 # refresh
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
         if self.count > 1:
-            msg.append("There are multiple sets of foot prints.")
+            msg.append("There are multiple sets of footprints.")
 
         if self.fresh: # fresh = 0
             msg.append("You see a fresh set of footprints.")
@@ -895,6 +896,13 @@ class BrokenTreeClue(Clue):
     def __init__(self):
         """ Extends Clue.__init__ method."""
         super(BrokenTreeClue, self).__init__("broken_tree", 2)
+
+    def add_clue(self):
+        """
+        Add one more clue of same type. Extends Clue.add_clue.
+        """
+        super(BrokenTreeClue, self).add_clue()
+        self.fresh = 2 # refresh
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
@@ -915,6 +923,13 @@ class SlainAnimalClue(Clue):
     def __init__(self):
         """ Extends Clue.__init__ method."""
         super(SlainAnimalClue, self).__init__("slain_animal", 2)
+
+    def add_clue(self):
+        """
+        Add one more clue of same type. Extends Clue.add_clue.
+        """
+        super(SlainAnimalClue, self).add_clue()
+        self.fresh = 2 # refresh
 
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
