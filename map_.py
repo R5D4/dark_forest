@@ -235,12 +235,14 @@ class Map(object):
         if direction and randint(1, 100) <= 75: # direction not None
             boss_sc.clues.append(FootprintClue(direction))
             # NOTE: print debugging statements
-            #print "Left footprints in {} pointing {}.".format(scene_name, 
-            #                                                  direction)
-        if randint(1, 100) <= 20: # 20% chance to leave droppings
-            boss_sc.clues.append(DroppingsClue())
-        if randint(1, 100) <= 20: # 10% chance to leave rubbing
-            boss_sc.clues.append(RubbingClue())
+            print "Left footprints in {} pointing {}.".format(scene_name, 
+                                                              direction)
+        if randint(1, 100) <= 20: # 30% chance to leave broken trees
+            boss_sc.clues.append(BrokenTreeClue())
+            print "Left a broken tree in {}".format(scene_name)
+        if randint(1, 100) <= 20: # 20% chance to leave slain animals
+            boss_sc.clues.append(SlainAnimalClue())
+            print "Left a slain anmial in {}".format(scene_name)
     
     def update_clues(self):
         """ Update all clues on the map."""
@@ -385,8 +387,7 @@ class Scene(object):
         update_desc(self)
         self.describe()
         self.print_items()
-        # NOTE: disabled for updates
-        # self.print_clues()
+        self.print_clues()
 
     def cmd_rest(self):
         """ Execute 'rest' command. Return output string."""
@@ -624,13 +625,11 @@ class Scene(object):
         boar = self.characters['boar']
         boar.heal()
         # update all clues on map
-        # NOTE: disabled for updates
-        # self.scene_map.update_clues()
+        self.scene_map.update_clues()
         # move boss to different scene
         scene_name, direction = self.scene_map.move_boss()
         # leave a clue in current scene
-        # NOTE: disabled for updates
-        #self.scene_map.leave_clue(scene_name, direction)
+        self.scene_map.leave_clue(scene_name, direction)
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""
