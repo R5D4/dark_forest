@@ -244,15 +244,11 @@ class Map(object):
     
     def update_clues(self):
         """ Update all clues on the map."""
-        # for each clue on map, decrement TTL, then remove clues if necessary
+        # for each clue on map, decrement freshness
         for sc in self.scenes.values():
             if sc.clues: # not None
                 for clue in sc.clues:
                     clue.update()
-                    if clue.ttl <= 0: # remove clue if its TTL <= 0
-                        sc.clues.remove(clue)
-                    else: # clue is still fresh
-                        pass
             else: # no clues in scene
                 pass
 

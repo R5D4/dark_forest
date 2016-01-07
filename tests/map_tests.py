@@ -156,41 +156,37 @@ def move_boss_test():
     ok_(moved) # should have moved at least once (randomly)
 
 
-# NOTE: disabled for updates
-#def map_update_clues_test():
-#    # Test Map.update_clues method
-#
-#    # create map and characters
-#    a_map = map_.Map('story')
-#    player = char.Player()
-#    boar = char.Boar()
-#    a_map.characters['player'] = player
-#    a_map.characters['boar'] = boar
-#    # add two adjacent scenes
-#    s1 = map_gen.new_scene(a_map, None, (5, 5))
-#    s1.name = 'scene1'
-#    a_map.add_scene(s1)
-#    # scene2 is east of scene1
-#    s2 = map_gen.new_scene(a_map, None, (6, 5))
-#    s2.name = 'scene2'
-#    a_map.add_scene(s2)
-#    map_gen.create_link(s1, s2)
-#    # put some clues in the scenes
-#    s1.clues.append(map_.FootprintClue('e')) # ttl = 12
-#    s2.clues.append(map_.DroppingsClue()) # ttl = 8
-#    # update clues one clock tick
-#    a_map.update_clues()
-#    ok_(s1.clues) # both clues should still exist
-#    ok_(s2.clues)
-#    # update clues 7 more times
-#    for i in range(7):
-#        a_map.update_clues()
-#    ok_(not s2.clues) # droppings should disappear
-#    ok_(s1.clues) # footprint should still be there
-#    # update clues 4 more times
-#    for i in range(4):
-#        a_map.update_clues()
-#    ok_(not s1.clues) # footprints should disappear
+def map_update_clues_test():
+    # Test Map.update_clues method
+
+    # create map and characters
+    a_map = map_.Map('story')
+    player = char.Player()
+    boar = char.Boar()
+    a_map.characters['player'] = player
+    a_map.characters['boar'] = boar
+    # add two adjacent scenes
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    # scene2 is east of scene1
+    s2 = map_gen.new_scene(a_map, None, (6, 5))
+    s2.name = 'scene2'
+    a_map.add_scene(s2)
+    map_gen.create_link(s1, s2)
+    # put some clues in the scenes
+    s1.clues.append(map_.FootprintClue('e')) 
+    s2.clues.append(map_.BrokenTreeClue())
+    ok_(s1.clues[0].fresh == 2)
+    ok_(s2.clues[0].fresh == 2)
+    # update clues one clock tick
+    a_map.update_clues()
+    ok_(s1.clues[0].fresh == 1)
+    ok_(s2.clues[0].fresh == 1)
+    # update clues one more time
+    a_map.update_clues()
+    ok_(s1.clues[0].fresh == 0)
+    ok_(s2.clues[0].fresh == 0)
 
 ########## Scene Class Tests ##########
 
