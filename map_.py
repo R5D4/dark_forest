@@ -123,7 +123,11 @@ class Map(object):
         draw_map.print_canvas(draw_map.prepare_canvas(self, current_loc))
 
     def move_boss(self):
-        """ Define boss behavior."""
+        """
+        Move the boss. 
+        
+        Return the pre-move scene, and movement direction or None.
+        """
         direction = None
         boss_sc = self.scenes[self.boss_scene_name]
         lair = boss_sc.get_lair()
@@ -231,6 +235,11 @@ class Map(object):
         direction: direction in which the boss moved
         """
         boss_sc = self.scenes[scene_name]
+        lair = boss_sc.get_lair()
+        # boss is in lair = inactive. Don't leave clues.
+        if lair and lair.has_boss:
+            return
+
         # 75% chance to leave footprints on move
         if direction and randint(1, 100) <= 75: # direction not None
             boss_sc.clues.append(FootprintClue(direction))
@@ -627,9 +636,9 @@ class Scene(object):
         # update all clues on map
         self.scene_map.update_clues()
         # move boss to different scene
-        scene_name, direction = self.scene_map.move_boss()
+        old_scene_name, direction = self.scene_map.move_boss()
         # leave a clue in current scene
-        self.scene_map.leave_clue(scene_name, direction)
+        self.scene_map.leave_clue(old_scene_name, direction)
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""
