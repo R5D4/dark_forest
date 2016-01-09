@@ -652,6 +652,25 @@ class Scene(object):
         # otherwise, 50% random chance
         return self.flags['encounter'] and randint(1, 100) <= 50 
 
+    def add_clue(self, clue_type, direction):
+        # NOTE: finish this
+        """
+        Add a clue of the specified type to this scene.
+        
+        clue_type: the clue type string for clue subclasses
+        direction: (optional, mandatory for footprints) direction of movement
+        """
+        # find any existing clues of the same type
+        clue = None
+        for c in self.clues:
+            if c.clue_type == clue_type:
+                clue = c
+                break
+        # if there is an existing clue, add to it
+        #if clue:
+        #    clue.add_clue()
+                
+
 ##########  SPECIAL SCENES  ##########
 
 
