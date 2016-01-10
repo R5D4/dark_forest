@@ -482,6 +482,27 @@ def get_lair_test():
     lair = s1.get_lair()
     ok_(isinstance(lair, map_.Lair))
 
+
+def scene_add_clue_test():
+    # Test Scene.add_clue method
+
+    # create a scene
+    a_map = map_.Map('story')
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+
+    # add first footprint
+    
+    # add second footprint
+
+    # add first broken tree
+    # add second broken tree
+
+    # add first slain animal
+    # add second slain animal
+
+
 ########## Clue Class/Subclasses Tests ##########
 
 
@@ -525,7 +546,7 @@ def clue_get_desc_test():
     ok_("You see a rotting corpse of a deer." in desc)
 
 
-def add_clue_test():
+def clue_add_clue_test():
     # Test the Clue.add_clue method
 
     # FootprintClue

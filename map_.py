@@ -652,13 +652,12 @@ class Scene(object):
         # otherwise, 50% random chance
         return self.flags['encounter'] and randint(1, 100) <= 50 
 
-    def add_clue(self, clue_type, direction):
-        # NOTE: finish this
+    def add_clue(self, clue_type, m_direction):
         """
         Add a clue of the specified type to this scene.
         
         clue_type: the clue type string for clue subclasses
-        direction: (optional, mandatory for footprints) direction of movement
+        m_direction: (optional, mandatory for footprints) direction of movement
         """
         # find any existing clues of the same type
         clue = None
@@ -667,8 +666,8 @@ class Scene(object):
                 clue = c
                 break
         # if there is an existing clue, add to it
-        #if clue:
-        #    clue.add_clue()
+        if clue:
+            clue.add_clue(direction=m_direction)
                 
 
 ##########  SPECIAL SCENES  ##########
@@ -862,7 +861,7 @@ class Clue(object):
         self.clue_type = c_type
         self.fresh = fresh # >0 is fresh, counts down every tick
 
-    def add_clue(self):
+    def add_clue(self, direction=None): 
         """ Add one more clue of same type. Extend in subclass."""
         self.count += 1
 
@@ -888,11 +887,12 @@ class FootprintClue(Clue):
         super(FootprintClue, self).__init__("footprint", 2) # fresh for 2 ticks
         self.direction = direction # direction of latest footprints
 
-    def add_clue(self, direction):
+    def add_clue(self, direction=None): 
         """
         Add one more clue of same type. Extends Clue.add_clue.
 
-        direction: direction of the newest set of footprints
+        keyword arguments: 
+        direction: (string) direction of the newest set of footprints
         """
         super(FootprintClue, self).add_clue()
         self.direction = direction
@@ -920,7 +920,7 @@ class BrokenTreeClue(Clue):
         """ Extends Clue.__init__ method."""
         super(BrokenTreeClue, self).__init__("broken_tree", 2)
 
-    def add_clue(self):
+    def add_clue(self, direction=None): 
         """
         Add one more clue of same type. Extends Clue.add_clue.
         """
@@ -947,7 +947,7 @@ class SlainAnimalClue(Clue):
         """ Extends Clue.__init__ method."""
         super(SlainAnimalClue, self).__init__("slain_animal", 2)
 
-    def add_clue(self):
+    def add_clue(self, direction=None): 
         """
         Add one more clue of same type. Extends Clue.add_clue.
         """
