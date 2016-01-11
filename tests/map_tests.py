@@ -515,6 +515,10 @@ def scene_find_clue_test():
     s1.name = 'scene1'
     a_map.add_scene(s1)
     s1.clues = []
+
+    # no clues
+    clue = s1.find_clue("footprint")
+    ok_(not clue)
     
     # add footprint
     s1.clues.append(map_.FootprintClue("n"))
