@@ -491,9 +491,12 @@ def scene_add_clue_test():
     s1 = map_gen.new_scene(a_map, None, (5, 5))
     s1.name = 'scene1'
     a_map.add_scene(s1)
+    s1.clues = []
 
     # add first footprint
-    
+    s1.add_clue("footprint_clue", "n")
+    clue = s1.find_clue("footprint")
+    #ok_(clue)
     # add second footprint
 
     # add first broken tree
@@ -501,6 +504,35 @@ def scene_add_clue_test():
 
     # add first slain animal
     # add second slain animal
+
+
+def scene_find_clue_test():
+    # Test Scene.find_clue
+
+    # create a scene
+    a_map = map_.Map('story')
+    s1 = map_gen.new_scene(a_map, None, (5, 5))
+    s1.name = 'scene1'
+    a_map.add_scene(s1)
+    s1.clues = []
+    
+    # add footprint
+    s1.clues.append(map_.FootprintClue("n"))
+    clue = s1.find_clue("footprint")
+    ok_(clue)
+    ok_(clue.clue_type == "footprint")
+
+    # add broken tree
+    s1.clues.append(map_.BrokenTreeClue())
+    clue = s1.find_clue("broken_tree")
+    ok_(clue)
+    ok_(clue.clue_type == "broken_tree")
+
+    # add slain animal
+    s1.clues.append(map_.SlainAnimalClue())
+    clue = s1.find_clue("slain_animal")
+    ok_(clue)
+    ok_(clue.clue_type == "slain_animal")
 
 
 ########## Clue Class/Subclasses Tests ##########

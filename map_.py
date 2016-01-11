@@ -659,16 +659,18 @@ class Scene(object):
         clue_type: the clue type string for clue subclasses
         m_direction: (optional, mandatory for footprints) direction of movement
         """
-        # find any existing clues of the same type
-        clue = None
-        for c in self.clues:
-            if c.clue_type == clue_type:
-                clue = c
-                break
+        # find the clue object of the desired type, if possible
+        clue = self.find_clue(clue_type)
         # if there is an existing clue, add to it
         if clue:
             clue.add_clue(direction=m_direction)
                 
+    def find_clue(self, clue_type):
+        """ Find the Clue object of the given type in the scene."""
+        for clue in self.clues:
+            if clue.clue_type == clue_type:
+                return clue
+        return None
 
 ##########  SPECIAL SCENES  ##########
 
