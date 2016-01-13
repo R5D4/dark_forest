@@ -494,9 +494,10 @@ def scene_add_clue_test():
     s1.clues = []
 
     # add first footprint
-    s1.add_clue("footprint_clue", "n")
+    s1.add_clue("footprint", "n")
     clue = s1.find_clue("footprint")
-    #ok_(clue)
+    ok_(clue)
+    ok_(clue.count == 1)
     # add second footprint
 
     # add first broken tree

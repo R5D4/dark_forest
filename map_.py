@@ -242,14 +242,17 @@ class Map(object):
 
         # 75% chance to leave footprints on move
         if direction and randint(1, 100) <= 75: # direction not None
+            # self.add_clue("footprint", direction)
             boss_sc.clues.append(FootprintClue(direction))
             # NOTE: print debugging statements
             print "Left footprints in {} pointing {}.".format(scene_name, 
                                                               direction)
         if randint(1, 100) <= 20: # 30% chance to leave broken trees
+            # self.add_clue("broken_tree", direction)
             boss_sc.clues.append(BrokenTreeClue())
             print "Left a broken tree in {}".format(scene_name)
         if randint(1, 100) <= 20: # 20% chance to leave slain animals
+            # self.add_clue("slain_animal", direction)
             boss_sc.clues.append(SlainAnimalClue())
             print "Left a slain anmial in {}".format(scene_name)
     
@@ -652,18 +655,20 @@ class Scene(object):
         # otherwise, 50% random chance
         return self.flags['encounter'] and randint(1, 100) <= 50 
 
-    def add_clue(self, clue_type, m_direction):
+    def add_clue(self, clue_class, m_direction):
         """
         Add a clue of the specified type to this scene.
         
-        clue_type: the clue type string for clue subclasses
-        m_direction: (optional, mandatory for footprints) direction of movement
+        clue_class: desired clue class to be instantiated
+        m_direction: direction of movement returned from move_boss
         """
         # find the clue object of the desired type, if possible
         clue = self.find_clue(clue_type)
         # if there is an existing clue, add to it
         if clue:
             clue.add_clue(direction=m_direction)
+        else: # no clue, create one
+            if 
                 
     def find_clue(self, clue_type):
         """ Find the Clue object of the given type in the scene."""
