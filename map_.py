@@ -242,18 +242,18 @@ class Map(object):
 
         # 75% chance to leave footprints on move
         if direction and randint(1, 100) <= 75: # direction not None
-            # self.add_clue("footprint", direction)
-            boss_sc.clues.append(FootprintClue(direction))
+            boss_sc.add_clue(FootprintClue, direction)
+            #boss_sc.clues.append(FootprintClue(direction))
             # NOTE: print debugging statements
             print "Left footprints in {} pointing {}.".format(scene_name, 
                                                               direction)
         if randint(1, 100) <= 20: # 30% chance to leave broken trees
-            # self.add_clue("broken_tree", direction)
-            boss_sc.clues.append(BrokenTreeClue())
+            boss_sc.add_clue(BrokenTreeClue, direction)
+            #boss_sc.clues.append(BrokenTreeClue())
             print "Left a broken tree in {}".format(scene_name)
         if randint(1, 100) <= 20: # 20% chance to leave slain animals
-            # self.add_clue("slain_animal", direction)
-            boss_sc.clues.append(SlainAnimalClue())
+            boss_sc.add_clue(SlainAnimalClue, direction)
+            #boss_sc.clues.append(SlainAnimalClue())
             print "Left a slain anmial in {}".format(scene_name)
     
     def update_clues(self):
@@ -659,21 +659,26 @@ class Scene(object):
         """
         Add a clue of the specified type to this scene.
         
-        clue_class: desired clue class to be instantiated
+        clue_class: Class object to be instantiated
         m_direction: direction of movement returned from move_boss
         """
         # find the clue object of the desired type, if possible
-        clue = self.find_clue(clue_type)
+        clue = self.find_clue(clue_class)
         # if there is an existing clue, add to it
         if clue:
             clue.add_clue(direction=m_direction)
-        else: # no clue, create one
-            if 
+        else: # no existing clue, add new clue
+            self.clues.append(clue_class())
                 
-    def find_clue(self, clue_type):
-        """ Find the Clue object of the given type in the scene."""
+    def find_clue(self, clue_class):
+        """
+        Find the Clue object of the given clue class.
+
+        clue_class: the Class object of the clue
+        """
+        # return first instance of clue, should also be the only one
         for clue in self.clues:
-            if clue.clue_type == clue_type:
+            if isinstance(clue, clue_class):
                 return clue
         return None
 
@@ -889,7 +894,7 @@ class Clue(object):
 class FootprintClue(Clue):
     """ A footprint left by the boss."""
 
-    def __init__(self, direction):
+    def __init__(self, direction=None):
         """ Extends Clue.__init__ method."""
         super(FootprintClue, self).__init__("footprint", 2) # fresh for 2 ticks
         self.direction = direction # direction of latest footprints
@@ -923,7 +928,7 @@ class FootprintClue(Clue):
 class BrokenTreeClue(Clue):
     """ Trees broken by the boss."""
 
-    def __init__(self):
+    def __init__(self, direction=None):
         """ Extends Clue.__init__ method."""
         super(BrokenTreeClue, self).__init__("broken_tree", 2)
 
@@ -950,7 +955,7 @@ class BrokenTreeClue(Clue):
 class SlainAnimalClue(Clue):
     """ Carcass of slain animals."""
 
-    def __init__(self):
+    def __init__(self, direction=None):
         """ Extends Clue.__init__ method."""
         super(SlainAnimalClue, self).__init__("slain_animal", 2)
 

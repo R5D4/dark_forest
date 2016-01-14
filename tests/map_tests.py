@@ -485,6 +485,8 @@ def get_lair_test():
 
 def scene_add_clue_test():
     # Test Scene.add_clue method
+    # i.e. create a new clue if no clues of same type, otherwise add to 
+    # existing clue
 
     # create a scene
     a_map = map_.Map('story')
@@ -494,17 +496,37 @@ def scene_add_clue_test():
     s1.clues = []
 
     # add first footprint
-    s1.add_clue("footprint", "n")
-    clue = s1.find_clue("footprint")
+    s1.add_clue(map_.FootprintClue, "n")
+    clue = s1.find_clue(map_.FootprintClue)
     ok_(clue)
     ok_(clue.count == 1)
     # add second footprint
+    s1.add_clue(map_.FootprintClue, "n")
+    clue = s1.find_clue(map_.FootprintClue)
+    ok_(clue)
+    ok_(clue.count == 2)
 
     # add first broken tree
+    s1.add_clue(map_.BrokenTreeClue, None)
+    clue = s1.find_clue(map_.BrokenTreeClue)
+    ok_(clue)
+    ok_(clue.count == 1)
     # add second broken tree
+    s1.add_clue(map_.BrokenTreeClue, None)
+    clue = s1.find_clue(map_.BrokenTreeClue)
+    ok_(clue)
+    ok_(clue.count == 2)
 
     # add first slain animal
+    s1.add_clue(map_.SlainAnimalClue, None)
+    clue = s1.find_clue(map_.SlainAnimalClue)
+    ok_(clue)
+    ok_(clue.count == 1)
     # add second slain animal
+    s1.add_clue(map_.SlainAnimalClue, None)
+    clue = s1.find_clue(map_.SlainAnimalClue)
+    ok_(clue)
+    ok_(clue.count == 2)
 
 
 def scene_find_clue_test():
@@ -518,26 +540,26 @@ def scene_find_clue_test():
     s1.clues = []
 
     # no clues
-    clue = s1.find_clue("footprint")
+    clue = s1.find_clue(map_.FootprintClue)
     ok_(not clue)
     
     # add footprint
     s1.clues.append(map_.FootprintClue("n"))
-    clue = s1.find_clue("footprint")
+    clue = s1.find_clue(map_.FootprintClue)
     ok_(clue)
-    ok_(clue.clue_type == "footprint")
+    ok_(isinstance(clue, map_.FootprintClue))
 
     # add broken tree
     s1.clues.append(map_.BrokenTreeClue())
-    clue = s1.find_clue("broken_tree")
+    clue = s1.find_clue(map_.BrokenTreeClue)
     ok_(clue)
-    ok_(clue.clue_type == "broken_tree")
+    ok_(isinstance(clue, map_.BrokenTreeClue))
 
     # add slain animal
     s1.clues.append(map_.SlainAnimalClue())
-    clue = s1.find_clue("slain_animal")
+    clue = s1.find_clue(map_.SlainAnimalClue)
     ok_(clue)
-    ok_(clue.clue_type == "slain_animal")
+    ok_(isinstance(clue, map_.SlainAnimalClue))
 
 
 ########## Clue Class/Subclasses Tests ##########
