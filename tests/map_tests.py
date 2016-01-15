@@ -500,6 +500,7 @@ def scene_add_clue_test():
     clue = s1.find_clue(map_.FootprintClue)
     ok_(clue)
     ok_(clue.count == 1)
+    ok_(clue.direction == "n")
     # add second footprint
     s1.add_clue(map_.FootprintClue, "n")
     clue = s1.find_clue(map_.FootprintClue)

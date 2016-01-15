@@ -243,17 +243,14 @@ class Map(object):
         # 75% chance to leave footprints on move
         if direction and randint(1, 100) <= 75: # direction not None
             boss_sc.add_clue(FootprintClue, direction)
-            #boss_sc.clues.append(FootprintClue(direction))
             # NOTE: print debugging statements
             print "Left footprints in {} pointing {}.".format(scene_name, 
                                                               direction)
         if randint(1, 100) <= 20: # 30% chance to leave broken trees
             boss_sc.add_clue(BrokenTreeClue, direction)
-            #boss_sc.clues.append(BrokenTreeClue())
             print "Left a broken tree in {}".format(scene_name)
         if randint(1, 100) <= 20: # 20% chance to leave slain animals
             boss_sc.add_clue(SlainAnimalClue, direction)
-            #boss_sc.clues.append(SlainAnimalClue())
             print "Left a slain anmial in {}".format(scene_name)
     
     def update_clues(self):
@@ -668,7 +665,7 @@ class Scene(object):
         if clue:
             clue.add_clue(direction=m_direction)
         else: # no existing clue, add new clue
-            self.clues.append(clue_class())
+            self.clues.append(clue_class(direction=m_direction))
                 
     def find_clue(self, clue_class):
         """
