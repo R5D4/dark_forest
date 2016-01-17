@@ -8,6 +8,7 @@ Contains the Scene class and all special scene subclasses.
 from sys import exit
 from random import randint
 from random import choice
+import data.clue_data as cd
 import char
 import combat
 import map_gen
@@ -911,14 +912,15 @@ class FootprintClue(Clue):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
         if self.count > 1:
-            msg.append("There are multiple sets of footprints.")
-
-        if self.fresh: # fresh = 0
-            msg.append("You see a fresh set of footprints.")
+            if self.fresh:
+                msg.append(cd.FOOTPRINT['multi_fresh'] % self.direction)
+            else:
+                msg.append(cd.FOOTPRINT['multi_old'] % self.direction)
         else:
-            msg.append("The footprints have been here for a while.")
-
-        msg.append("The freshest footprints point {}.".format(self.direction))
+            if self.fresh:
+                msg.append(cd.FOOTPRINT['single_fresh'] % self.direction)
+            else:
+                msg.append(cd.FOOTPRINT['single_old'] % self.direction)
         return ' '.join(msg)
 
 
@@ -940,12 +942,15 @@ class BrokenTreeClue(Clue):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
         if self.count > 1:
-            msg.append("{} trees are knocked over.".format(self.count))
-
-        if self.fresh:
-            msg.append("You see a freshly broken tree.")
+            if self.fresh:
+                msg.append(cd.BROKEN_TREE['multi_fresh'])
+            else:
+                msg.append(cd.BROKEN_TREE['multi_old'])
         else:
-            msg.append("The tree has been knocked over for a while.")
+            if self.fresh:
+                msg.append(cd.BROKEN_TREE['single_fresh'])
+            else:
+                msg.append(cd.BROKEN_TREE['single_old'])
         return ' '.join(msg)
 
 
@@ -967,12 +972,15 @@ class SlainAnimalClue(Clue):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
         if self.count > 1:
-            msg.append("{} animal carcasses lay here.".format(self.count))
-
-        if self.fresh:
-            msg.append("You see a freshly deceased deer.")
+            if self.fresh:
+                msg.append(cd.SLAIN_ANIMAL['multi_fresh'])
+            else:
+                msg.append(cd.SLAIN_ANIMAL['multi_old'])
         else:
-            msg.append("You see a rotting corpse of a deer.")
+            if self.fresh:
+                msg.append(cd.SLAIN_ANIMAL['single_fresh'])
+            else:
+                msg.append(cd.SLAIN_ANIMAL['single_old'])
         return ' '.join(msg)
 
 ########## UTILITY FUNCTIONS ##########

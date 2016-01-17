@@ -570,40 +570,66 @@ def clue_get_desc_test():
     # Test the get_desc method of each Clue subclass
     
     # FootprintClue
-    # test for count and freshness
-    clue = map_.FootprintClue('n') # 1 clue
-    ok_("You see a fresh set of footprints." in clue.get_desc())
-    clue.add_clue('s') # 2 clues
+    # single clue, fresh
+    clue = map_.FootprintClue('n') 
     desc = clue.get_desc()
-    ok_("There are multiple sets of footprints." in desc)
-    ok_("You see a fresh set of footprints." in desc)
+    ok_(desc == "There is one track of footprints pointing n; it's fresh.")
+    # single clue, old
     clue.fresh = 0
     desc = clue.get_desc()
-    ok_("The footprints have been here for a while." in desc)
+    ok_(desc == "There is an old track of footprints pointing n.")
+    # multiple clues, fresh
+    clue.add_clue('s') 
+    desc = clue.get_desc()
+    ok_(desc == "Multiple tracks lead through here, the latest one is fresh. \
+The track points s.") 
+    # multiple clues, old
+    clue.fresh = 0
+    desc = clue.get_desc()
+    ok_(desc == "There are several tracks mingled together, none of them \
+fresh. The latest tracks point s.")
 
     # BrokenTreeClue
-    # test for count and freshness
-    clue = map_.BrokenTreeClue() # 1 clue
-    ok_("You see a freshly broken tree." in clue.get_desc())
-    clue.add_clue() # 2 clues
+    # single clue, fresh
+    clue = map_.BrokenTreeClue()
     desc = clue.get_desc()
-    ok_("2 trees are knocked over." in desc)
-    ok_("You see a freshly broken tree." in clue.get_desc())
+    ok_(desc == "A young tree has been recently knocked over.")
+    # single clue, old
     clue.fresh = 0
     desc = clue.get_desc()
-    ok_("The tree has been knocked over for a while." in desc)
+    ok_(desc == "A tree here has been knocked over a while ago.")
+    # multiple clues, fresh
+    clue.add_clue()
+    desc = clue.get_desc()
+    ok_(desc == "Several trees have been knocked over, one of them very \
+recently.")
+    # multiple clues, old
+    clue.fresh = 0
+    desc = clue.get_desc()
+    ok_(desc == "Several trees have been knocked down; it seems to have \
+happened a while ago.")
 
     # SlainAnimalClue
-    # test for count and freshness
-    clue = map_.SlainAnimalClue() # 1 clue
-    ok_("You see a freshly deceased deer." in clue.get_desc())
-    clue.add_clue() # 2 clues
+    # single clue, fresh
+    clue = map_.SlainAnimalClue()
     desc = clue.get_desc()
-    ok_("2 animal carcasses lay here." in desc)
-    ok_("You see a freshly deceased deer." in clue.get_desc())
+    ok_(desc == "A fresh deer carcass lay here, its side gored by what \
+seem like humongous tusks.")
+    # single clue, old
     clue.fresh = 0
     desc = clue.get_desc()
-    ok_("You see a rotting corpse of a deer." in desc)
+    ok_(desc == "You see the dead mangled body of a badger. The body \
+has been here a while.")
+    # multiple clues, fresh
+    clue.add_clue()
+    desc = clue.get_desc()
+    ok_(desc == "Bodies of dead forest animals litter the scene. One seems \
+to have been killed just recently.")
+    # multiple clues, old
+    clue.fresh = 0
+    desc = clue.get_desc()
+    ok_(desc == "Quite a few animals have been slaughtered here. None of the \
+bodies are fresh.")
 
 
 def clue_add_clue_test():
