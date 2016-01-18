@@ -4,6 +4,17 @@ Contains functions that are used in multiple modules.
 
 from random import randint
 
+FULL_DIR = {
+    'n': 'north',
+    'ne': 'northeast',
+    'e': 'east',
+    'se': 'southeast',
+    's': 'south',
+    'sw': 'southwest',
+    'w': 'west',
+    'nw': 'northwest'
+}
+
 
 def parse_roll(formatting):
     """
@@ -42,4 +53,5 @@ def roll(formatting, output):
     if output:
         print "%d!" % total
     return (total, max_roll)
+
 

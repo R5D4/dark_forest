@@ -14,6 +14,7 @@ import combat
 import map_gen
 import draw_map
 import game_clock
+import util
 
 
 ##########  CONSTANTS ##########
@@ -911,16 +912,17 @@ class FootprintClue(Clue):
     def get_desc(self):
         """ Construct and return description string. Overrides Clue.get_desc."""
         msg = []
+        full_dir = util.FULL_DIR[self.direction]
         if self.count > 1:
             if self.fresh:
-                msg.append(cd.FOOTPRINT['multi_fresh'] % self.direction)
+                msg.append(cd.FOOTPRINT['multi_fresh'] % full_dir)
             else:
-                msg.append(cd.FOOTPRINT['multi_old'] % self.direction)
+                msg.append(cd.FOOTPRINT['multi_old'] % full_dir)
         else:
             if self.fresh:
-                msg.append(cd.FOOTPRINT['single_fresh'] % self.direction)
+                msg.append(cd.FOOTPRINT['single_fresh'] % full_dir)
             else:
-                msg.append(cd.FOOTPRINT['single_old'] % self.direction)
+                msg.append(cd.FOOTPRINT['single_old'] % full_dir)
         return ' '.join(msg)
 
 

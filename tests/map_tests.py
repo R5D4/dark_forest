@@ -573,21 +573,21 @@ def clue_get_desc_test():
     # single clue, fresh
     clue = map_.FootprintClue('n') 
     desc = clue.get_desc()
-    ok_(desc == "There is one track of footprints pointing n; it's fresh.")
+    ok_(desc == "There is one track of footprints pointing north; it's fresh.")
     # single clue, old
     clue.fresh = 0
     desc = clue.get_desc()
-    ok_(desc == "There is an old track of footprints pointing n.")
+    ok_(desc == "There is an old track of footprints pointing north.")
     # multiple clues, fresh
     clue.add_clue('s') 
     desc = clue.get_desc()
     ok_(desc == "Multiple tracks lead through here, the latest one is fresh. \
-The track points s.") 
+The track points south.") 
     # multiple clues, old
     clue.fresh = 0
     desc = clue.get_desc()
     ok_(desc == "There are several tracks mingled together, none of them \
-fresh. The latest tracks point s.")
+fresh. The latest tracks point south.")
 
     # BrokenTreeClue
     # single clue, fresh
