@@ -53,6 +53,8 @@ ACTION_DURATION = {
 SUPPORTED_ACTIONS = \
     [ ele for key in ENV_ACTIONS.keys() for ele in ENV_ACTIONS[key] ]
 
+TIME_LIMIT = 672 # 28 days
+
 ##########  MAP CLASS  ##########
 
 
