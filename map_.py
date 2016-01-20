@@ -267,6 +267,24 @@ class Map(object):
             else: # no clues in scene
                 pass
 
+    def clock_tick(self):
+        """ 
+        Advance the clock by one tick.
+
+        Perform actions that are done every clock tick, e.g. passive healing.
+        """
+        # advance clock
+        self.clock.tick()
+        # boss heals when outside of combat
+        boar = self.characters['boar']
+        boar.heal()
+        # update all clues on map
+        self.update_clues()
+        # move boss to different scene
+        old_scene_name, direction = self.move_boss()
+        # leave a clue in current scene
+        self.leave_clue(old_scene_name, direction)
+
 
 ##########  SCENE CLASS  ##########
 
@@ -317,7 +335,7 @@ class Scene(object):
 
             # exit scene
             if action in self.exits.keys() and self.flags['can_leave']:
-                self.clock_tick()
+                self.scene_map.clock_tick()
                 return self.exits.get(action) 
             # enter combat
             elif combat.ATTACK in action and self.flags['encounter']:
@@ -358,7 +376,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['wait']:
                 # advance clock by one tick
                 print "You wait."
-                self.clock_tick()
+                self.scene_map.clock_tick()
             elif action in ENV_ACTIONS['rest']:
                 print self.cmd_rest()
             elif action in ENV_ACTIONS['sleep']:
@@ -366,7 +384,7 @@ class Scene(object):
             elif action in ENV_ACTIONS['pray']:
                 # currently only advances the clock by one tick
                 print "You offer a prayer to Elbereth."
-                self.clock_tick()
+                self.scene_map.clock_tick()
             elif action in ENV_ACTIONS['stats']:
                 print player.get_stats()
             elif action in ENV_ACTIONS['inventory']:
@@ -379,7 +397,7 @@ class Scene(object):
                 print self.cmd_examine(args)
             elif action in ENV_ACTIONS['search']:
                 print self.cmd_search()
-                self.clock_tick()
+                self.scene_map.clock_tick()
             elif action in ENV_ACTIONS['take']:
                 print self.cmd_take(args)
             elif action in ENV_ACTIONS['drop']:
@@ -414,7 +432,7 @@ class Scene(object):
                 player.conditions['surprised'] = True
                 break
             msg.append(player.rest())
-            self.clock_tick()
+            self.scene_map.clock_tick()
         # add regular wake up message
         if not self.flags['encounter']:
             msg.append("You wake up from your rest.")
@@ -432,7 +450,7 @@ class Scene(object):
                 player.conditions['surprised'] = True
                 break
             msg.append(player.sleep())
-            self.clock_tick()
+            self.scene_map.clock_tick()
         # add regular wake up message
         if not self.flags['encounter']:
             msg.append("You wake up from your sleep.")
@@ -625,24 +643,6 @@ class Scene(object):
                 return msg
         else: # player doesn't see the boss
             return None
-
-    def clock_tick(self):
-        """
-        Advance the clock by one tick.
-
-        Perform actions that are done every clock tick, e.g. passive healing.
-        """
-        # advance clock
-        self.scene_map.clock.tick()
-        # boss heals when outside of combat
-        boar = self.characters['boar']
-        boar.heal()
-        # update all clues on map
-        self.scene_map.update_clues()
-        # move boss to different scene
-        old_scene_name, direction = self.scene_map.move_boss()
-        # leave a clue in current scene
-        self.scene_map.leave_clue(old_scene_name, direction)
 
     def get_boss_attack(self):
         """ Return True if boss will initiate combat. False otherwise."""
