@@ -40,3 +40,11 @@ def is_day_test():
     ok_(not clock.is_day())
 
 
+def lifetime_test():
+    # Test if lifetime is incremented properly
+    clock = game_clock.GameClock()
+    ok_(clock.lifetime == 0)
+    clock.tick()
+    ok_(clock.lifetime == 1)
+    clock.tick()
+    ok_(clock.lifetime == 2)

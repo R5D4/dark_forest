@@ -15,9 +15,11 @@ class GameClock(object):
 
     def __init__(self):
         self.time = START_TIME # 24-hr clock (values: 0-23)
+        self.lifetime = 0 # total number of elapsed clock ticks
 
     def tick(self):
         """ Advance time by one clock tick."""
+        self.lifetime += 1
         self.time = (self.time + TICK) % 24
 
     def is_day(self):
