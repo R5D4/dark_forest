@@ -158,7 +158,7 @@ def run_away(scene):
     scene: current Scene object of the player
     Return name of a random adjacent location.
     """
-    scene.clock_tick()
+    scene.scene_map.clock_tick()
     name = choice(scene.exits.values())
     return name
 

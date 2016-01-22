@@ -273,7 +273,7 @@ class Map(object):
         """ 
         Advance the clock by one tick.
 
-        Perform actions that are done every clock tick, e.g. passive healing.
+        Perform actions that are done every clock tick.
         """
         # advance clock
         self.clock.tick()
@@ -719,14 +719,14 @@ class Win(Scene):
         exit(1)
 
 
-class Quit(Scene):
-    """ Special scene for quitting. No interaction. Game over."""
+class TimeUp(Scene):
+    """ Special scene for time up (lose). No interaction. Game over."""
 
     def enter(self):
         print "\n\n"
         print '*' * 30
-        print "You breathe a sigh of relief as you exit the oppressive"
-        print "atmosphere of the forest. But what are you going to tell"
+        print "As the sliver of the new moon rises, you hear in the not"
+        print "so far distance the rumbling of the"
         print "the others? Damn, this is like ranger school all over again!"
         print "You slowly start on your long journey back to the village."
         print '*' * 20,
