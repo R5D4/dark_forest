@@ -77,6 +77,7 @@ class Map(object):
         self.boss_scene_name = None # scene name of boss' location
         self.clock = game_clock.GameClock()
         self.path = [] # list of scene names in path (destination first)
+        self.timeup = False # flag for losing due to time running out
 
     def next_scene(self, scene_name):
         """ Return the Scene object for the next scene."""
@@ -277,6 +278,9 @@ class Map(object):
         """
         # advance clock
         self.clock.tick()
+        # if time's up, go to time up scene
+        if self.clock.lifetime >= TIME_LIMIT:
+            return
         # boss heals when outside of combat
         boar = self.characters['boar']
         boar.heal()
@@ -428,7 +432,7 @@ class Scene(object):
         player = self.characters['player']
         msg = ["You take a rest ({} hrs).".format(n)]
         # loop until command finished or boss encountered
-        for i in xrange(n):
+        for i in xrange(n) and not self.scene_map.timeup:
             if self.flags['encounter']:
                 msg.append("You are woken up by a noise!")
                 player.conditions['surprised'] = True
@@ -725,14 +729,12 @@ class TimeUp(Scene):
     def enter(self):
         print "\n\n"
         print '*' * 30
-        print "As the sliver of the new moon rises, you hear in the not"
-        print "so far distance the rumbling of the"
-        print "the others? Damn, this is like ranger school all over again!"
-        print "You slowly start on your long journey back to the village."
+        print "As the new moon rises, the mad beast bursts out through"
+        print "the forest as it makes a beeline for the nearest settlement."
+        print "There's no way to catch it now. You've failed."
         print '*' * 20,
         print "GAME OVER",
         print '*' * 20
-        print "Please support my kickstarter campaign for more content!"
         exit(1)
 
 
