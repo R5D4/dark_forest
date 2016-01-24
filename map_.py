@@ -280,6 +280,8 @@ class Map(object):
         self.clock.tick()
         # if time's up, go to time up scene
         if self.clock.lifetime >= TIME_LIMIT:
+            # NOTE: debug statement
+            print "Time's up!"
             return
         # boss heals when outside of combat
         boar = self.characters['boar']
@@ -432,7 +434,7 @@ class Scene(object):
         player = self.characters['player']
         msg = ["You take a rest ({} hrs).".format(n)]
         # loop until command finished or boss encountered
-        for i in xrange(n) and not self.scene_map.timeup:
+        for i in xrange(n):
             if self.flags['encounter']:
                 msg.append("You are woken up by a noise!")
                 player.conditions['surprised'] = True
