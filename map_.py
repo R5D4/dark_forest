@@ -280,6 +280,7 @@ class Map(object):
         self.clock.tick()
         # if time's up, go to time up scene
         if self.clock.lifetime >= TIME_LIMIT:
+            self.timeup = True
             # NOTE: debug statement
             print "Time's up!"
             return
@@ -344,6 +345,8 @@ class Scene(object):
             # exit scene
             if action in self.exits.keys() and self.flags['can_leave']:
                 self.scene_map.clock_tick()
+                if self.scene_map.timeup: # time's up you lose
+                    return "timeup"
                 return self.exits.get(action) 
             # enter combat
             elif combat.ATTACK in action and self.flags['encounter']:
@@ -351,6 +354,8 @@ class Scene(object):
             # map commands
             else: 
                 if self.process_action(action): # valid action
+                    if self.scene_map.timeup: # time's up you lose
+                        return "timeup"
                     self.print_encounter_msg()
                     # if the boss attacks, go into combat
                     if self.get_boss_attack():
@@ -441,6 +446,8 @@ class Scene(object):
                 break
             msg.append(player.rest())
             self.scene_map.clock_tick()
+            if self.scene_map.timeup: # time's up you lose
+                break
         # add regular wake up message
         if not self.flags['encounter']:
             msg.append("You wake up from your rest.")
@@ -459,6 +466,8 @@ class Scene(object):
                 break
             msg.append(player.sleep())
             self.scene_map.clock_tick()
+            if self.scene_map.timeup: # time's up you lose
+                break
         # add regular wake up message
         if not self.flags['encounter']:
             msg.append("You wake up from your sleep.")
