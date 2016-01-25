@@ -55,7 +55,7 @@ SUPPORTED_ACTIONS = \
 
 TIME_LIMIT = 672 # roughly 28 days
 # NOTE: for debugging
-TIME_LIMIT = 3 
+TIME_LIMIT =  240 # 10 days
 
 ##########  MAP CLASS  ##########
 
